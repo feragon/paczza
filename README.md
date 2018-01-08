@@ -1,3 +1,3 @@
-# paczza-hawaienne
+# Pac-Zza
 
-Vive les ananas !
+Mort aux ananas !
