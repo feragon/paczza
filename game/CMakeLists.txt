@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 set(SOURCE_FILES
         src/main.cpp
-        src/ui/fenetrejeu.cpp src/ui/fenetrejeu.h)
+        src/ui/fenetrejeu.cpp src/ui/fenetrejeu.h src/game/jeu.cpp src/game/jeu.h src/game/joueur.cpp src/game/joueur.h src/board/position.cpp src/board/position.h)
 
 find_package(SFML 2.4 COMPONENTS graphics window system REQUIRED)
 include_directories(${SFML_INCLUDE_DIR})
