@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(paczza_hawaienne)
+project(paczza)
 
 set(CMAKE_CXX_STANDARD 11)
 
