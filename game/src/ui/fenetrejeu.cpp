@@ -8,6 +8,10 @@ FenetreJeu::FenetreJeu() :
     _fenetre(sf::VideoMode(LARGEUR_FENETRE, HAUTEUR_FENETRE), TITRE_FENETRE) {
 
     _fenetre.setVerticalSyncEnabled(true);
+
+    sf::Image image;
+    image.loadFromFile("res/icon.png");
+    _fenetre.setIcon(45, 45, image.getPixelsPtr());
 }
 
 void FenetreJeu::ouvrir() {
