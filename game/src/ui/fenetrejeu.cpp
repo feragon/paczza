@@ -3,6 +3,7 @@
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <ui/spriteloader.h>
+#include <ui/views/mainmenu.h>
 
 FenetreJeu::FenetreJeu() :
     _fenetre(sf::VideoMode(LARGEUR_FENETRE, HAUTEUR_FENETRE), TITRE_FENETRE) {
@@ -12,21 +13,16 @@ FenetreJeu::FenetreJeu() :
     sf::Image image;
     image.loadFromFile("res/icon.png");
     _fenetre.setIcon(45, 45, image.getPixelsPtr());
+
+    _view = new MainMenu(&_fenetre);
+}
+
+FenetreJeu::~FenetreJeu() {
+    delete _view;
 }
 
 void FenetreJeu::ouvrir() {
-    //TODO: utilisé pour les tests, à enlever
-    std::vector<sf::Sprite> sprites;
-    for(unsigned int i = 0; i < LARGEUR_FENETRE / SPRITE_SIZE; i++) {
-        for(unsigned int j = 0; j < HAUTEUR_FENETRE / SPRITE_SIZE; j++) {
-            sf::Sprite sprite(SpriteLoader::getSprite(SpriteLoader::EMPTY_CELL));
-            sprite.setPosition(i * SPRITE_SIZE, j * SPRITE_SIZE);
-            sprites.push_back(sprite);
-        }
-    }
-
     while (_fenetre.isOpen()) {
-
         sf::Event event;
         while (_fenetre.pollEvent(event))
         {
@@ -38,9 +34,7 @@ void FenetreJeu::ouvrir() {
         // Clear screen
         _fenetre.clear(sf::Color(0, 0, 0, 255));
 
-        for(sf::Sprite sprite : sprites) {
-            _fenetre.draw(sprite);
-        }
+        _view->render();
 
         // Update the window
         _fenetre.display();
