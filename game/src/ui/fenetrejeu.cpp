@@ -15,6 +15,8 @@ FenetreJeu::FenetreJeu() :
     _fenetre.setIcon(45, 45, image.getPixelsPtr());
 
     _view = new MainMenu(&_fenetre);
+
+    resizeView(_fenetre.getSize());
 }
 
 FenetreJeu::~FenetreJeu() {
@@ -29,18 +31,26 @@ void FenetreJeu::ouvrir() {
             // Close window: exit
             if (event.type == sf::Event::Closed)
                 fermer();
+
+            if (event.type == sf::Event::Resized) {
+                resizeView(_fenetre.getSize());
+            }
         }
 
-        // Clear screen
         _fenetre.clear(sf::Color(0, 0, 0, 255));
 
         _view->render();
 
-        // Update the window
         _fenetre.display();
     }
 }
 
 void FenetreJeu::fermer() {
     _fenetre.close();
+}
+
+void FenetreJeu::resizeView(const sf::Vector2u& size) {
+    sf::Vector2f newSize(size.x / 2, size.y / 2);
+    _fenetre.setView(sf::View(sf::FloatRect(sf::Vector2f(0, 0), newSize)));
+    _view->resize(newSize);
 }

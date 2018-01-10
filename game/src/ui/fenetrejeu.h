@@ -8,6 +8,12 @@ class FenetreJeu {
         sf::RenderWindow _fenetre;
         View* _view;
 
+        /**
+         * @brief Redimensionne la vue
+         * @param size Nouvelles dimensions
+         */
+        void resizeView(const sf::Vector2u& size);
+
     public:
         FenetreJeu();
         ~FenetreJeu();

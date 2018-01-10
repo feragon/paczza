@@ -1,12 +1,8 @@
 #pragma once
 
-#include <SFML/Graphics/Sprite.hpp>
-#include "view.h"
+#include "menu.h"
 
-class MainMenu : public View {
-    private:
-        std::vector<sf::Sprite> _backgroundSprites;
-
+class MainMenu : public Menu {
     public:
         MainMenu(sf::RenderWindow* window);
 
