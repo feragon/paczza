@@ -1,20 +1,25 @@
 #pragma once
 
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Text.hpp>
 #include "view.h"
 
 class Menu : public View {
-    public:
+    protected:
         Menu(sf::RenderWindow* window);
+        ~Menu();
 
+        void addMenu(const std::wstring& title);
+
+    public:
         void resize(const sf::Vector2f& size) override;
 
-    protected:
-        /**
-         * @brief Affiche le fond du menu dans la fenêtre
-         */
-        void renderBackground();
+        void render() override;
 
     private:
+        void centerTexts();
+
+        sf::Font _font;
         std::vector<sf::Sprite> _backgroundSprites;
+        std::vector<sf::Text*> _texts;
 };

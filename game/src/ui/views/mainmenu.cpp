@@ -3,8 +3,7 @@
 MainMenu::MainMenu(sf::RenderWindow* window) :
     Menu(window) {
 
-}
-
-void MainMenu::render() {
-    renderBackground();
+    addMenu(L"Nouvelle partie");
+    addMenu(L"Meilleurs scores");
+    addMenu(L"Crédits");
 }
