@@ -12,8 +12,8 @@ include_directories(${SFML_INCLUDE_DIR})
 
 include_directories(src)
 
-add_executable(paczza_hawaienne ${SOURCE_FILES})
-target_link_libraries(paczza_hawaienne ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
+add_executable(paczza ${SOURCE_FILES})
+target_link_libraries(paczza ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
 
 add_library(game ${SOURCE_FILES})
 target_link_libraries(game ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})

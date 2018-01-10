@@ -6,7 +6,10 @@ SpriteLoader SpriteLoader::_instance;
 
 SpriteLoader::SpriteLoader() {
     sf::Image sprites;
-    sprites.loadFromFile("res/sprites.png");
+
+    if(!sprites.loadFromFile("res/sprites.png")) {
+        throw std::runtime_error("Impossible de lire les sprites");
+    }
 
     unsigned int columns = sprites.getSize().x / SPRITE_SIZE;
     unsigned int lines = sprites.getSize().y / SPRITE_SIZE;

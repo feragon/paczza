@@ -13,12 +13,14 @@ class SpriteLoader {
             CHEESE,
             TOMATO,
             HAM,
+            MUSHROOM,
             PIZZA,
             OPEN_PIZZA,
             LEFT_PINEAPPLE,
             UP_PINEAPPLE,
             RIGHT_PINEAPPLE,
             DOWN_PINEAPPLE,
+            TOMATO_SMUDGE,
             FIN
         };
 
