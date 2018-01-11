@@ -50,7 +50,7 @@ void FenetreJeu::fermer() {
 }
 
 void FenetreJeu::resizeView(const sf::Vector2u& size) {
-    sf::Vector2f newSize(size.x / 2, size.y / 2);
+    sf::Vector2f newSize(size.x, size.y);
     _fenetre.setView(sf::View(sf::FloatRect(sf::Vector2f(0, 0), newSize)));
     _view->resize(newSize);
 }

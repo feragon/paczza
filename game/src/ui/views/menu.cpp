@@ -41,7 +41,7 @@ void Menu::render() {
 }
 
 void Menu::addMenu(const std::wstring& title) {
-    sf::Text* text = new sf::Text(sf::String(title), _font, 18);
+    sf::Text* text = new sf::Text(sf::String(title), _font, 48);
     _texts.push_back(text);
 }
 
@@ -51,7 +51,7 @@ void Menu::centerTexts() {
     unsigned int i = 0;
 
     for(sf::Text* text : _texts) {
-        text->setPosition(halfWidth - (text->getGlobalBounds().width / 2), halfHeight + (i * 20));
+        text->setPosition(halfWidth - (text->getGlobalBounds().width / 2), halfHeight + (i * 50));
         i++;
     }
 }
