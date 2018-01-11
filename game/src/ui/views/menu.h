@@ -16,10 +16,22 @@ class Menu : public View {
 
         void render() override;
 
+        virtual void onEvent(const sf::Event& event) override;
+
     private:
+        /**
+         * @brief Center menu texts
+         */
         void centerTexts();
+
+        /**
+         * @brief Update the selector icon position
+         */
+        void updateSelectorPosition();
 
         sf::Font _font;
         std::vector<sf::Sprite> _backgroundSprites;
         std::vector<sf::Text*> _texts;
+        sf::Sprite _selector;
+        unsigned int _selected;
 };

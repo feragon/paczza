@@ -35,6 +35,8 @@ void FenetreJeu::ouvrir() {
             if (event.type == sf::Event::Resized) {
                 resizeView(_fenetre.getSize());
             }
+
+            _view->onEvent(event);
         }
 
         _fenetre.clear(sf::Color(0, 0, 0, 255));
