@@ -29,6 +29,8 @@ class Menu : public View {
          */
         void updateSelectorPosition();
 
+        void launchGame();
+
         sf::Font _font;
         std::vector<sf::Sprite> _backgroundSprites;
         std::vector<sf::Text*> _texts;

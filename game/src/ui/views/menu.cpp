@@ -4,6 +4,7 @@
 #include <ui/spriteloader.h>
 #include <iostream>
 #include <SFML/Window/Event.hpp>
+#include <game/jeu.h>
 
 Menu::Menu(sf::RenderWindow* window) :
         View(window),
@@ -74,9 +75,13 @@ void Menu::updateSelectorPosition() {
     }
 
     sf::Vector2f position = _texts[_selected]->getPosition();
-    float top = position.y;
+    float top = position.y - 8;
     float left = position.x - 64;
     _selector.setPosition(left, top);
+}
+
+void Menu::launchGame() {
+    new Jeu(4);
 }
 
 void Menu::onEvent(const sf::Event& event) {
@@ -94,6 +99,11 @@ void Menu::onEvent(const sf::Event& event) {
                     _selected--;
                 }
                 updateSelectorPosition();
+                break;
+            case sf::Keyboard::Key::Return:
+                if(_selected == 0) {
+                    launchGame();
+                }
                 break;
         }
 
