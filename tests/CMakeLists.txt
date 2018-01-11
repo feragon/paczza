@@ -10,4 +10,4 @@ set(SOURCE_FILES
 include_directories(catch)
 
 add_executable(unittests ${SOURCE_FILES})
-target_link_libraries(unittests jeu ui)
+target_link_libraries(unittests game)
