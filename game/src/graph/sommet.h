@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <ostream>
 
 class Arete;
 
@@ -19,7 +20,10 @@ public:
     inline bool tomatoSmudge();
     inline bool estIsole();
 
+    void insererAreteAdj(Arete &a);
     std::vector<Arete*> incidentes();
+
+    friend std::ostream& operator<<(std::ostream &, Sommet const &);
 };
 
 int Sommet::x() {

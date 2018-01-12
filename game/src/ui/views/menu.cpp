@@ -1,4 +1,5 @@
 #include "menu.h"
+#include "boardview.h"
 #include <config.h>
 #include <math.h>
 #include <ui/spriteloader.h>
@@ -82,6 +83,7 @@ void Menu::updateSelectorPosition() {
 
 void Menu::launchGame() {
     new Jeu(4);
+    _window->close();
 }
 
 void Menu::onEvent(const sf::Event& event) {
@@ -101,9 +103,9 @@ void Menu::onEvent(const sf::Event& event) {
                 updateSelectorPosition();
                 break;
             case sf::Keyboard::Key::Return:
-                if(_selected == 0) {
-                    launchGame();
-                }
+                if(_selected == 0) launchGame();
+                else if(_selected == 1) /*highScore()*/;
+                else if(_selected == 2) /*credits()*/;
                 break;
         }
 
