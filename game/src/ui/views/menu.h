@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
+#include <functional>
 #include "view.h"
 
 class Menu : public View {
@@ -9,7 +10,12 @@ class Menu : public View {
         Menu(sf::RenderWindow* window);
         ~Menu();
 
-        void addMenu(const std::wstring& title);
+        /**
+         * @brief Ajoute un élément au menu
+         * @param title Texte de l'élément
+         * @param callback Fonction appelée lors de la selection
+         */
+        void addMenu(const std::wstring& title, const std::function<void(void)>& callback);
 
     public:
         void resize(const sf::Vector2f& size) override;
@@ -29,11 +35,10 @@ class Menu : public View {
          */
         void updateSelectorPosition();
 
-        void launchGame();
-
         sf::Font _font;
         std::vector<sf::Sprite> _backgroundSprites;
         std::vector<sf::Text*> _texts;
+        std::vector<std::function<void(void)>> _callbacks;
         sf::Sprite _selector;
         unsigned int _selected;
 };

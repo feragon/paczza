@@ -48,9 +48,10 @@ void Menu::render() {
     _window->draw(_selector);
 }
 
-void Menu::addMenu(const std::wstring& title) {
+void Menu::addMenu(const std::wstring& title, const std::function<void(void)>& callback) {
     sf::Text* text = new sf::Text(sf::String(title), _font, 42);
     _texts.push_back(text);
+    _callbacks.push_back(callback);
 }
 
 void Menu::centerTexts() {
@@ -81,11 +82,6 @@ void Menu::updateSelectorPosition() {
     _selector.setPosition(left, top);
 }
 
-void Menu::launchGame() {
-    new Jeu(4);
-    _window->close();
-}
-
 void Menu::onEvent(const sf::Event& event) {
     if(event.type == sf::Event::EventType::KeyPressed) {
         switch(event.key.code) {
@@ -103,10 +99,7 @@ void Menu::onEvent(const sf::Event& event) {
                 updateSelectorPosition();
                 break;
             case sf::Keyboard::Key::Return:
-                if(_selected == 0) launchGame();
-                else if(_selected == 1) /*highScore()*/;
-                else if(_selected == 2) /*credits()*/;
-                break;
+                _callbacks[_selected]();
         }
 
 
