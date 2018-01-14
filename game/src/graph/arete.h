@@ -1,17 +1,27 @@
 #pragma once
 
+#include <ostream>
+
 class Arete {
 private:
-    int _chaleur;
+    unsigned int _chaleur;
 
 public:
-    Arete(int chaleur);
+    Arete(unsigned int chaleur);
     virtual ~Arete();
 
-    inline int chaleur();
+    inline unsigned int chaleur();
+
+    inline void setChaleur(unsigned int ch);
+
+    friend std::ostream& operator<<(std::ostream &, Arete const &);
 };
 
 
-int Arete::chaleur() {
+unsigned int Arete::chaleur() {
     return _chaleur;
+}
+
+void Arete::setChaleur(unsigned int ch) {
+    _chaleur = ch;
 }

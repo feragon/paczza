@@ -9,3 +9,8 @@ Sommet::Sommet(int x, int y) {
 Sommet::~Sommet() {
 
 }
+
+std::ostream & operator<<(std::ostream &os, Sommet const &s) {
+    os << "Sommet[" << s._x << "][" << s._y << "](_tomatoSmudge=" << s._tomatoSmudge << ")";
+    return os;
+}

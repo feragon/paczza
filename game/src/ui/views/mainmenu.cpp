@@ -1,4 +1,5 @@
 #include <iostream>
+#include <game/jeu.h>
 #include "mainmenu.h"
 
 MainMenu::MainMenu(sf::RenderWindow* window) :
@@ -10,6 +11,7 @@ MainMenu::MainMenu(sf::RenderWindow* window) :
 }
 
 void MainMenu::onNewGameSelected() {
+    Jeu *j = new Jeu(4);
     _window->close();
 }
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <ostream>
+
 class Sommet {
 private:
     int _x;
@@ -13,6 +15,10 @@ public:
     inline int x();
     inline int y();
     inline bool tomatoSmudge();
+
+    inline void takeTomatoSmudge();
+
+    friend std::ostream& operator<<(std::ostream &, Sommet const &);
 };
 
 int Sommet::x() {
@@ -23,4 +29,8 @@ int Sommet::y() {
 }
 bool Sommet::tomatoSmudge() {
     return _tomatoSmudge;
+}
+
+void Sommet::takeTomatoSmudge() {
+    _tomatoSmudge = false;
 }
