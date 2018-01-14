@@ -7,7 +7,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 set(SOURCE_FILES
         src/main.cpp
-        src/ui/fenetrejeu.cpp src/ui/fenetrejeu.h src/game/jeu.cpp src/game/jeu.h src/game/joueur.cpp src/game/joueur.h src/board/position.cpp src/board/position.h src/ui/spriteloader.cpp src/ui/spriteloader.h src/ui/views/view.cpp src/ui/views/view.h src/ui/views/mainmenu.cpp src/ui/views/mainmenu.h src/ui/views/menu.cpp src/ui/views/menu.h src/graph/graphe.cpp src/graph/graphe.h src/graph/sommet.cpp src/graph/sommet.h src/graph/arete.cpp src/graph/arete.h src/ui/views/boardview.cpp src/ui/views/boardview.h)
+        src/ui/fenetrejeu.cpp src/ui/fenetrejeu.h src/game/jeu.cpp src/game/jeu.h src/game/joueur.cpp src/game/joueur.h src/board/position.cpp src/board/position.h src/ui/spriteloader.cpp src/ui/spriteloader.h src/ui/views/view.cpp src/ui/views/view.h src/ui/views/mainmenu.cpp src/ui/views/mainmenu.h src/ui/views/menu.cpp src/ui/views/menu.h src/graph/graphe.h src/graph/elementsommet.h src/graph/elementarete.h src/ui/views/boardview.cpp src/ui/views/boardview.h src/graph/sommet.cpp src/graph/sommet.h src/graph/arete.cpp src/graph/arete.h)
 
 find_package(SFML 2 COMPONENTS graphics window system REQUIRED)
 include_directories(${SFML_INCLUDE_DIR})

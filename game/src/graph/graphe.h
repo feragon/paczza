@@ -1,27 +1,32 @@
 #pragma once
 
-#include "sommet.h"
-#include "arete.h"
-#include <iterator>
-#include <vector>
+#include "elementsommet.h"
+#include "elementarete.h"
 
+template<class S, class T>
 class Graphe {
 private:
-    std::vector<Sommet*> _liste_sommets;
-    std::vector<Arete*> _liste_aretes;
-    void insererSommet(int x, int y);
-    void insererArete(Sommet &u, Sommet &v);
+    ElementSommet<S> *_listeSommets;
+    ElementArete<S,T> *_listeAretes;
+
 public:
     Graphe(int largeur, int hauteur);
-    virtual ~Graphe();
-
-    bool sontAdjacents(Sommet &u, Sommet &v);
-    /*
-    void modifChaleur(Arete a, int chaleur);
-    void enleverSommet(Sommet s);
-    void enleverArete(Arete a);
-     */
-    std::vector<Arete*> incidentes(Sommet &s);
-    std::vector<Sommet*> sommets();
-    std::vector<Arete*> aretes();
 };
+
+
+template <class S, class T>
+Graphe<S,T>::Graphe(int largeur, int hauteur) {
+
+    S *s1 = new S(1,1);
+    S *s2 = new S(1,2);
+    S *s3 = new S(2,1);
+    S *s4 = new S(2,2);
+
+    _listeSommets = new ElementSommet<S>(s1, new ElementSommet<S>(s2, new ElementSommet<S>(s3, new ElementSommet<S>(s4, NULL))));
+
+    T *a1 = new T(0);
+    T *a2 = new T(3);
+    T *a3 = new T(1);
+
+    _listeAretes = new ElementArete<S,T>(a1, s1, s2, new ElementArete<S,T>(a2, s1, s4, new ElementArete<S,T>(a3, s3, s4, NULL)));
+}

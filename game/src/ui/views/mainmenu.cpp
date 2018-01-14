@@ -10,7 +10,6 @@ MainMenu::MainMenu(sf::RenderWindow* window) :
 }
 
 void MainMenu::onNewGameSelected() {
-    new Jeu(4);
     _window->close();
 }
 
