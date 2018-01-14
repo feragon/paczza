@@ -4,33 +4,33 @@
 
 class Sommet {
 private:
-    int _x;
-    int _y;
+    int _column;
+    int _row;
     bool _tomatoSmudge;
 
 public:
-    Sommet(int x, int y);
+    Sommet(int colonne, int ligne);
     virtual ~Sommet();
 
-    inline int x();
-    inline int y();
-    inline bool tomatoSmudge();
+    inline int column();
+    inline int row();
+    inline bool isTomatoSmudge();
 
-    inline void takeTomatoSmudge();
+    inline void eatTomatoSmudge();
 
     friend std::ostream& operator<<(std::ostream &, Sommet const &);
 };
 
-int Sommet::x() {
-    return _x;
+int Sommet::column() {
+    return _column;
 }
-int Sommet::y() {
-    return _y;
+int Sommet::row() {
+    return _row;
 }
-bool Sommet::tomatoSmudge() {
+bool Sommet::isTomatoSmudge() {
     return _tomatoSmudge;
 }
 
-void Sommet::takeTomatoSmudge() {
+void Sommet::eatTomatoSmudge() {
     _tomatoSmudge = false;
 }
