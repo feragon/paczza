@@ -3,6 +3,7 @@
 #include <ui/menu/menubutton.h>
 #include "mainmenu.h"
 #include "boardview.h"
+#include "credits.h"
 
 MainMenu::MainMenu(sf::RenderWindow* window, FenetreJeu* f) :
     Menu(window, f) {
@@ -22,7 +23,7 @@ void MainMenu::onHighScoreSelected() {
 }
 
 void MainMenu::onCreditsSelected() {
-
+    getFenetreJeu()->changerVue(new Credits(_window, getFenetreJeu()));
 }
 
 void MainMenu::onExitSelected() {

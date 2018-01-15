@@ -2,6 +2,7 @@
 #include <ui/resourceloader.h>
 #include <SFML/Window/Event.hpp>
 #include "boardview.h"
+#include <cmath>
 
 Boardview::Boardview(sf::RenderWindow* window, FenetreJeu* f) :
         View(window, f), _joueur(ResourceLoader::getSprite(Sprite::OPEN_PIZZA)) {
