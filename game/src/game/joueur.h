@@ -4,10 +4,13 @@
 
 class Joueur {
     private:
-        Position p;
+        Position _position;
     public:
         /**
          * @brief Crée un nouveau joueur
          */
-        Joueur();
+        Joueur(Position p);
+
+        Position position();
+        void setPosition(Position p);
 };

@@ -4,6 +4,7 @@
 #include <SFML/Graphics/Text.hpp>
 #include <ui/fenetrejeu.h>
 #include <game/jeu.h>
+#include <game/joueur.h>
 #include "view.h"
 
 class Boardview : public View {
@@ -19,10 +20,13 @@ public:
 
     virtual void onEvent(const sf::Event& event) override;
 
+    void UpdatePlayer(int x, int y, int angle);
+
 private:
     sf::Font _font;
     std::vector<sf::Sprite> _backgroundSprites;
     std::vector<sf::Text*> _texts;
-    sf::Sprite _selector;
     Jeu* _jeu;
+
+    sf::Sprite _joueur;
 };

@@ -4,7 +4,7 @@
 #include "boardview.h"
 
 Boardview::Boardview(sf::RenderWindow* window, FenetreJeu* f) :
-        View(window, f) {
+        View(window, f), _joueur(ResourceLoader::getSprite(Sprite::OPEN_PIZZA)) {
 
     _jeu = new Jeu(4);
 }
@@ -19,7 +19,7 @@ void Boardview::resize(const sf::Vector2f& size) {
         }
     }
 
-    for(Sommet<Case>* sommet : _jeu->getGrapge()->sommets()) {
+    for(Sommet<Case>* sommet : _jeu->getGraphe()->sommets()) {
         sf::Sprite sprite(ResourceLoader::getSprite(Sprite::CELL));
 
         sprite.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
@@ -27,7 +27,7 @@ void Boardview::resize(const sf::Vector2f& size) {
         _backgroundSprites.push_back(sprite);
     }
 
-    for(Arete<Case, Chemin>* arete : _jeu->getGrapge()->aretes()) {
+    for(Arete<Case, Chemin>* arete : _jeu->getGraphe()->aretes()) {
         sf::Sprite sprite(ResourceLoader::getSprite(Sprite::PATH));
         sf::Sprite sprite2(ResourceLoader::getSprite(Sprite::PATH));
 
@@ -75,11 +75,13 @@ void Boardview::resize(const sf::Vector2f& size) {
         sprite.setPosition(s1_x * SPRITE_SIZE, s1_y * SPRITE_SIZE);
         _backgroundSprites.push_back(sprite);
 
+
         sprite2.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
         sprite2.rotate((angle + 180) % 360);
         sprite2.setPosition(s2_x * SPRITE_SIZE, s2_y * SPRITE_SIZE);
         _backgroundSprites.push_back(sprite2);
     }
+
 
 }
 
@@ -88,10 +90,31 @@ void Boardview::render() {
         _window->draw(sprite);
     }
 
+    _joueur.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
+    _joueur.setPosition(_jeu->getJoueur()->position().x * SPRITE_SIZE, _jeu->getJoueur()->position().y * SPRITE_SIZE);
+    _window->draw(_joueur);
+}
+
+void Boardview::UpdatePlayer(int x, int y, int angle) {
+    _jeu->getJoueur()->setPosition(Position(x, y));
+    _joueur.setRotation(angle);
 }
 
 void Boardview::onEvent(const sf::Event& event) {
     if(event.type == sf::Event::EventType::KeyPressed) {
+        switch(event.key.code) {
+            case sf::Keyboard::Key::Numpad2:
+                UpdatePlayer(_jeu->getJoueur()->position().x, _jeu->getJoueur()->position().y+1, 270);
+                break;
 
+            case sf::Keyboard::Key::Numpad8:
+                UpdatePlayer(_jeu->getJoueur()->position().x, _jeu->getJoueur()->position().y-1, 90);                break;
+
+            case sf::Keyboard::Key::Numpad4:
+                UpdatePlayer(_jeu->getJoueur()->position().x-1, _jeu->getJoueur()->position().y, 0);                break;
+
+            case sf::Keyboard::Key::Numpad6:
+                UpdatePlayer(_jeu->getJoueur()->position().x+1, _jeu->getJoueur()->position().y, 180);                break;
+        }
     }
 }
