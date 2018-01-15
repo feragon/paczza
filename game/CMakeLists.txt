@@ -7,7 +7,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 set(SOURCE_FILES
         src/main.cpp
-        src/ui/fenetrejeu.cpp src/ui/fenetrejeu.h src/game/jeu.cpp src/game/jeu.h src/game/joueur.cpp src/game/joueur.h src/graph/position.cpp src/graph/position.h src/ui/spriteloader.cpp src/ui/spriteloader.h src/ui/views/view.cpp src/ui/views/view.h src/ui/views/mainmenu.cpp src/ui/views/mainmenu.h src/ui/views/menu.cpp src/ui/views/menu.h src/graph/graphe.h src/graph/sommet.h src/graph/arete.h src/ui/views/boardview.cpp src/ui/views/boardview.h src/board/case.cpp src/board/case.h src/board/chemin.cpp src/board/chemin.h)
+        src/ui/fenetrejeu.cpp src/ui/fenetrejeu.h src/game/jeu.cpp src/game/jeu.h src/game/joueur.cpp src/game/joueur.h src/graph/position.cpp src/graph/position.h src/ui/spriteloader.cpp src/ui/spriteloader.h src/ui/views/view.cpp src/ui/views/view.h src/ui/views/mainmenu.cpp src/ui/views/mainmenu.h src/ui/menu/menu.cpp src/ui/menu/menu.h src/graph/graphe.h src/graph/sommet.h src/graph/arete.h src/ui/views/boardview.cpp src/ui/views/boardview.h src/board/case.cpp src/board/case.h src/board/chemin.cpp src/board/chemin.h src/ui/menu/menuitem.h src/ui/menu/menubutton.cpp src/ui/menu/menubutton.h)
 
 find_package(SFML 2 COMPONENTS graphics window system REQUIRED)
 include_directories(${SFML_INCLUDE_DIR})
