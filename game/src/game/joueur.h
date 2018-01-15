@@ -1,6 +1,6 @@
 #pragma once
 
-#include <board/position.h>
+#include <graph/position.h>
 
 class Joueur {
     private:

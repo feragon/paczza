@@ -1,36 +1,43 @@
 #pragma once
 
 #include <ostream>
+#include "position.h"
 
+template <class S>
 class Sommet {
-private:
-    int _column;
-    int _row;
-    bool _tomatoSmudge;
+    private:
+        S* _donnees;
+        Position _position;
 
-public:
-    Sommet(int colonne, int ligne);
-    virtual ~Sommet();
+    public:
+        Sommet(const Position& p, S* dataSommet);
 
-    inline int column();
-    inline int row();
-    inline bool isTomatoSmudge();
+        inline S* donnees();
+        inline Position position();
 
-    inline void eatTomatoSmudge();
-
-    friend std::ostream& operator<<(std::ostream &, Sommet const &);
+        template <class osS>
+        friend std::ostream& operator<<(std::ostream& os, const Sommet<osS>& sommet);
 };
 
-int Sommet::column() {
-    return _column;
-}
-int Sommet::row() {
-    return _row;
-}
-bool Sommet::isTomatoSmudge() {
-    return _tomatoSmudge;
+
+template <class S>
+Sommet<S>::Sommet(const Position& position, S* dataSommet) {
+    _position = position;
+    _donnees = dataSommet;
 }
 
-void Sommet::eatTomatoSmudge() {
-    _tomatoSmudge = false;
+template <class S>
+S* Sommet<S>::donnees() {
+    return _donnees;
+}
+
+template <class S>
+Position Sommet<S>::position() {
+    return _position;
+}
+
+template <class S>
+std::ostream& operator<<(std::ostream& os, const Sommet<S>& sommet) {
+    os << "Sommet(_donnees: " << sommet._donnees << " _position: " << sommet._position << ")";
+    return os;
 }

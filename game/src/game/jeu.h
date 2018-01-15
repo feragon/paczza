@@ -1,12 +1,12 @@
 #pragma once
 
 #include <graph/graphe.h>
-#include <graph/sommet.h>
-#include <graph/arete.h>
+#include <board/case.h>
+#include <board/chemin.h>
 
 class Jeu {
 private:
-    Graphe<Sommet, Arete> *_graphe;
+    Graphe<Case, Chemin> *_graphe;
 
 public:
     Jeu(unsigned short nbMonstres);

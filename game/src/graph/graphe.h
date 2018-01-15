@@ -1,14 +1,15 @@
 #pragma once
 
 #include <iostream>
-#include "elementsommet.h"
-#include "elementarete.h"
+#include <vector>
+#include "sommet.h"
+#include "arete.h"
 
 template<class S, class T>
 class Graphe {
 private:
-    ElementSommet<S> *_listeSommets;
-    ElementArete<S,T> *_listeAretes;
+    std::vector<Sommet<S>*> _sommets;
+    std::vector<Arete<S,T>*> _aretes;
     unsigned int _columns;
     unsigned int _rows;
 
@@ -23,14 +24,13 @@ public:
     void afficherListeSommets();
     void afficherListeAretes();
 
-    S * sommet(unsigned int colonne, unsigned int ligne);
-    ElementSommet<S> * sommetsIncidents(S *sommet);
+    Sommet<S>* sommet(const Position& position);
+    std::vector<Sommet<S>*> sommetsIncidents(Sommet<S>* sommet);
 };
 
 
 template <class S, class T>
 Graphe<S,T>::Graphe(unsigned int colonnes, unsigned int lignes) {
-
     _columns = colonnes;
     _rows = lignes;
 
@@ -41,19 +41,15 @@ Graphe<S,T>::Graphe(unsigned int colonnes, unsigned int lignes) {
     afficherListeAretes();
 
     std::cout << std::endl << "== Sommets incidents à S[3][2] :" << std::endl;
-    sommetsIncidents(sommet(3,2));
+    for(Sommet<S>* s : sommetsIncidents(sommet(Position(3,2)))) {
+        std::cout << *s << std::endl;
+    }
 }
 
 template <class S, class T>
 void Graphe<S,T>::genererGraphe() {
-
-    _listeSommets = NULL;
-    _listeAretes = NULL;
-
     for(int k = (_columns*_rows)-1; k >= 0; k--) {
-        S *s = new S((k%_columns)+1, (k/_columns)+1);
-
-        _listeSommets = new ElementSommet<S>(s, _listeSommets);
+        _sommets.push_back(new Sommet<S>(Position((k%_columns)+1, (k/_columns)+1), NULL));
     }
 
     for(int i = 1; i <= _rows; i++) {
@@ -62,12 +58,10 @@ void Graphe<S,T>::genererGraphe() {
             /* Ca fait un quadrillage :) */
 
             if(j < _columns) {
-                T *a = new T(0);
-                _listeAretes = new ElementArete<S,T>(a, sommet(j, i), sommet(j+1, i), _listeAretes);
+                _aretes.push_back(new Arete<S,T>(NULL, sommet(Position(j, i)), sommet(Position(j+1, i))));
             }
             if(i < _rows) {
-                T *a = new T(0);
-                _listeAretes = new ElementArete<S,T>(a, sommet(j, i), sommet(j, i+1), _listeAretes);
+                _aretes.push_back(new Arete<S,T>(NULL, sommet(Position(j, i)), sommet(Position(j, i+1))));
             }
         }
     }
@@ -85,63 +79,44 @@ unsigned int Graphe<S,T>::rows() {
 
 template <class S, class T>
 void Graphe<S,T>::afficherListeSommets() {
-
-    ElementSommet<S> *temp = _listeSommets;
-
-    while(temp != NULL) {
-        std::cout << *(temp->tete()) << std::endl;
-        temp = temp->reste();
+    for(Sommet<S>* sommet : _sommets) {
+        std::cout << *sommet << std::endl;
     }
 };
 
 template <class S, class T>
 void Graphe<S,T>::afficherListeAretes() {
-
-    ElementArete<S,T> *temp = _listeAretes;
-
-    while(temp != NULL) {
-        std::cout << *(temp->tete()) << "{ " << *(temp->sommet1()) << " , " << *(temp->sommet2()) << " }" << std::endl;
-        temp = temp->reste();
+    for(Arete<S, T>* arete : _aretes) {
+        std::cout << *arete << std::endl;
     }
 };
 
 template <class S, class T>
-S * Graphe<S,T>::sommet(unsigned int colonne, unsigned int ligne) {
+Sommet<S>* Graphe<S,T>::sommet(const Position& position) {
 
-    if(colonne > _columns || colonne < 1 || ligne > _rows || ligne < 1)
+    if(position.x > _columns || position.x < 1 || position.y > _rows || position.y < 1)
         throw std::invalid_argument("Coordonees inexistantes");
 
-    unsigned int k = (ligne-1) * _columns + (colonne-1);
-    ElementSommet<S> *temp = _listeSommets;
-
-    while(k > 0) {
-        temp = temp->reste();
-        k--;
+    for(Sommet<S>* sommet : _sommets) {
+        if(sommet->position() == position) {
+            return sommet;
+        }
     }
 
-    return temp->tete();
+    throw std::runtime_error("Sommet introuvable");
 };
 
 template <class S, class T>
-ElementSommet<S> * Graphe<S,T>::sommetsIncidents(S *sommet) {
+std::vector<Sommet<S>*> Graphe<S,T>::sommetsIncidents(Sommet<S>* sommet) {
+    std::vector<Sommet<S>*> res;
 
-    ElementArete<S,T> *temp = _listeAretes;
-    ElementSommet<S> *res = NULL;
-
-    while(temp != NULL) {
-
-        if(temp->sommet1() == sommet) {
-            res = new ElementSommet<S>(temp->sommet2(), res);
-
-            std::cout << *(res->tete()) << std::endl;
+    for(Arete<S,T>* arete : _aretes) {
+        if(arete->sommet1() == sommet) {
+            res.push_back(arete->sommet2());
         }
-        else if(temp->sommet2() == sommet) {
-            res = new ElementSommet<S>(temp->sommet1(), res);
-
-            std::cout << *(res->tete()) << std::endl;
+        else if(arete->sommet2() == sommet) {
+            res.push_back(arete->sommet1());
         }
-
-        temp = temp->reste();
     }
 
     return res;
