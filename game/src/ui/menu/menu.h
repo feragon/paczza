@@ -3,19 +3,19 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <functional>
-#include "view.h"
+#include "ui/views/view.h"
+#include "menuitem.h"
 
 class Menu : public View {
     protected:
         Menu(sf::RenderWindow* window);
-        ~Menu();
+        virtual ~Menu();
 
         /**
          * @brief Ajoute un élément au menu
-         * @param title Texte de l'élément
-         * @param callback Fonction appelée lors de la selection
+         * @param item Element à ajouter
          */
-        void addMenu(const std::wstring& title, const std::function<void(void)>& callback);
+        void addItem(MenuItem* item);
 
     public:
         void resize(const sf::Vector2f& size) override;
@@ -35,10 +35,8 @@ class Menu : public View {
          */
         void updateSelectorPosition();
 
-        sf::Font _font;
         std::vector<sf::Sprite> _backgroundSprites;
-        std::vector<sf::Text*> _texts;
-        std::vector<std::function<void(void)>> _callbacks;
+        std::vector<MenuItem*> _items;
         sf::Sprite _selector;
         unsigned int _selected;
 };

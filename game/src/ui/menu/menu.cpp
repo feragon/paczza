@@ -1,5 +1,5 @@
 #include "menu.h"
-#include "boardview.h"
+#include "ui/views/boardview.h"
 #include <config.h>
 #include <math.h>
 #include <ui/spriteloader.h>
@@ -12,15 +12,11 @@ Menu::Menu(sf::RenderWindow* window) :
         _selector(SpriteLoader::getSprite(SpriteLoader::RIGHT_PINEAPPLE)) {
 
     _selected = 0;
-
-    if (!_font.loadFromFile("res/fonts/Pixellari.ttf")) {
-        throw std::runtime_error("Impossible de lire la police de caractères.");
-    }
 }
 
 Menu::~Menu() {
-    for(sf::Text* text : _texts) {
-        delete text;
+    for(MenuItem* item : _items) {
+        delete item;
     }
 }
 
@@ -36,22 +32,20 @@ void Menu::resize(const sf::Vector2f& size) {
     centerTexts();
 }
 
+void Menu::addItem(MenuItem* item) {
+    _items.push_back(item);
+}
+
 void Menu::render() {
     for(sf::Sprite sprite : _backgroundSprites) {
         _window->draw(sprite);
     }
 
-    for(sf::Text* text : _texts) {
-        _window->draw(*text);
+    for(MenuItem* item : _items) {
+        _window->draw(*item);
     }
 
     _window->draw(_selector);
-}
-
-void Menu::addMenu(const std::wstring& title, const std::function<void(void)>& callback) {
-    sf::Text* text = new sf::Text(sf::String(title), _font, 42);
-    _texts.push_back(text);
-    _callbacks.push_back(callback);
 }
 
 void Menu::centerTexts() {
@@ -59,8 +53,8 @@ void Menu::centerTexts() {
     float halfHeight = _window->getView().getSize().y / 2;
     unsigned int i = 0;
 
-    for(sf::Text* text : _texts) {
-        text->setPosition(halfWidth - (text->getGlobalBounds().width / 2), halfHeight + (i * 45));
+    for(MenuItem* item : _items) {
+        item->setPosition(sf::Vector2f(halfWidth - (item->bounds().width / 2), halfHeight + (i * 45)));
         i++;
     }
 
@@ -68,19 +62,17 @@ void Menu::centerTexts() {
 }
 
 void Menu::updateSelectorPosition() {
-    if(_texts.size() == 0) {
+    if(_items.size() == 0) {
         return;
     }
 
-    if(_selected >= _texts.size()) {
+    if(_selected >= _items.size()) {
         _selected = 0;
     }
 
-    _selector.setOrigin(0,0);
+    sf::Vector2f position = _items[_selected]->position();
 
-    sf::Vector2f position = _texts[_selected]->getPosition();
-
-    float top = position.y + (_texts[_selected]->getCharacterSize() - _selector.getLocalBounds().height) / 2;
+    float top = position.y + (_items[_selected]->bounds().height - _selector.getLocalBounds().height) / 2;
     float left = position.x - _selector.getLocalBounds().width;
     _selector.setPosition(left, top);
 }
@@ -89,7 +81,7 @@ void Menu::onEvent(const sf::Event& event) {
     if(event.type == sf::Event::EventType::KeyPressed) {
         switch(event.key.code) {
             case sf::Keyboard::Key::Down:
-                if(_selected < _texts.size() - 1) {
+                if(_selected < _items.size() - 1) {
                     _selected++;
                 }
                 updateSelectorPosition();
@@ -101,10 +93,8 @@ void Menu::onEvent(const sf::Event& event) {
                 }
                 updateSelectorPosition();
                 break;
-            case sf::Keyboard::Key::Return:
-                _callbacks[_selected]();
+            default:
+                _items[_selected]->onEvent(event);
         }
-
-
     }
 }

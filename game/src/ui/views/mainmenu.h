@@ -1,6 +1,6 @@
 #pragma once
 
-#include "menu.h"
+#include "ui/menu/menu.h"
 
 class MainMenu : public Menu {
     public:
