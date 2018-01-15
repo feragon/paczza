@@ -10,4 +10,5 @@ class MainMenu : public Menu {
         void onNewGameSelected();
         void onHighScoreSelected();
         void onCreditsSelected();
+        void onExitSelected();
 };
