@@ -2,7 +2,7 @@
 #include <config.h>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/Sprite.hpp>
-#include <ui/spriteloader.h>
+#include <ui/resourceloader.h>
 #include <ui/views/mainmenu.h>
 
 FenetreJeu::FenetreJeu() :

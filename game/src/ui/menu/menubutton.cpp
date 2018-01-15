@@ -1,12 +1,9 @@
 #include "menubutton.h"
 #include <SFML/Graphics/RenderTarget.hpp>
+#include <ui/resourceloader.h>
 
 MenuButton::MenuButton(const std::wstring& title, const std::function<void(void)>& callback) {
-    if (!_font.loadFromFile("res/fonts/Pixellari.ttf")) {
-        throw std::runtime_error("Impossible de lire la police de caractères.");
-    }
-
-    _text = sf::Text(sf::String(title), _font, 42);
+    _text = sf::Text(sf::String(title), ResourceLoader::getFont(Font::PIXELLARI), 42);
     _callback = callback;
 }
 
