@@ -4,7 +4,7 @@
 
 class MainMenu : public Menu {
     public:
-        MainMenu(sf::RenderWindow* window);
+        MainMenu(sf::RenderWindow* window, FenetreJeu* f);
 
     private:
         void onNewGameSelected();

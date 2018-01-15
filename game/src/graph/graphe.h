@@ -26,6 +26,9 @@ public:
 
     Sommet<S>* sommet(const Position& position);
     std::vector<Sommet<S>*> sommetsIncidents(Sommet<S>* sommet);
+
+    std::vector<Sommet<S>*> sommets();
+    std::vector<Arete<S,T>*> aretes();
 };
 
 
@@ -65,6 +68,11 @@ void Graphe<S,T>::genererGraphe() {
             }
         }
     }
+
+    _aretes.push_back(new Arete<S,T>(NULL, sommet(Position(3, 2)), sommet(Position(2, 1))));
+    _aretes.push_back(new Arete<S,T>(NULL, sommet(Position(3, 2)), sommet(Position(4, 1))));
+    _aretes.push_back(new Arete<S,T>(NULL, sommet(Position(3, 2)), sommet(Position(4, 3))));
+    _aretes.push_back(new Arete<S,T>(NULL, sommet(Position(3, 2)), sommet(Position(2, 3))));
 };
 
 template <class S, class T>
@@ -120,4 +128,15 @@ std::vector<Sommet<S>*> Graphe<S,T>::sommetsIncidents(Sommet<S>* sommet) {
     }
 
     return res;
+};
+
+
+template <class S, class T>
+std::vector<Sommet<S>*> Graphe<S,T>::sommets() {
+    return _sommets;
+};
+
+template <class S, class T>
+std::vector<Arete<S,T>*> Graphe<S,T>::aretes() {
+    return _aretes;
 };

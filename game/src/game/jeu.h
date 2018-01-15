@@ -10,4 +10,6 @@ private:
 
 public:
     Jeu(unsigned short nbMonstres);
+
+    Graphe<Case, Chemin> * getGrapge();
 };

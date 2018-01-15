@@ -3,12 +3,13 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <functional>
+#include <ui/fenetrejeu.h>
 #include "ui/views/view.h"
 #include "menuitem.h"
 
 class Menu : public View {
     protected:
-        Menu(sf::RenderWindow* window);
+        Menu(sf::RenderWindow* window, FenetreJeu *f);
         virtual ~Menu();
 
         /**
@@ -23,7 +24,6 @@ class Menu : public View {
         void render() override;
 
         virtual void onEvent(const sf::Event& event) override;
-
     private:
         /**
          * @brief Center menu texts

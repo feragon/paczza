@@ -20,4 +20,6 @@ class FenetreJeu {
 
         void ouvrir();
         void fermer();
+
+        void changerVue(View *v);
 };

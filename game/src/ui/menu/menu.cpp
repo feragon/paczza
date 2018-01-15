@@ -7,8 +7,8 @@
 #include <SFML/Window/Event.hpp>
 #include <game/jeu.h>
 
-Menu::Menu(sf::RenderWindow* window) :
-        View(window),
+Menu::Menu(sf::RenderWindow* window, FenetreJeu *f) :
+        View(window, f),
         _selector(ResourceLoader::getSprite(Sprite::RIGHT_PINEAPPLE)) {
 
     _selected = 0;

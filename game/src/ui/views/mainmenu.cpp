@@ -2,9 +2,10 @@
 #include <game/jeu.h>
 #include <ui/menu/menubutton.h>
 #include "mainmenu.h"
+#include "boardview.h"
 
-MainMenu::MainMenu(sf::RenderWindow* window) :
-    Menu(window) {
+MainMenu::MainMenu(sf::RenderWindow* window, FenetreJeu* f) :
+    Menu(window, f) {
 
     addItem(new MenuButton(L"Nouvelle partie", std::bind(&MainMenu::onNewGameSelected, this)));
     addItem(new MenuButton(L"Meilleurs scores", std::bind(&MainMenu::onHighScoreSelected, this)));
@@ -13,7 +14,7 @@ MainMenu::MainMenu(sf::RenderWindow* window) :
 }
 
 void MainMenu::onNewGameSelected() {
-    Jeu *j = new Jeu(4);
+    getFenetreJeu()->changerVue(new Boardview(_window, getFenetreJeu()));
 }
 
 void MainMenu::onHighScoreSelected() {

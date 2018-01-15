@@ -2,6 +2,8 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 
+class FenetreJeu;
+
 class View {
     public:
         virtual void render() = 0;
@@ -18,7 +20,9 @@ class View {
          */
         virtual void onEvent(const sf::Event& event) = 0;
 
+        FenetreJeu* getFenetreJeu();
     protected:
-        View(sf::RenderWindow* window);
+        View(sf::RenderWindow* window, FenetreJeu* f);
         sf::RenderWindow* _window;
+        FenetreJeu * _fenetreJeu;
 };

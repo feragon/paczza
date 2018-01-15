@@ -14,7 +14,7 @@ FenetreJeu::FenetreJeu() :
     image.loadFromFile("res/icon.png");
     _fenetre.setIcon(45, 45, image.getPixelsPtr());
 
-    _view = new MainMenu(&_fenetre);
+    _view = new MainMenu(&_fenetre, this);
 
     resizeView(_fenetre.getSize());
 }
@@ -55,4 +55,9 @@ void FenetreJeu::resizeView(const sf::Vector2u& size) {
     sf::Vector2f newSize(size.x, size.y);
     _fenetre.setView(sf::View(sf::FloatRect(sf::Vector2f(0, 0), newSize)));
     _view->resize(newSize);
+}
+
+void FenetreJeu::changerVue(View *v) {
+    _view = v;
+    _view->resize(_fenetre.getView().getSize());
 }
