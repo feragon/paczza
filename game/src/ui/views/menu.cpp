@@ -76,9 +76,12 @@ void Menu::updateSelectorPosition() {
         _selected = 0;
     }
 
+    _selector.setOrigin(0,0);
+
     sf::Vector2f position = _texts[_selected]->getPosition();
-    float top = position.y - 8;
-    float left = position.x - 64;
+
+    float top = position.y + (_texts[_selected]->getCharacterSize() - _selector.getLocalBounds().height) / 2;
+    float left = position.x - _selector.getLocalBounds().width;
     _selector.setPosition(left, top);
 }
 
