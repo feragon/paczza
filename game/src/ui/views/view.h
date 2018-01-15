@@ -8,6 +8,28 @@ class FenetreJeu;
 
 class View {
     public:
+        /**
+         * @brief Donne la fenre SFML
+         * @return Fenêtre SFML
+         */
+        inline sf::RenderWindow* window();
+
+        /**
+         * @brief Donne la fenêtre du jeu
+         * @return Fenêtre du jeu
+         */
+        inline FenetreJeu* fenetreJeu();
+
+        /**
+         * @brief Définit le fond de la vue
+         * @param sprite Sprite utilisé pour remplir la vue
+         * @TODO: utiliser ça partout
+         */
+        void setFond(Sprite sprite);
+
+        /**
+         * @brief Provoque le rendu de la vue
+         */
         virtual void render();
 
         /**
@@ -22,24 +44,26 @@ class View {
          */
         virtual void onEvent(const sf::Event& event) = 0;
 
-        FenetreJeu* getFenetreJeu();
-
         /**
          * @brief Supprime le fond déjà crée
          */
         void clearFond();
 
-        /**
-         * @brief Définit le fond de la vue
-         * @param sprite Sprite utilisé pour remplir la vue
-         * @TODO: utiliser ça partout
-         */
-        void setFond(Sprite sprite);
     protected:
         View(sf::RenderWindow* window, FenetreJeu* f);
+
+    private:
         sf::RenderWindow* _window;
         FenetreJeu * _fenetreJeu;
 
         Sprite _spriteFond;
         std::vector<sf::Sprite> _fond;
 };
+
+FenetreJeu* View::fenetreJeu() {
+    return _fenetreJeu;
+}
+
+sf::RenderWindow* View::window() {
+    return _window;
+}

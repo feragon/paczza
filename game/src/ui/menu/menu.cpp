@@ -11,6 +11,7 @@ Menu::Menu(sf::RenderWindow* window, FenetreJeu *f) :
         View(window, f),
         _selector(ResourceLoader::getSprite(Sprite::RIGHT_PINEAPPLE)) {
 
+    setFond(EMPTY_CELL);
     _selected = 0;
 }
 
@@ -21,13 +22,7 @@ Menu::~Menu() {
 }
 
 void Menu::resize(const sf::Vector2f& size) {
-    for(unsigned int i = 0; i <= ceil(size.x / SPRITE_SIZE); i++) {
-        for(unsigned int j = 0; j <= ceil(size.y / SPRITE_SIZE); j++) {
-            sf::Sprite sprite(ResourceLoader::getSprite(Sprite::EMPTY_CELL));
-            sprite.setPosition(i * SPRITE_SIZE, j * SPRITE_SIZE);
-            _backgroundSprites.push_back(sprite);
-        }
-    }
+    View::resize(size);
 
     centerTexts();
 }
@@ -37,20 +32,18 @@ void Menu::addItem(MenuItem* item) {
 }
 
 void Menu::render() {
-    for(sf::Sprite sprite : _backgroundSprites) {
-        _window->draw(sprite);
-    }
+    View::render();
 
     for(MenuItem* item : _items) {
-        _window->draw(*item);
+        window()->draw(*item);
     }
 
-    _window->draw(_selector);
+    window()->draw(_selector);
 }
 
 void Menu::centerTexts() {
-    float halfWidth = _window->getView().getSize().x / 2;
-    float halfHeight = _window->getView().getSize().y / 2;
+    float halfWidth = window()->getView().getSize().x / 2;
+    float halfHeight = window()->getView().getSize().y / 2;
     unsigned int i = 0;
 
     for(MenuItem* item : _items) {

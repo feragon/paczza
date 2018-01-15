@@ -2,23 +2,16 @@
 #include <ui/resourceloader.h>
 #include <SFML/Window/Event.hpp>
 #include "boardview.h"
-#include <cmath>
 
 Boardview::Boardview(sf::RenderWindow* window, FenetreJeu* f) :
         View(window, f), _joueur(ResourceLoader::getSprite(Sprite::OPEN_PIZZA)) {
 
     _jeu = new Jeu(4);
+    setFond(Sprite::EMPTY_CELL);
 }
 
 void Boardview::resize(const sf::Vector2f& size) {
-    for(unsigned int i = 0; i <= ceil(size.x / SPRITE_SIZE); i++) {
-        for(unsigned int j = 0; j <= ceil(size.y / SPRITE_SIZE); j++) {
-
-            sf::Sprite sprite(ResourceLoader::getSprite(Sprite::EMPTY_CELL));
-            sprite.setPosition(i * SPRITE_SIZE, j * SPRITE_SIZE);
-            _backgroundSprites.push_back(sprite);
-        }
-    }
+    View::resize(size);
 
     for(Sommet<Case>* sommet : _jeu->getGraphe()->sommets()) {
         sf::Sprite sprite(ResourceLoader::getSprite(Sprite::CELL));
@@ -87,13 +80,15 @@ void Boardview::resize(const sf::Vector2f& size) {
 }
 
 void Boardview::render() {
+    View::render();
+
     for(sf::Sprite sprite : _backgroundSprites) {
-        _window->draw(sprite);
+        window()->draw(sprite);
     }
 
     _joueur.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
     _joueur.setPosition(_jeu->getJoueur()->position().x * SPRITE_SIZE, _jeu->getJoueur()->position().y * SPRITE_SIZE);
-    _window->draw(_joueur);
+    window()->draw(_joueur);
 }
 
 void Boardview::UpdatePlayer(int x, int y, int angle) {

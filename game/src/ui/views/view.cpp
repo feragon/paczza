@@ -8,11 +8,11 @@ View::View(sf::RenderWindow* window, FenetreJeu* f) {
     _fenetreJeu = f;
 }
 
-FenetreJeu* View::getFenetreJeu() {
-    return _fenetreJeu;
-}
-
 void View::resize(const sf::Vector2f& size) {
+    if(_spriteFond == SPRITE_FIN) {
+        return;
+    }
+
     for(unsigned int i = 0; i <= ceil(size.x / SPRITE_SIZE); i++) {
         for(unsigned int j = 0; j <= ceil(size.y / SPRITE_SIZE); j++) {
             sf::Sprite s(ResourceLoader::getSprite(_spriteFond));

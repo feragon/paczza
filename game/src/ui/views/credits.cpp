@@ -28,7 +28,7 @@ void Credits::render() {
     View::render();
 
     for(sf::Text text : _texts) {
-        _window->draw(text);
+        window()->draw(text);
     }
 }
 

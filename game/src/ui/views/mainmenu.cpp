@@ -15,7 +15,7 @@ MainMenu::MainMenu(sf::RenderWindow* window, FenetreJeu* f) :
 }
 
 void MainMenu::onNewGameSelected() {
-    getFenetreJeu()->changerVue(new Boardview(_window, getFenetreJeu()));
+    fenetreJeu()->changerVue(new Boardview(window(), fenetreJeu()));
 }
 
 void MainMenu::onHighScoreSelected() {
@@ -23,9 +23,9 @@ void MainMenu::onHighScoreSelected() {
 }
 
 void MainMenu::onCreditsSelected() {
-    getFenetreJeu()->changerVue(new Credits(_window, getFenetreJeu()));
+    fenetreJeu()->changerVue(new Credits(window(), fenetreJeu()));
 }
 
 void MainMenu::onExitSelected() {
-    _window->close();
+    window()->close();
 }
