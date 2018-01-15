@@ -20,6 +20,5 @@ class MenuButton : public MenuItem {
 
     private:
         sf::Text _text;
-        sf::Font _font;
         std::function<void(void)> _callback;
 };

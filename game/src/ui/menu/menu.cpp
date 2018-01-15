@@ -2,14 +2,14 @@
 #include "ui/views/boardview.h"
 #include <config.h>
 #include <math.h>
-#include <ui/spriteloader.h>
+#include <ui/resourceloader.h>
 #include <iostream>
 #include <SFML/Window/Event.hpp>
 #include <game/jeu.h>
 
 Menu::Menu(sf::RenderWindow* window) :
         View(window),
-        _selector(SpriteLoader::getSprite(SpriteLoader::RIGHT_PINEAPPLE)) {
+        _selector(ResourceLoader::getSprite(Sprite::RIGHT_PINEAPPLE)) {
 
     _selected = 0;
 }
@@ -23,7 +23,7 @@ Menu::~Menu() {
 void Menu::resize(const sf::Vector2f& size) {
     for(unsigned int i = 0; i <= ceil(size.x / SPRITE_SIZE); i++) {
         for(unsigned int j = 0; j <= ceil(size.y / SPRITE_SIZE); j++) {
-            sf::Sprite sprite(SpriteLoader::getSprite(SpriteLoader::EMPTY_CELL));
+            sf::Sprite sprite(ResourceLoader::getSprite(Sprite::EMPTY_CELL));
             sprite.setPosition(i * SPRITE_SIZE, j * SPRITE_SIZE);
             _backgroundSprites.push_back(sprite);
         }
