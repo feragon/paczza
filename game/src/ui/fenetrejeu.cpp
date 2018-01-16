@@ -16,10 +16,13 @@ FenetreJeu::FenetreJeu() :
 
     _view = new MainMenu(&_fenetre, this);
 
+    _historique = nullptr;
+
     resizeView(_fenetre.getSize());
 }
 
 FenetreJeu::~FenetreJeu() {
+    Liste<View>::efface2(_historique);
     delete _view;
 }
 
@@ -28,15 +31,18 @@ void FenetreJeu::ouvrir() {
         sf::Event event;
         while (_fenetre.pollEvent(event))
         {
-            // Close window: exit
-            if (event.type == sf::Event::Closed)
+            if (event.type == sf::Event::Closed) {
                 fermer();
-
-            if (event.type == sf::Event::Resized) {
+            }
+            else if (event.type == sf::Event::Resized) {
                 resizeView(_fenetre.getSize());
             }
-
-            _view->onEvent(event);
+            else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+                vuePrecedente();
+            }
+            else {
+                _view->onEvent(event);
+            }
         }
 
         _fenetre.clear(sf::Color(0, 0, 0, 255));
@@ -58,6 +64,21 @@ void FenetreJeu::resizeView(const sf::Vector2u& size) {
 }
 
 void FenetreJeu::changerVue(View *v) {
+    _historique = new Liste<View>(_view, _historique);
+
     _view = v;
     _view->resize(_fenetre.getView().getSize());
+}
+
+void FenetreJeu::vuePrecedente() {
+    if(Liste<View>::taille(_historique) == 0) {
+        return;
+    }
+
+    View* old = _view;
+
+    _view = Liste<View>::depiler(_historique);
+    _view->resize(_fenetre.getView().getSize());
+
+    delete old;
 }

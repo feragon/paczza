@@ -5,9 +5,10 @@ set(CMAKE_CXX_STANDARD 11)
 
 set(SOURCE_FILES
         src/main.cpp
-)
+        src/testliste.cpp)
 
 include_directories(catch)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../game/src)
 
 add_executable(unittests ${SOURCE_FILES})
 target_link_libraries(unittests game)
