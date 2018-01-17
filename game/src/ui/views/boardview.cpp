@@ -13,16 +13,6 @@ Boardview::Boardview(sf::RenderWindow* window, FenetreJeu* f) :
 void Boardview::resize(const sf::Vector2f& size) {
     View::resize(size);
 
-    for(Sommet<Case>* sommet : _jeu->getGraphe()->sommets()) {
-        if(sommet->degre() > 0) {
-            sf::Sprite sprite(ResourceLoader::getSprite(Sprite::CELL));
-
-            sprite.setOrigin(SPRITE_SIZE / 2, SPRITE_SIZE / 2);
-            sprite.setPosition(sommet->position().x * SPRITE_SIZE, sommet->position().y * SPRITE_SIZE);
-            _backgroundSprites.push_back(sprite);
-        }
-    }
-
     for(Arete<Case, Chemin>* arete : _jeu->getGraphe()->aretes()) {
         sf::Sprite sprite(ResourceLoader::getSprite(Sprite::PATH));
 
@@ -46,6 +36,16 @@ void Boardview::resize(const sf::Vector2f& size) {
         sprite.setPosition((s1_x + vect_x/2) * SPRITE_SIZE, (s1_y + vect_y/2) * SPRITE_SIZE);
         _backgroundSprites.push_back(sprite);
     }
+
+    for(Sommet<Case>* sommet : _jeu->getGraphe()->sommets()) {
+        if(sommet->degre() > 0) {
+            sf::Sprite sprite(ResourceLoader::getSprite(Sprite::CELL));
+
+            sprite.setOrigin(SPRITE_SIZE / 2, SPRITE_SIZE / 2);
+            sprite.setPosition(sommet->position().x * SPRITE_SIZE, sommet->position().y * SPRITE_SIZE);
+            _backgroundSprites.push_back(sprite);
+        }
+    }
 }
 
 void Boardview::render() {
@@ -59,12 +59,12 @@ void Boardview::render() {
     _joueur.setPosition(_jeu->getJoueur()->position().x * SPRITE_SIZE, _jeu->getJoueur()->position().y * SPRITE_SIZE);
     window()->draw(_joueur);
 
-    for(std::pair<Position,Sprite> p : _jeu->_aliments) {
+    for(ElementGraphique * p : _jeu->_aliments) {
 
-        sf::Sprite sprite(ResourceLoader::getSprite(p.second));
+        sf::Sprite sprite(ResourceLoader::getSprite(p->sprite()));
 
         sprite.setOrigin(SPRITE_SIZE / 2, SPRITE_SIZE / 2);
-        sprite.setPosition(p.first.x * SPRITE_SIZE, p.first.y * SPRITE_SIZE);
+        sprite.setPosition(p->position().x * SPRITE_SIZE, p->position().y * SPRITE_SIZE);
         window()->draw(sprite);
     }
 }
@@ -80,8 +80,8 @@ void Boardview::UpdatePlayer(int x, int y, int angle) {
         catch(std::invalid_argument ia) {}
     }
 
-    for(std::pair<Position,Sprite> p : _jeu->_aliments) {
-        if(p.first.x == x && p.first.y == y)
+    for(ElementGraphique * p : _jeu->_aliments) {
+        if(p->position().x == x && p->position().y == y)
             _jeu->_aliments.erase(std::find(_jeu->_aliments.begin(),_jeu->_aliments.end(),p));
     }
 }

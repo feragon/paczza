@@ -27,6 +27,7 @@ template <class S>
 Sommet<S>::Sommet(const Position& position, S* dataSommet) {
     _position = position;
     _donnees = dataSommet;
+    _degre = 0;
 }
 
 template <class S>
