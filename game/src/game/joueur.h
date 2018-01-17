@@ -5,6 +5,7 @@
 class Joueur {
     private:
         Position _position;
+        int _points;
     public:
         /**
          * @brief Crée un nouveau joueur
@@ -13,4 +14,6 @@ class Joueur {
 
         Position position();
         void setPosition(Position p);
+        int points();
+        void addPoints(int pts);
 };

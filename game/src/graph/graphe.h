@@ -38,15 +38,6 @@ Graphe<S,T>::Graphe(unsigned int colonnes, unsigned int lignes) {
     _rows = lignes;
 
     genererGraphe();
-
-    std::cout << std::endl << "== Generation du graphe :" << std::endl;
-    afficherListeSommets();
-    afficherListeAretes();
-
-    std::cout << std::endl << "== Sommets incidents à S[3][2] :" << std::endl;
-    for(Sommet<S>* s : sommetsIncidents(sommet(Position(3,2)))) {
-        std::cout << *s << std::endl;
-    }
 }
 
 template <class S, class T>

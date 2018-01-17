@@ -22,5 +22,6 @@ enum Sprite {
         OPEN_PIZZA_3,
         PIZZA,
         TOMATO_SMUDGE,
+        SPACE,
         SPRITE_FIN
 };
