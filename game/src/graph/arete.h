@@ -26,6 +26,9 @@ Arete<S,T>::Arete(T *dataArete, Sommet<S>* sommet1, Sommet<S>* sommet2) {
     this->_dataArete = dataArete;
     this->_sommet1 = sommet1;
     this->_sommet2 = sommet2;
+
+    _sommet1->setDegre(_sommet1->degre() + 1);
+    _sommet2->setDegre(_sommet2->degre() + 1);
 }
 
 template <class S, class T>

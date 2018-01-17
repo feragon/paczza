@@ -7,6 +7,7 @@ template <class S>
 class Sommet {
     private:
         S* _donnees;
+        int _degre;
         Position _position;
 
     public:
@@ -14,6 +15,8 @@ class Sommet {
 
         inline S* donnees();
         inline Position position();
+        inline int degre();
+        inline int setDegre(int i);
 
         template <class osS>
         friend std::ostream& operator<<(std::ostream& os, const Sommet<osS>& sommet);
@@ -34,6 +37,16 @@ S* Sommet<S>::donnees() {
 template <class S>
 Position Sommet<S>::position() {
     return _position;
+}
+
+template <class S>
+int Sommet<S>::degre() {
+    return _degre;
+}
+
+template <class S>
+int Sommet<S>::setDegre(int i) {
+    _degre = i;
 }
 
 template <class S>

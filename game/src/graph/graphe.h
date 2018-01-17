@@ -55,24 +55,25 @@ void Graphe<S,T>::genererGraphe() {
         _sommets.push_back(new Sommet<S>(Position((k%_columns)+1, (k/_columns)+1), NULL));
     }
 
+    srand(time(NULL));
+
     for(int i = 1; i <= _rows; i++) {
         for(int j = 1; j <= _columns; j++) {
 
-            /* Ca fait un quadrillage :) */
+            int nb = rand() % 100;
+            if (nb < 80) {
 
-            if(j < _columns) {
-                _aretes.push_back(new Arete<S,T>(NULL, sommet(Position(j, i)), sommet(Position(j+1, i))));
-            }
-            if(i < _rows) {
-                _aretes.push_back(new Arete<S,T>(NULL, sommet(Position(j, i)), sommet(Position(j, i+1))));
+                /* Ca fait un quadrillage :) */
+                if(j < _columns)
+                    _aretes.push_back(new Arete<S, T>(NULL, sommet(Position(j, i)), sommet(Position(j + 1, i))));
+                if(i < _rows)
+                    _aretes.push_back(new Arete<S, T>(NULL, sommet(Position(j, i)), sommet(Position(j, i + 1))));
             }
         }
     }
 
     _aretes.push_back(new Arete<S,T>(NULL, sommet(Position(3, 2)), sommet(Position(2, 1))));
-    _aretes.push_back(new Arete<S,T>(NULL, sommet(Position(3, 2)), sommet(Position(4, 1))));
-    _aretes.push_back(new Arete<S,T>(NULL, sommet(Position(3, 2)), sommet(Position(4, 3))));
-    _aretes.push_back(new Arete<S,T>(NULL, sommet(Position(3, 2)), sommet(Position(2, 3))));
+    _aretes.push_back(new Arete<S,T>(NULL, sommet(Position(5, 4)), sommet(Position(4, 5))));
 };
 
 template <class S, class T>
