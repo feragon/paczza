@@ -10,7 +10,7 @@ Credits::Credits(sf::RenderWindow* window, FenetreJeu* f) :
         View(window, f) {
 
     _position = 0;
-    setFond(EMPTY_CELL);
+    setFond(SPACE);
 }
 
 void Credits::resize(const sf::Vector2f& size) {
@@ -57,20 +57,32 @@ void Credits::createText(float initialYPosition) {
         if(ratio > 1) {
             std::wstring str(buf);
             size_t textLen = str.size();
-            double lineLength = ceil(textLen / ratio) - 1;
+            unsigned long lineLength = ceil(textLen / ratio) - 1;
+            unsigned long esp;
+            std::string charEsp(" ");
 
-            for(unsigned long i = 0; i < textLen; i += lineLength) {
-                text = sf::Text(str.substr(i, lineLength), ResourceLoader::getFont(KONGTEXT), 32);
+            long i = 0;
+            while(i < str.size()) {
+
+                esp = i+lineLength;
+                while(esp < str.size()-1 && esp > i && str.at(esp) != charEsp.at(0))
+                    esp--;
+
+                text = sf::Text(str.substr(i, esp-i), ResourceLoader::getFont(KONGTEXT), 32);
 
                 text.setPosition(25, nextY);
+                text.setColor(sf::Color(255,255,0));
                 nextY += text.getCharacterSize() + 2;
 
                 _texts.push_back(text);
+
+                i = esp + 1;
             }
         }
         else {
             _texts.push_back(text);
             text.setPosition(25, nextY);
+            text.setColor(sf::Color(255,255,0));
             nextY += text.getCharacterSize() + 2;
         }
     }

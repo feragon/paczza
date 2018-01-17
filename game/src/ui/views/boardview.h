@@ -30,4 +30,5 @@ private:
     Jeu* _jeu;
 
     AnimatedSprite _joueur;
+    sf::Text _score;
 };

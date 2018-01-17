@@ -5,7 +5,7 @@
 
 Boardview::Boardview(sf::RenderWindow* window, FenetreJeu* f) :
         View(window, f),
-        _joueur(AnimatedSprite::ANIMATION_CIRCULAR, sf::Sprite(ResourceLoader::getSprite(Sprite::OPEN_PIZZA_1)), 8) {
+        _joueur(AnimatedSprite::ANIMATION_CIRCULAR, sf::Sprite(ResourceLoader::getSprite(Sprite::OPEN_PIZZA_1)), 16) {
 
     _jeu = new Jeu(4);
     setFond(Sprite::EMPTY_CELL);
@@ -73,6 +73,10 @@ void Boardview::render(double timeElapsed) {
         sprite.setPosition(p->position().x * SPRITE_SIZE, p->position().y * SPRITE_SIZE);
         window()->draw(sprite);
     }
+
+    _score = sf::Text("Score:"+std::to_string(_jeu->joueur()->points()), ResourceLoader::getFont(KONGTEXT), 32);
+    _score.setPosition(window()->getView().getSize().x - _score.getLocalBounds().width - 20, window()->getView().getSize().y - _score.getLocalBounds().height - 20);
+    window()->draw(_score);
 }
 
 void Boardview::UpdatePlayer(int x, int y, int angle) {
@@ -92,9 +96,11 @@ void Boardview::UpdatePlayer(int x, int y, int angle) {
 
     Liste<Sommet<Case>>::efface1(voisins);
 
-    for(ElementGraphique * p : _jeu->aliments()) {
-        if(p->position().x == x && p->position().y == y)
+    for(ElementGraphique* p : _jeu->aliments()) {
+        if(p->position().x == x && p->position().y == y) {
+            _jeu->joueur()->addPoints(p->points());
             _jeu->aliments().erase(std::find(_jeu->aliments().begin(), _jeu->aliments().end(), p));
+        }
     }
 }
 
