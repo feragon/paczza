@@ -31,8 +31,8 @@ void Menu::addItem(MenuItem* item) {
     _items.push_back(item);
 }
 
-void Menu::render() {
-    View::render();
+void Menu::render(double timeElapsed) {
+    View::render(timeElapsed);
 
     for(MenuItem* item : _items) {
         window()->draw(*item);

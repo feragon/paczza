@@ -4,10 +4,15 @@
 #include "boardview.h"
 
 Boardview::Boardview(sf::RenderWindow* window, FenetreJeu* f) :
-        View(window, f), _joueur(ResourceLoader::getSprite(Sprite::OPEN_PIZZA)) {
+        View(window, f),
+        _joueur(AnimatedSprite::ANIMATION_CIRCULAR, sf::Sprite(ResourceLoader::getSprite(Sprite::OPEN_PIZZA_1)), 8) {
 
     _jeu = new Jeu(4);
     setFond(Sprite::EMPTY_CELL);
+
+    _joueur.addSprite(sf::Sprite(ResourceLoader::getSprite(Sprite::OPEN_PIZZA_2)));
+    _joueur.addSprite(sf::Sprite(ResourceLoader::getSprite(Sprite::OPEN_PIZZA_3)));
+    _joueur.addSprite(sf::Sprite(ResourceLoader::getSprite(Sprite::PIZZA)));
 }
 
 void Boardview::resize(const sf::Vector2f& size) {
@@ -48,8 +53,8 @@ void Boardview::resize(const sf::Vector2f& size) {
     }
 }
 
-void Boardview::render() {
-    View::render();
+void Boardview::render(double timeElapsed) {
+    View::render(timeElapsed);
 
     for(sf::Sprite sprite : _backgroundSprites) {
         window()->draw(sprite);
@@ -57,6 +62,7 @@ void Boardview::render() {
 
     _joueur.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
     _joueur.setPosition(_jeu->getJoueur()->position().x * SPRITE_SIZE, _jeu->getJoueur()->position().y * SPRITE_SIZE);
+    _joueur.animate(timeElapsed);
     window()->draw(_joueur);
 
     for(ElementGraphique * p : _jeu->_aliments) {

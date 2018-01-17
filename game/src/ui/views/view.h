@@ -29,8 +29,9 @@ class View {
 
         /**
          * @brief Provoque le rendu de la vue
+         * @param timeElapsed Temps écoulé depuis le dernier rendu
          */
-        virtual void render();
+        virtual void render(double timeElapsed);
 
         /**
          * @brief Redimensionne la vue

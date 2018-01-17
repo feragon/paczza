@@ -27,6 +27,8 @@ FenetreJeu::~FenetreJeu() {
 }
 
 void FenetreJeu::ouvrir() {
+    sf::Clock frameClock;
+
     while (_fenetre.isOpen()) {
         sf::Event event;
         while (_fenetre.pollEvent(event))
@@ -47,7 +49,7 @@ void FenetreJeu::ouvrir() {
 
         _fenetre.clear(sf::Color(0, 0, 0, 255));
 
-        _view->render();
+        _view->render(frameClock.restart().asSeconds());
 
         _fenetre.display();
     }

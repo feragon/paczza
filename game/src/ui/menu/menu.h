@@ -21,7 +21,7 @@ class Menu : public View {
     public:
         void resize(const sf::Vector2f& size) override;
 
-        void render() override;
+        void render(double timeElapsed) override;
 
         virtual void onEvent(const sf::Event& event) override;
     private:

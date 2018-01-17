@@ -17,8 +17,10 @@ enum Sprite {
         UP_PINEAPPLE_OFF,
         RIGHT_PINEAPPLE_OFF,
         DOWN_PINEAPPLE_OFF,
+        OPEN_PIZZA_1,
+        OPEN_PIZZA_2,
+        OPEN_PIZZA_3,
         PIZZA,
-        OPEN_PIZZA,
         TOMATO_SMUDGE,
         SPRITE_FIN
 };

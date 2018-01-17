@@ -7,7 +7,7 @@ class Credits : public View {
     public:
         Credits(sf::RenderWindow* window, FenetreJeu* f);
 
-        virtual void render() override;
+        virtual void render(double timeElapsed) override;
         virtual void resize(const sf::Vector2f& size) override;
         virtual void onEvent(const sf::Event& event) override;
 

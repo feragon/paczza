@@ -32,7 +32,7 @@ void View::clearFond() {
     _fond.clear();
 }
 
-void View::render() {
+void View::render(double timeElapsed) {
     for(sf::Sprite sprite : _fond) {
         _window->draw(sprite);
     }

@@ -49,8 +49,8 @@ void Credits::resize(const sf::Vector2f& size) {
     creditsFile.close();
 }
 
-void Credits::render() {
-    View::render();
+void Credits::render(double timeElapsed) {
+    View::render(timeElapsed);
 
     for(sf::Text text : _texts) {
         window()->draw(text);

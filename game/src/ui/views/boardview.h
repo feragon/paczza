@@ -5,6 +5,7 @@
 #include <ui/fenetrejeu.h>
 #include <game/jeu.h>
 #include <game/joueur.h>
+#include <ui/drawables/animatedsprite.h>
 #include "view.h"
 
 class Boardview : public View {
@@ -16,7 +17,7 @@ public:
 
     void resize(const sf::Vector2f& size) override;
 
-    void render() override;
+    void render(double timeElapsed) override;
 
     virtual void onEvent(const sf::Event& event) override;
 
@@ -28,5 +29,5 @@ private:
     std::vector<sf::Text*> _texts;
     Jeu* _jeu;
 
-    sf::Sprite _joueur;
+    AnimatedSprite _joueur;
 };
