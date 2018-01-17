@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstring>
 #include <cmath>
+#include <codecvt>
 
 Credits::Credits(sf::RenderWindow* window, FenetreJeu* f) :
         View(window, f) {
@@ -14,10 +15,11 @@ Credits::Credits(sf::RenderWindow* window, FenetreJeu* f) :
 void Credits::resize(const sf::Vector2f& size) {
     View::resize(size);
 
-    char buf[BUFSIZ];
+    wchar_t buf[BUFSIZ];
     unsigned int n = 0;
 
-    std::fstream creditsFile("res/credits.txt", std::ios::in);
+    std::wifstream creditsFile("res/credits.txt", std::ios::in);
+    creditsFile.imbue(std::locale(creditsFile.getloc(), new std::codecvt_utf8<wchar_t, 0x10ffff, std::consume_header>));
 
     while (!creditsFile.eof()) {
         creditsFile.getline(buf, BUFSIZ);
@@ -26,7 +28,7 @@ void Credits::resize(const sf::Vector2f& size) {
         double ratio = text.getLocalBounds().width / window()->getView().getSize().x;
 
         if(ratio > 1) {
-            std::string str(buf);
+            std::wstring str(buf);
             size_t textLen = str.size();
             double lineLength = ceil(textLen / ratio) - 1;
 
