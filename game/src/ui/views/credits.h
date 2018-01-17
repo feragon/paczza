@@ -12,5 +12,18 @@ class Credits : public View {
         virtual void onEvent(const sf::Event& event) override;
 
     private:
+        /**
+         * @brief Déplace le texte
+         * @param yOffest Positif pour monter, négatif pour descendre
+         */
+        void updateText(float yOffest);
+
+        /**
+         * @brief Crée le texte
+         * @param initialYPosition Position verticale initiale
+         */
+        void createText(float initialYPosition);
+
         std::vector<sf::Text> _texts;
+        float _position;
 };
