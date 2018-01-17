@@ -1,11 +1,12 @@
 #include "jeu.h"
 
 Jeu::Jeu(unsigned short nbMonstres) {
-    _graphe = new Graphe<Case, Chemin>(12,8);
-    _joueur = new Joueur(Position(getGraphe()->columns()/2,getGraphe()->rows()/2));
+    _plateau = new Board(12,8);
 
-    int i = _graphe->columns();
-    int j = _graphe->rows();
+    int i = _plateau->width();
+    int j = _plateau->height();
+
+    _joueur = new Joueur(Position(i / 2, j / 2));
 
     _aliments.push_back(new ElementGraphique(Position((rand() % i) + 1, (rand() % j) + 1), Sprite::TOMATO, 200));
     _aliments.push_back(new ElementGraphique(Position((rand() % i) + 1, (rand() % j) + 1), Sprite::CHEESE, 200));
@@ -13,10 +14,19 @@ Jeu::Jeu(unsigned short nbMonstres) {
     _aliments.push_back(new ElementGraphique(Position((rand() % i) + 1, (rand() % j) + 1), Sprite::MUSHROOM, 200));
 }
 
-Graphe<Case, Chemin> * Jeu::getGraphe() {
-    return _graphe;
+Jeu::~Jeu() {
+    delete _plateau;
+    delete _joueur;
+}
+
+Board* Jeu::plateau() {
+    return _plateau;
 };
 
-Joueur * Jeu::getJoueur() {
+Joueur * Jeu::joueur() {
     return _joueur;
+}
+
+std::vector<ElementGraphique*>& Jeu::aliments() {
+    return _aliments;
 }
