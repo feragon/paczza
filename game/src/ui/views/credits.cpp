@@ -23,7 +23,7 @@ void Credits::resize(const sf::Vector2f& size) {
 
     while (!creditsFile.eof()) {
         creditsFile.getline(buf, BUFSIZ);
-        sf::Text text(buf, ResourceLoader::getFont(PIXELLARI), 32);
+        sf::Text text(buf, ResourceLoader::getFont(KONGTEXT), 32);
 
         double ratio = text.getLocalBounds().width / window()->getView().getSize().x;
 
@@ -33,7 +33,7 @@ void Credits::resize(const sf::Vector2f& size) {
             double lineLength = ceil(textLen / ratio) - 1;
 
             for(int i = 0; i < textLen; i += lineLength) {
-                text = sf::Text(str.substr(i, lineLength), ResourceLoader::getFont(PIXELLARI), 32);
+                text = sf::Text(str.substr(i, lineLength), ResourceLoader::getFont(KONGTEXT), 32);
                 text.setPosition(0, 36 * n);
                 _texts.push_back(text);
                 n++;

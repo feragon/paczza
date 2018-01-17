@@ -4,10 +4,10 @@
 #include <map>
 
 enum Font {
-    PIXELLARI,
+    KONGTEXT,
     FONT_FIN
 };
 
 const std::map<Font, std::string> fontPath = {
-    {PIXELLARI, "Pixellari.ttf"}
+    {KONGTEXT, "kongtext.ttf"}
 };

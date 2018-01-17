@@ -3,7 +3,7 @@
 #include <ui/resourceloader.h>
 
 MenuButton::MenuButton(const std::wstring& title, const std::function<void(void)>& callback) {
-    _text = sf::Text(sf::String(title), ResourceLoader::getFont(Font::PIXELLARI), 42);
+    _text = sf::Text(sf::String(title), ResourceLoader::getFont(Font::KONGTEXT), 42);
     _callback = callback;
 }
 

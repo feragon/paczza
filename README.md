@@ -3,4 +3,4 @@
 Mort aux ananas !
 
 # Ressources utilisées
-- Police de caractères Pixellari par Zacchary Dempsey-Plante
+- Police de caractères Kongtext par codeman38
