@@ -1,11 +1,8 @@
 #include "case.h"
 
-Case::Case() {
+Case::Case(const Position& position) {
+    _position = position;
     _points = 10;
-}
-
-Case::~Case() {
-
 }
 
 int Case::eatGum() {
@@ -15,6 +12,6 @@ int Case::eatGum() {
 }
 
 std::ostream & operator<<(std::ostream &os, const Case& s) {
-    os << "Case()";
+    os << "Case(" << s.position() << ")";
     return os;
 }

@@ -2,56 +2,54 @@
 
 #include <ostream>
 #include "position.h"
+#include "conteneur.h"
 
-template <class S>
-class Sommet {
+template <class T>
+class Sommet : public Conteneur<T> {
     private:
-        S* _donnees;
         int _degre;
-        Position _position;
 
     public:
-        Sommet(const Position& p, S* dataSommet);
+        Sommet(int identifiant, const T& contenu);
 
-        inline S* donnees();
-        inline Position position();
-        inline int degre();
+        inline int degre() const;
         inline int setDegre(int i);
+
+
+        operator std::string() const;
 
         template <class osS>
         friend std::ostream& operator<<(std::ostream& os, const Sommet<osS>& sommet);
 };
 
+template <class T>
+Sommet<T>::Sommet(int identifiant, const T& contenu) :
+        Conteneur<T>(identifiant, contenu),
+        _degre(0) {
 
-template <class S>
-Sommet<S>::Sommet(const Position& position, S* dataSommet) {
-    _position = position;
-    _donnees = dataSommet;
-    _degre = 0;
 }
 
-template <class S>
-S* Sommet<S>::donnees() {
-    return _donnees;
-}
-
-template <class S>
-Position Sommet<S>::position() {
-    return _position;
-}
-
-template <class S>
-int Sommet<S>::degre() {
+template <class T>
+int Sommet<T>::degre() const {
     return _degre;
 }
 
-template <class S>
-int Sommet<S>::setDegre(int i) {
+template <class T>
+int Sommet<T>::setDegre(int i) {
     _degre = i;
 }
 
-template <class S>
-std::ostream& operator<<(std::ostream& os, const Sommet<S>& sommet) {
-    os << "Sommet(_donnees: " << sommet._donnees << " _position: " << sommet._position << ")";
+template <class T>
+Sommet<T>::operator std::string() const {
+    std::ostringstream oss;
+
+    oss << "Sommet(" << (std::string) ((Conteneur<T>) *this) << "; degre=" << _degre << ")";
+
+    return oss.str();
+}
+
+template <class T>
+std::ostream& operator<<(std::ostream& os, const Sommet<T>& sommet) {
+    os << (std::string) sommet;
     return os;
 }

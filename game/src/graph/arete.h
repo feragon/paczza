@@ -3,54 +3,73 @@
 #include <ostream>
 
 template <class S, class T>
-class Arete {
+class Arete : public Conteneur<S> {
     private:
-        T* _dataArete;
-        Sommet<S>* _sommet1;
-        Sommet<S>* _sommet2;
+        Sommet<T>* _debut;
+        Sommet<T>* _fin;
     
     public:
-        Arete(T* dataArete, Sommet<S>* sommet1, Sommet<S>* sommet2);
-    
-        T* tete();
-        Sommet<S>* sommet1();
-        Sommet<S>* sommet2();
+        Arete(int clef, const S& contenu, Sommet<T>* debut, Sommet<T>* fin);
 
+        virtual ~Arete();
+
+        Sommet<T>* debut() const;
+        Sommet<T>* fin() const;
+
+        bool estEgal(const Sommet<T>* s1, const Sommet<T>* s2) const;
+
+        operator std::string() const;
         template <class osS, class osT>
         friend std::ostream& operator<<(std::ostream& os, const Arete<osS, osT>& arete);
 };
 
 
 template <class S, class T>
-Arete<S,T>::Arete(T *dataArete, Sommet<S>* sommet1, Sommet<S>* sommet2) {
-    this->_dataArete = dataArete;
-    this->_sommet1 = sommet1;
-    this->_sommet2 = sommet2;
+Arete<S,T>::Arete(int clef, const S& contenu, Sommet<T>* debut, Sommet<T>* fin) :
+    Conteneur<S>(clef, contenu){
 
-    _sommet1->setDegre(_sommet1->degre() + 1);
-    _sommet2->setDegre(_sommet2->degre() + 1);
+    _debut = debut;
+    _fin = fin;
+
+    _debut->setDegre(_debut->degre() + 1);
+    _fin->setDegre(_fin->degre() + 1);
 }
 
 template <class S, class T>
-T * Arete<S,T>::tete() {
-    return _dataArete;
+Arete<S,T>::~Arete() {
+    _debut->setDegre(_debut->degre() - 1);
+    _fin->setDegre(_fin->degre() - 1);
 }
 
 template <class S, class T>
-Sommet<S>* Arete<S,T>::sommet1() {
-    return _sommet1;
+Sommet<T>* Arete<S,T>::debut() const {
+    return _debut;
 }
 
 template <class S, class T>
-Sommet<S>* Arete<S,T>::sommet2() {
-    return _sommet2;
+Sommet<T>* Arete<S,T>::fin() const {
+    return _fin;
 }
 
 template <class S, class T>
-std::ostream& operator<<(std::ostream& os, const Arete<S,T>& arete) {
-    os << "Arete(_dataArete: " << arete._dataArete <<
-               " _sommet1: " << arete._sommet1 <<
-               " _sommet2: " << arete._sommet2 <<
+bool Arete<S,T>::estEgal(const Sommet<T>* s1, const Sommet<T>* s2) const {
+    return (s1 == _debut && s2 == _fin) || (s2 == _debut && s1 == _fin);
+}
+
+template <class S, class T>
+Arete<S, T>::operator std::string() const {
+    std::ostringstream oss;
+
+    oss << "Arete(" << (std::string) ((Conteneur<S>) *this) <<
+       "; debut=" << _debut->cle() <<
+       "; fin=" << _fin->cle() <<
     ")";
-    return os;
+
+    return oss.str();
+}
+
+template <class S, class T>
+std::ostream& operator<<(std::ostream& o, const Arete<S,T>& arete) {
+    o << (std::string) arete;
+    return o;
 }
