@@ -71,7 +71,7 @@ void Credits::createText(float initialYPosition) {
                 text = sf::Text(str.substr(i, esp-i), ResourceLoader::getFont(KONGTEXT), 32);
 
                 text.setPosition(25 + (window()->getView().getSize().x - 50 - text.getLocalBounds().width)/2, nextY);
-                text.setColor(sf::Color(255,255,0));
+                text.setFillColor(sf::Color(255,255,0));
                 nextY += text.getCharacterSize() + 2;
 
                 _texts.push_back(text);
@@ -81,7 +81,7 @@ void Credits::createText(float initialYPosition) {
         }
         else {
             text.setPosition(25 + (window()->getView().getSize().x - 50 - text.getLocalBounds().width)/2, nextY);
-            text.setColor(sf::Color(255,255,0));
+            text.setFillColor(sf::Color(255,255,0));
             _texts.push_back(text);
             nextY += text.getCharacterSize() + 2;
         }
