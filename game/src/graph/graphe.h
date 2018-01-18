@@ -46,25 +46,44 @@ void Graphe<S,T>::genererGraphe() {
         _sommets.push_back(new Sommet<S>(Position((k%_columns)+1, (k/_columns)+1), NULL));
     }
 
-    srand(time(NULL));
+    srand(time(NULL)); int nb, alea_x1, alea_y1, alea_x2, alea_y2;
 
     for(int i = 1; i <= _rows; i++) {
         for(int j = 1; j <= _columns; j++) {
 
-            int nb = rand() % 100;
-            if (nb < 80) {
+            /* Ca fait un quadrillage :) */
 
-                /* Ca fait un quadrillage :) */
+            nb = rand() % 100;
+            if (nb < 80)
                 if(j < _columns)
                     _aretes.push_back(new Arete<S, T>(NULL, sommet(Position(j, i)), sommet(Position(j + 1, i))));
+
+            nb = rand() % 100;
+            if (nb < 55)
                 if(i < _rows)
                     _aretes.push_back(new Arete<S, T>(NULL, sommet(Position(j, i)), sommet(Position(j, i + 1))));
-            }
+
         }
     }
 
-    _aretes.push_back(new Arete<S,T>(NULL, sommet(Position(3, 2)), sommet(Position(2, 1))));
-    _aretes.push_back(new Arete<S,T>(NULL, sommet(Position(5, 4)), sommet(Position(4, 5))));
+    for(int i = 0; i < _columns; i++) {
+        //Sommet1 aleatoire
+        alea_x1 = rand() % _columns + 1;
+        alea_y1 = rand() % _rows + 1;
+
+        //Sommet2 voisin
+        alea_x2 = alea_x1 % 3 ? alea_x1 - 1 : alea_x1 + 1;
+        alea_y2 = alea_y1 % 3 ? alea_y1 - 1 : alea_y1 + 1;
+
+        //si Sommet1 est sur un bord on force la direction de Sommet2
+        if(alea_x1 == 1) alea_x2 = alea_x1+1;
+        if(alea_x1 == _columns) alea_x2 = alea_x1-1;
+        if(alea_y1 == 1) alea_y2 = alea_y1+1;
+        if(alea_y1 == _rows) alea_y2 = alea_y1-1;
+
+        _aretes.push_back(new Arete<S, T>(NULL, sommet(Position(alea_x1, alea_y1)), sommet(Position(alea_x2, alea_y2))));
+        std::cout << alea_x1 << ","<< alea_y1 << " / "<< alea_x2 << ","<< alea_y2 << "," << std::endl;
+    }
 };
 
 template <class S, class T>

@@ -18,6 +18,16 @@ Boardview::Boardview(sf::RenderWindow* window, FenetreJeu* f) :
 void Boardview::resize(const sf::Vector2f& size) {
     View::resize(size);
 
+    for(Sommet<Case>* sommet : _jeu->getGraphe()->sommets()) {
+        if(sommet->degre() > 0) {
+            sf::Sprite sprite(ResourceLoader::getSprite(Sprite::CELL));
+
+            sprite.setOrigin(SPRITE_SIZE / 2, SPRITE_SIZE / 2);
+            sprite.setPosition(sommet->position().x * SPRITE_SIZE, sommet->position().y * SPRITE_SIZE);
+            _backgroundSprites.push_back(sprite);
+        }
+    }
+
     for(Arete<Case, Chemin>* arete : _jeu->getGraphe()->aretes()) {
         sf::Sprite sprite(ResourceLoader::getSprite(Sprite::PATH));
 
@@ -30,7 +40,7 @@ void Boardview::resize(const sf::Vector2f& size) {
 
         int angle = 0;
 
-        if(vect_x == 1 || vect_x*vect_y > 0)
+        if((vect_x == 1 && vect_y == 0) || vect_x*vect_y > 0)
             angle = 90;
 
         if(vect_x != 0 && vect_y != 0)
@@ -42,15 +52,7 @@ void Boardview::resize(const sf::Vector2f& size) {
         _backgroundSprites.push_back(sprite);
     }
 
-    for(Sommet<Case>* sommet : _jeu->getGraphe()->sommets()) {
-        if(sommet->degre() > 0) {
-            sf::Sprite sprite(ResourceLoader::getSprite(Sprite::CELL));
 
-            sprite.setOrigin(SPRITE_SIZE / 2, SPRITE_SIZE / 2);
-            sprite.setPosition(sommet->position().x * SPRITE_SIZE, sommet->position().y * SPRITE_SIZE);
-            _backgroundSprites.push_back(sprite);
-        }
-    }
 }
 
 void Boardview::render(double timeElapsed) {
@@ -84,17 +86,19 @@ void Boardview::UpdatePlayer(int x, int y, int angle) {
     for(Sommet<Case> * sommet :_jeu->getGraphe()->sommetsIncidents(_jeu->getGraphe()->sommet(_jeu->getJoueur()->position()))) {
         try {
             _joueur.setRotation(angle);
-            if(sommet == _jeu->getGraphe()->sommet(Position(x,y)))
+            if(sommet == _jeu->getGraphe()->sommet(Position(x,y))) {
                 _jeu->getJoueur()->setPosition(Position(x, y));
+                //_jeu->getJoueur()->addPoints(10);
+
+                for(ElementGraphique * p : _jeu->_aliments) {
+                    if(p->position().x == x && p->position().y == y) {
+                        _jeu->getJoueur()->addPoints(p->points());
+                        _jeu->_aliments.erase(std::find(_jeu->_aliments.begin(), _jeu->_aliments.end(), p));
+                    }
+                }
+            }
         }
         catch(std::invalid_argument ia) {}
-    }
-
-    for(ElementGraphique * p : _jeu->_aliments) {
-        if(p->position().x == x && p->position().y == y) {
-            _jeu->getJoueur()->addPoints(p->points());
-            _jeu->_aliments.erase(std::find(_jeu->_aliments.begin(), _jeu->_aliments.end(), p));
-        }
     }
 }
 

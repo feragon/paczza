@@ -37,7 +37,7 @@ void Credits::updateText(float yOffset) {
     _position += yOffset;
 
     for(sf::Text& text : _texts) {
-        text.move(0, - yOffset);
+        text.move(0, -yOffset);
     }
 }
 
@@ -70,7 +70,7 @@ void Credits::createText(float initialYPosition) {
 
                 text = sf::Text(str.substr(i, esp-i), ResourceLoader::getFont(KONGTEXT), 32);
 
-                text.setPosition(25, nextY);
+                text.setPosition(25 + (window()->getView().getSize().x - 50 - text.getLocalBounds().width)/2, nextY);
                 text.setColor(sf::Color(255,255,0));
                 nextY += text.getCharacterSize() + 2;
 
@@ -80,9 +80,9 @@ void Credits::createText(float initialYPosition) {
             }
         }
         else {
-            _texts.push_back(text);
-            text.setPosition(25, nextY);
+            text.setPosition(25 + (window()->getView().getSize().x - 50 - text.getLocalBounds().width)/2, nextY);
             text.setColor(sf::Color(255,255,0));
+            _texts.push_back(text);
             nextY += text.getCharacterSize() + 2;
         }
     }
