@@ -3,6 +3,7 @@
 #include <graph/conteneur.h>
 #include <graph/sommet.h>
 #include <graph/arete.h>
+#include <graph/graphe.h>
 
 TEST_CASE("Test Identifiable graphe") {
     Identifiable i(0);
@@ -69,4 +70,74 @@ TEST_CASE("Test arete graphe") {
 
     REQUIRE(s1.degre() == 0);
     REQUIRE(s2.degre() == 0);
+}
+
+TEST_CASE("Test constructeur graphe") {
+    Graphe<char, std::string> g;
+    REQUIRE(g.aretes() == nullptr);
+    REQUIRE(g.sommets() == nullptr);
+    REQUIRE((std::string) g == "Graphe(sommets=(); aretes=())");
+}
+
+TEST_CASE("Test constructeur sommet") {
+    Graphe<char, std::string> g;
+    g.creeSommet("Contenu");
+
+    REQUIRE((std::string) g == "Graphe(sommets=(Sommet(Conteneur(Identifiable(0); contenu=Contenu); degre=0)); aretes=())");
+}
+
+TEST_CASE("Test constructeur arete") {
+    Graphe<char, std::string> g;
+    Sommet<std::string>* s1 = g.creeSommet("Contenu");
+    Sommet<std::string>* s2 = g.creeSommet("Contenu 2");
+    g.creeArete('a', s1, s2);
+
+    REQUIRE((std::string) g == "Graphe(sommets=(Sommet(Conteneur(Identifiable(1); contenu=Contenu 2); degre=1), Sommet(Conteneur(Identifiable(0); contenu=Contenu); degre=1)); aretes=(Arete(Conteneur(Identifiable(0); contenu=a); debut=0; fin=1)))");
+}
+
+TEST_CASE("Test nombre sommets") {
+    Graphe<char, std::string> g;
+    REQUIRE(g.nombreSommets() == 0);
+
+    g.creeSommet("Contenu");
+    REQUIRE(g.nombreSommets() == 1);
+
+    g.creeSommet("Contenu 2");
+    REQUIRE(g.nombreSommets() == 2);
+}
+
+TEST_CASE("Test nombre aretes") {
+    Graphe<char, std::string> g;
+    Sommet<std::string>* s1 = g.creeSommet("Contenu");
+    Sommet<std::string>* s2 = g.creeSommet("Contenu 2");
+    REQUIRE(g.nombreAretes() == 0);
+
+    g.creeArete('a', s1, s2);
+    REQUIRE(g.nombreAretes() == 1);
+}
+
+TEST_CASE("Test voisins") {
+    Graphe<char, std::string> g;
+    Sommet<std::string>* s1 = g.creeSommet("Contenu");
+    Sommet<std::string>* s2 = g.creeSommet("Contenu 2");
+
+    REQUIRE(g.voisins(s1) == nullptr);
+    REQUIRE(g.voisins(s2) == nullptr);
+
+    g.creeArete('a', s1, s2);
+    REQUIRE(g.voisins(s1)->value == s2);
+    REQUIRE(g.voisins(s2)->value == s1);
+}
+
+TEST_CASE("Test aretes adjacentes") {
+    Graphe<char, std::string> g;
+    Sommet<std::string>* s1 = g.creeSommet("Contenu");
+    Sommet<std::string>* s2 = g.creeSommet("Contenu 2");
+
+    REQUIRE(g.aretesAdjacentes(s1) == nullptr);
+    REQUIRE(g.aretesAdjacentes(s2) == nullptr);
+
+    Arete<char, std::string>* a = g.creeArete('a', s1, s2);
+    REQUIRE(g.aretesAdjacentes(s1)->value == a);
+    REQUIRE(g.aretesAdjacentes(s2)->value == a);
 }

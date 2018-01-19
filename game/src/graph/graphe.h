@@ -6,18 +6,53 @@
 #include "arete.h"
 #include "liste.h"
 
-//TODO: ajout méthodes manquantes TD
+template <class T>
+class SommetClesEgales {
+    private:
+        Sommet<T>* _sommet;
+
+    public:
+        SommetClesEgales(Sommet<T>* sommet) {
+            _sommet = sommet;
+        }
+
+        bool operator() (const Sommet<T>* autre) {
+            return _sommet->cle() == autre->cle();
+        }
+};
 
 template<class S, class T>
 class Graphe {
     private:
+        /**
+         * @brief Vide le graphe
+         */
+        void reset();
+
+        /**
+         * @brief Copie un graphe
+         * @param graphe Graphe à copier
+         */
+        void copie(const Graphe& graphe);
+
+        /**
+         * @brief Crée un sommet dans le graphe
+         * @param cle Clé du sommet
+         * @param content Contenu du sommet
+         * @return Nouveau sommet
+         */
+        Sommet<T>* creerSommet(int cle, const T& content);
+
         Liste<Sommet<T>>* _sommets;
         Liste<Arete<S,T>>* _aretes;
         int _prochaineCle;
 
     public:
         Graphe();
+        Graphe(const Graphe& graphe);
         virtual ~Graphe();
+
+        Graphe<S,T>& operator = (const Graphe& graphe);
 
         /**
          * @brief Crée un sommet isolé
@@ -82,6 +117,14 @@ class Graphe {
          */
         Liste<Arete<S, T>>* aretes();
 
+        /**
+         * @brief Retourne l'arrête contenant les deux sommets
+         * @param s1 Sommet 1
+         * @param s2 Sommet 2
+         * @return Arête
+         */
+        Arete<S,T>* getAreteParSommets(const Sommet<T>* s1, const Sommet<T>* s2) const;
+
         operator std::string() const;
 
         template <class osS, class osT>
@@ -97,17 +140,61 @@ Graphe<S,T>::Graphe() {
 }
 
 template <class S, class T>
-Graphe<S,T>::~Graphe() {
-    //TODO
+Graphe<S,T>::Graphe(const Graphe& graphe) :
+        Graphe() {
+    copie(graphe);
 }
 
 template <class S, class T>
-Sommet<T>* Graphe<S,T>::creeSommet(const T& contenu) {
-    Sommet<T>* sommet = new Sommet<T>(_prochaineCle++, contenu);
+Graphe<S,T>::~Graphe() {
+    reset();
+}
+
+template <class S, class T>
+Graphe<S, T>& Graphe<S,T>::operator=(const Graphe& graphe) {
+    reset();
+    copie(graphe);
+    return *this;
+}
+
+template <class S, class T>
+void Graphe<S,T>::reset() {
+    Liste<Arete<S, T>>::efface2(_aretes);
+    Liste<Sommet<T>>::efface2(_sommets);
+    _prochaineCle = 0;
+}
+
+template <class S, class T>
+void Graphe<S,T>::copie(const Graphe& graphe) {
+    Liste<Sommet<T>>* l;
+
+    for(l = graphe._sommets; l; l = l->next) {
+        creerSommet(l->value->cle(), l->value->contenu());
+    }
+
+    Liste<Arete<S,T>>* a;
+    for(a = graphe._aretes; a; a = a->next) {
+        SommetClesEgales<T> conditionDebut(a->value->debut());
+        SommetClesEgales<T> conditionFin(a->value->fin());
+
+        Sommet<T>* debut = Liste<Sommet<T>>::appartient(_sommets, conditionDebut)->value;
+        Sommet<T>* fin = Liste<Sommet<T>>::appartient(_sommets, conditionFin)->value;
+        creeArete(a->value, debut, fin);
+    }
+}
+
+template <class S, class T>
+Sommet<T>* Graphe<S,T>::creerSommet(int cle, const T& content) {
+    Sommet<T>* sommet = new Sommet<T>(cle, content);
 
     _sommets = new Liste<Sommet<T>>(sommet, _sommets);
 
     return sommet;
+}
+
+template <class S, class T>
+Sommet<T>* Graphe<S,T>::creeSommet(const T& contenu) {
+    return creerSommet(_prochaineCle++, contenu);
 }
 
 template <class S, class T>
@@ -204,4 +291,17 @@ Liste<Sommet<T>>* Graphe<S,T>::sommets() {
 template<class S, class T>
 Liste<Arete<S, T>>* Graphe<S,T>::aretes() {
     return _aretes;
+}
+
+template<class S, class T>
+Arete<S, T>* Graphe<S,T>::getAreteParSommets(const Sommet<T>* s1, const Sommet<T>* s2) const {
+    Liste<Arete<S,T>>* l;
+
+    for(l = this->_aretes; l; l = l->next) {
+        if (l->value->estEgal(s1, s2)) {
+            return l->value;
+        }
+    }
+
+    return NULL;
 }
