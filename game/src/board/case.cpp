@@ -1,17 +1,17 @@
 #include "case.h"
 
-Case::Case(const Position& position) {
+Case::Case(int points, const Position& position) {
     _position = position;
-    _points = 10;
+    _points = points;
 }
 
-int Case::eatGum() {
-    int pts = _points;
+int Case::prendrePoints() {
+    int res = _points;
     _points = 0;
-    return pts;
+    return res;
 }
 
 std::ostream & operator<<(std::ostream &os, const Case& s) {
-    os << "Case(" << s.position() << ")";
+    os << "Case(" << s.position() << "; points=" << s.points() << ")";
     return os;
 }

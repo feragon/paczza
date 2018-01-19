@@ -67,6 +67,20 @@ void Boardview::render(double timeElapsed) {
     _joueur.animate(timeElapsed);
     window()->draw(_joueur);
 
+    //TODO: optimiser le rendu
+    for(Liste<Sommet<Case>>* l = _jeu->plateau()->sommets(); l; l = l->next) {
+        Case c = l->value->contenu();
+        if(c.points() > 0) {
+            sf::Sprite sprite(ResourceLoader::getSprite(TOMATO_SMUDGE));
+
+            sprite.setOrigin(SPRITE_SIZE / 2, SPRITE_SIZE / 2);
+            sprite.setPosition(c.position().x * SPRITE_SIZE,
+                               c.position().y * SPRITE_SIZE);
+
+            window()->draw(sprite);
+        }
+    }
+
     for(ElementGraphique * p : _jeu->aliments()) {
         sf::Sprite sprite(ResourceLoader::getSprite(p->sprite()));
 
@@ -86,10 +100,12 @@ void Boardview::UpdatePlayer(int x, int y, int angle) {
         try {
             _joueur.setRotation(angle);
             if(sommet->value == _jeu->plateau()->sommet(Position(x,y))) {
-                _jeu->joueur()->setPosition(Position(x, y));
-                //_jeu->getJoueur()->addPoints(10);
+                Position p(x, y);
+                _jeu->joueur()->setPosition(p);
 
-                for(ElementGraphique* p : _jeu->aliments()) {
+                _jeu->joueur()->addPoints(_jeu->plateau()->sommet(p)->contenu().prendrePoints());
+
+                for(ElementGraphique* p : _jeu->aliments()) { //TODO: déplacer ça
                     if(p->position().x == x && p->position().y == y) {
                         _jeu->joueur()->addPoints(p->points());
                         _jeu->aliments().erase(std::find(_jeu->aliments().begin(), _jeu->aliments().end(), p));

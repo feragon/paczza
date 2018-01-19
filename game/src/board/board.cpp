@@ -15,7 +15,7 @@ void Board::genererGraphe() {
     //Création des sommets
     for(int k = (_width * _height) - 1; k >= 0; k--) {
         Position p((k % _width) + 1, (k / _width) + 1);
-        _cases[p] = creeSommet(p);
+        _cases[p] = creeSommet(Case(10, p));
     }
 
     //Création des arêtes diagonales
