@@ -8,27 +8,31 @@
 #include <ui/drawables/animatedsprite.h>
 #include "view.h"
 
-class Boardview : public View {
-protected:
-    ~Boardview();
+class BoardView : public View {
+    public:
+        BoardView(sf::RenderWindow* window, FenetreJeu* f);
+        virtual ~BoardView();
 
-public:
-    Boardview(sf::RenderWindow* window, FenetreJeu* f);
+        void resize(const sf::Vector2f& size) override;
 
-    void resize(const sf::Vector2f& size) override;
+        void render(double timeElapsed) override;
 
-    void render(double timeElapsed) override;
+        virtual void onEvent(const sf::Event& event) override;
 
-    virtual void onEvent(const sf::Event& event) override;
+        void UpdatePlayer(int x, int y, int angle);
 
-    void UpdatePlayer(int x, int y, int angle);
+    private:
+        void genererSpritesElements();
+        void genererSpriteElement(const Case& c);
 
-private:
-    sf::Font _font;
-    std::vector<sf::Sprite> _backgroundSprites;
-    std::vector<sf::Text*> _texts;
-    Jeu* _jeu;
+        BoardView(const BoardView&);
+        BoardView& operator = (const BoardView&);
 
-    AnimatedSprite _joueur;
-    sf::Text _score;
+        std::map<Position, sf::Sprite, cmpPosition> _elements;
+
+        std::vector<sf::Sprite> _backgroundSprites;
+        Jeu* _jeu;
+
+        AnimatedSprite _joueur;
+        sf::Text _score;
 };

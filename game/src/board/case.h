@@ -2,14 +2,22 @@
 
 #include <ostream>
 #include <graph/position.h>
+#include "element.h"
 
 class Case {
     private:
-        int _points;
         Position _position;
+        Element* _element;
+
+        void copy(const Case& c);
+        void clear();
 
     public:
-        Case(int points, const Position& position);
+        Case(const Position& position, const Element* element);
+        Case(const Case& c);
+        ~Case();
+
+        Case& operator = (const Case& c);
 
         /**
          * @brief Donne la position de la case
@@ -18,28 +26,28 @@ class Case {
         inline Position position() const;
 
         /**
-         * @brief Donne le nombre de points, ou 0 si la case est vide
-         * @return Nombre de points
+         * @brief Donne l'élément de la case, ou nullptr si la case est vide
+         * @return Element
          */
-        inline int points() const;
-
-        /**
-         * @brief Définit le nombre de points, ou 0 pour vider la case
-         * @param points Nouveau nombre de points
-         */
-        inline void setPoints(int points);
-
-        /**
-         * @brief Donne le nombre de points et le remet à 0
-         * @return Nombre de points pris
-         */
-        int prendrePoints();
+        inline Element* element() const;
 
         /**
          * @brief Définit la nouvelle position de la case
          * @param position Nouvelle position
          */
         inline void setPosition(const Position& position);
+
+        /**
+         * @brief Définit l'élément de la case
+         * @param element Nouvel élément, ou nullptr
+         */
+        inline void setElement(const Element* element);
+
+        /**
+         * @brief Fonction appelée quand un joueur passe sur la case
+         * @param joueur Joueur
+         */
+        void heberge(Joueur& joueur);
 
         friend std::ostream& operator<<(std::ostream &, const Case&);
 };
@@ -52,10 +60,19 @@ void Case::setPosition(const Position& position) {
     _position = position;
 }
 
-int Case::points() const {
-    return _points;
+Element* Case::element() const {
+    return _element;
 }
 
-void Case::setPoints(int points) {
-    _points = points;
+void Case::setElement(const Element* element) {
+    if(_element) {
+        delete _element;
+    }
+
+    if(element) {
+        _element = element->clone();
+    }
+    else {
+        _element = nullptr;
+    }
 }

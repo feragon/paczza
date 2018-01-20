@@ -15,7 +15,7 @@ MainMenu::MainMenu(sf::RenderWindow* window, FenetreJeu* f) :
 }
 
 void MainMenu::onNewGameSelected() {
-    fenetreJeu()->changerVue(new Boardview(window(), fenetreJeu()));
+    fenetreJeu()->changerVue(new BoardView(window(), fenetreJeu()));
 }
 
 void MainMenu::onHighScoreSelected() {

@@ -3,7 +3,7 @@
 #include <SFML/Window/Event.hpp>
 #include "boardview.h"
 
-Boardview::Boardview(sf::RenderWindow* window, FenetreJeu* f) :
+BoardView::BoardView(sf::RenderWindow* window, FenetreJeu* f) :
         View(window, f),
         _joueur(AnimatedSprite::ANIMATION_CIRCULAR, sf::Sprite(ResourceLoader::getSprite(Sprite::OPEN_PIZZA_1)), 16) {
 
@@ -15,7 +15,33 @@ Boardview::Boardview(sf::RenderWindow* window, FenetreJeu* f) :
     _joueur.addSprite(sf::Sprite(ResourceLoader::getSprite(Sprite::PIZZA)));
 }
 
-void Boardview::resize(const sf::Vector2f& size) {
+BoardView::~BoardView() {
+    delete _jeu;
+}
+
+void BoardView::genererSpritesElements() {
+    for(Liste<Sommet<Case>>* l = _jeu->plateau()->sommets(); l; l = l->next) {
+        genererSpriteElement(l->value->contenu());
+
+    }
+}
+
+void BoardView::genererSpriteElement(const Case& c) {
+    if(c.element()) {
+        sf::Sprite sprite(ResourceLoader::getSprite(c.element()->sprite()));
+
+        sprite.setOrigin(SPRITE_SIZE / 2, SPRITE_SIZE / 2);
+        sprite.setPosition(c.position().x * SPRITE_SIZE,
+                           c.position().y * SPRITE_SIZE);
+
+        _elements[c.position()] = sprite;
+    }
+    else {
+        _elements.erase(c.position());
+    }
+}
+
+void BoardView::resize(const sf::Vector2f& size) {
     View::resize(size);
 
     for(Liste<Sommet<Case>>* sommet = _jeu->plateau()->sommets(); sommet; sommet = sommet->next) {
@@ -53,9 +79,11 @@ void Boardview::resize(const sf::Vector2f& size) {
         sprite.setPosition((s1_x + vect_x/2) * SPRITE_SIZE, (s1_y + vect_y/2) * SPRITE_SIZE);
        _backgroundSprites.push_back(sprite);
     }
+
+    genererSpritesElements();
 }
 
-void Boardview::render(double timeElapsed) {
+void BoardView::render(double timeElapsed) {
     View::render(timeElapsed);
 
     for(sf::Sprite sprite : _backgroundSprites) {
@@ -67,26 +95,8 @@ void Boardview::render(double timeElapsed) {
     _joueur.animate(timeElapsed);
     window()->draw(_joueur);
 
-    //TODO: optimiser le rendu
-    for(Liste<Sommet<Case>>* l = _jeu->plateau()->sommets(); l; l = l->next) {
-        Case c = l->value->contenu();
-        if(c.points() > 0) {
-            sf::Sprite sprite(ResourceLoader::getSprite(TOMATO_SMUDGE));
-
-            sprite.setOrigin(SPRITE_SIZE / 2, SPRITE_SIZE / 2);
-            sprite.setPosition(c.position().x * SPRITE_SIZE,
-                               c.position().y * SPRITE_SIZE);
-
-            window()->draw(sprite);
-        }
-    }
-
-    for(ElementGraphique * p : _jeu->aliments()) {
-        sf::Sprite sprite(ResourceLoader::getSprite(p->sprite()));
-
-        sprite.setOrigin(SPRITE_SIZE / 2, SPRITE_SIZE / 2);
-        sprite.setPosition(p->position().x * SPRITE_SIZE, p->position().y * SPRITE_SIZE);
-        window()->draw(sprite);
+    for(std::pair<const Position, sf::Sprite> p : _elements) {
+        window()->draw(p.second);
     }
 
     _score = sf::Text("Score:"+std::to_string(_jeu->joueur()->points()), ResourceLoader::getFont(KONGTEXT), 32);
@@ -94,23 +104,16 @@ void Boardview::render(double timeElapsed) {
     window()->draw(_score);
 }
 
-void Boardview::UpdatePlayer(int x, int y, int angle) {
+void BoardView::UpdatePlayer(int x, int y, int angle) {
+    Position p(x, y);
     Liste<Sommet<Case>>* voisins = _jeu->plateau()->voisins(_jeu->plateau()->sommet(_jeu->joueur()->position()));
     for(Liste<Sommet<Case>>* sommet = voisins; sommet; sommet = sommet->next) {
         try {
             _joueur.setRotation(angle);
-            if(sommet->value == _jeu->plateau()->sommet(Position(x,y))) {
-                Position p(x, y);
+            if(sommet->value == _jeu->plateau()->sommet(p)) {
                 _jeu->joueur()->setPosition(p);
-
-                _jeu->joueur()->addPoints(_jeu->plateau()->sommet(p)->contenu().prendrePoints());
-
-                for(ElementGraphique* p : _jeu->aliments()) { //TODO: déplacer ça
-                    if(p->position().x == x && p->position().y == y) {
-                        _jeu->joueur()->addPoints(p->points());
-                        _jeu->aliments().erase(std::find(_jeu->aliments().begin(), _jeu->aliments().end(), p));
-                    }
-                }
+                sommet->value->contenu().heberge(*(_jeu->joueur()));
+                genererSpriteElement(sommet->value->contenu());
             }
         }
         catch(std::exception e) {}
@@ -119,7 +122,7 @@ void Boardview::UpdatePlayer(int x, int y, int angle) {
     Liste<Sommet<Case>>::efface1(voisins);
 }
 
-void Boardview::onEvent(const sf::Event& event) {
+void BoardView::onEvent(const sf::Event& event) {
     if(event.type == sf::Event::EventType::KeyPressed) {
         switch(event.key.code) {
             case sf::Keyboard::Key::Numpad2:

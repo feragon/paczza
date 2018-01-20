@@ -12,8 +12,6 @@ class Jeu {
         Board* _plateau;
         Joueur* _joueur;
 
-        std::vector<ElementGraphique*> _aliments;
-
     public:
         Jeu(unsigned short nbMonstres);
         virtual ~Jeu();
@@ -29,11 +27,4 @@ class Jeu {
          * @return Joueur
          */
         Joueur* joueur();
-
-        /**
-         * @brief Donne les aliments du jeu
-         * @return Aliments
-         * @TODO: enlever les éléments graphiques du jeu
-         */
-        std::vector<ElementGraphique*>& aliments();
 };

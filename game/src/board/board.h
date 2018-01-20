@@ -3,6 +3,7 @@
 #include <graph/graphe.h>
 #include "case.h"
 #include "chemin.h"
+#include "element.h"
 #include <map>
 
 struct cmpPosition {
@@ -13,7 +14,7 @@ struct cmpPosition {
 
 class Board : public Graphe<Chemin, Case> {
     public:
-        Board(unsigned int width, unsigned int height);
+        Board(unsigned int width, unsigned int height, Liste<Position>* positionsReservees);
 
         /**
          * @brief Donne le nombre de colonnes du plateau
@@ -30,12 +31,22 @@ class Board : public Graphe<Chemin, Case> {
         inline Sommet<Case>* sommet(const Position& position) const;
 
     private:
-        void genererGraphe();
+        void genererGraphe(Liste<Position>* positionsReservees);
+
+        /**
+         * @brief Place un élément au hasard sur le graphe
+         * @param element Élément à placer
+         * @param positionsReservees Liste des positions réservées
+         * @param limit Nombre de tentatives de placement maximales
+         * @throws std::runtime_exception si l'élément n'a pas pu être placé
+         */
+        void placerElementHasard(const Element& element, Liste<Position>* positionsReservees, unsigned int limit = 10);
 
         unsigned int _width;
         unsigned int _height;
 
         std::map<Position, Sommet<Case>*, cmpPosition> _cases;
+        std::map<Position, Element*, cmpPosition> _elements;
 };
 
 unsigned int Board::width() const {
