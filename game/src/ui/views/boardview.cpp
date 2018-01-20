@@ -104,13 +104,13 @@ void BoardView::render(double timeElapsed) {
     window()->draw(_score);
 }
 
-void BoardView::UpdatePlayer(int x, int y, int angle) {
+void BoardView::updatePlayer(int x, int y, int angle) {
     Position p(x, y);
     Liste<Sommet<Case>>* voisins = _jeu->plateau()->voisins(_jeu->plateau()->sommet(_jeu->joueur()->position()));
     for(Liste<Sommet<Case>>* sommet = voisins; sommet; sommet = sommet->next) {
         try {
             _joueur.setRotation(angle);
-            if(sommet->value == _jeu->plateau()->sommet(p)) {
+            if(sommet->value->contenu().position() == p) {
                 _jeu->joueur()->setPosition(p);
                 sommet->value->contenu().heberge(*(_jeu->joueur()));
                 genererSpriteElement(sommet->value->contenu());
@@ -126,28 +126,28 @@ void BoardView::onEvent(const sf::Event& event) {
     if(event.type == sf::Event::EventType::KeyPressed) {
         switch(event.key.code) {
             case sf::Keyboard::Key::Numpad2:
-                UpdatePlayer(_jeu->joueur()->position().x, _jeu->joueur()->position().y+1, 270);
+                updatePlayer(_jeu->joueur()->position().x, _jeu->joueur()->position().y + 1, 270);
                 break;
             case sf::Keyboard::Key::Numpad8:
-                UpdatePlayer(_jeu->joueur()->position().x, _jeu->joueur()->position().y-1, 90);
+                updatePlayer(_jeu->joueur()->position().x, _jeu->joueur()->position().y - 1, 90);
                 break;
             case sf::Keyboard::Key::Numpad4:
-                UpdatePlayer(_jeu->joueur()->position().x-1, _jeu->joueur()->position().y, 0);
+                updatePlayer(_jeu->joueur()->position().x - 1, _jeu->joueur()->position().y, 0);
                 break;
             case sf::Keyboard::Key::Numpad6:
-                UpdatePlayer(_jeu->joueur()->position().x+1, _jeu->joueur()->position().y, 180);
+                updatePlayer(_jeu->joueur()->position().x + 1, _jeu->joueur()->position().y, 180);
                 break;
             case sf::Keyboard::Key::Numpad1:
-                UpdatePlayer(_jeu->joueur()->position().x-1, _jeu->joueur()->position().y+1, 315);
+                updatePlayer(_jeu->joueur()->position().x - 1, _jeu->joueur()->position().y + 1, 315);
                 break;
             case sf::Keyboard::Key::Numpad3:
-                UpdatePlayer(_jeu->joueur()->position().x+1, _jeu->joueur()->position().y+1, 225);
+                updatePlayer(_jeu->joueur()->position().x + 1, _jeu->joueur()->position().y + 1, 225);
                 break;
             case sf::Keyboard::Key::Numpad7:
-                UpdatePlayer(_jeu->joueur()->position().x-1, _jeu->joueur()->position().y-1, 45);
+                updatePlayer(_jeu->joueur()->position().x - 1, _jeu->joueur()->position().y - 1, 45);
                 break;
             case sf::Keyboard::Key::Numpad9:
-                UpdatePlayer(_jeu->joueur()->position().x+1, _jeu->joueur()->position().y-1, 135);
+                updatePlayer(_jeu->joueur()->position().x + 1, _jeu->joueur()->position().y - 1, 135);
                 break;
         }
     }

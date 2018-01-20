@@ -19,7 +19,7 @@ class BoardView : public View {
 
         virtual void onEvent(const sf::Event& event) override;
 
-        void UpdatePlayer(int x, int y, int angle);
+        void updatePlayer(int x, int y, int angle);
 
     private:
         void genererSpritesElements();
