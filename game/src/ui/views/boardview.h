@@ -35,4 +35,6 @@ class BoardView : public View {
 
         AnimatedSprite _joueur;
         sf::Text _score;
+
+        std::map<Arete<Chemin, Case>*, sf::Sprite> _aretesMarquees;
 };

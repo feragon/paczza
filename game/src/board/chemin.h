@@ -4,32 +4,32 @@
 
 class Chemin {
     private:
-        unsigned int _chaleur;
+        double _chaleur;
 
     public:
-        Chemin(unsigned int chaleur);
+        Chemin(double chaleur);
         virtual ~Chemin();
 
         /**
          * @brief Donne la chaleur du chemin
          * @return Chaleur
          */
-        inline unsigned int chaleur();
+        inline double chaleur() const;
 
         /**
          * @brief Définit la chaleur de chemin
          * @param ch Chaleur
          */
-        inline void setChaleur(unsigned int chaleur);
+        inline void setChaleur(double chaleur);
 
         friend std::ostream& operator<<(std::ostream &, const Chemin&);
 };
 
 
-unsigned int Chemin::chaleur() {
+double Chemin::chaleur() const {
     return _chaleur;
 }
 
-void Chemin::setChaleur(unsigned int chaleur) {
+void Chemin::setChaleur(double chaleur) {
     _chaleur = chaleur;
 }

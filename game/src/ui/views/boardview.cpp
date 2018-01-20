@@ -13,6 +13,7 @@ BoardView::BoardView(sf::RenderWindow* window, FenetreJeu* f) :
     _joueur.addSprite(sf::Sprite(ResourceLoader::getSprite(Sprite::OPEN_PIZZA_2)));
     _joueur.addSprite(sf::Sprite(ResourceLoader::getSprite(Sprite::OPEN_PIZZA_3)));
     _joueur.addSprite(sf::Sprite(ResourceLoader::getSprite(Sprite::PIZZA)));
+    _joueur.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
 }
 
 BoardView::~BoardView() {
@@ -90,13 +91,31 @@ void BoardView::render(double timeElapsed) {
         window()->draw(sprite);
     }
 
-    _joueur.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
     _joueur.setPosition(_jeu->joueur()->position().x * SPRITE_SIZE, _jeu->joueur()->position().y * SPRITE_SIZE);
     _joueur.animate(timeElapsed);
     window()->draw(_joueur);
 
     for(std::pair<const Position, sf::Sprite> p : _elements) {
         window()->draw(p.second);
+    }
+
+    double chaleurEnlevee = (UINT8_MAX / COOLDOWN_TIME) * timeElapsed;
+    auto it = _aretesMarquees.begin();
+    while (it != _aretesMarquees.end()) {
+        Arete<Chemin, Case>* arete = it->first;
+        double chaleur = arete->contenu().chaleur();
+
+        if(chaleur <= chaleurEnlevee) {
+            it = _aretesMarquees.erase(it++);
+        }
+        else {
+            double nouvelleChaleur = chaleur - chaleurEnlevee;
+            arete->contenu().setChaleur(nouvelleChaleur);
+            it->second.setColor(sf::Color(255, 255, 255, (uint8_t) nouvelleChaleur));
+
+            window()->draw(it->second);
+            it++;
+        }
     }
 
     _score = sf::Text("Score:"+std::to_string(_jeu->joueur()->points()), ResourceLoader::getFont(KONGTEXT), 32);
@@ -106,20 +125,38 @@ void BoardView::render(double timeElapsed) {
 
 void BoardView::updatePlayer(int x, int y, int angle) {
     Position p(x, y);
-    Liste<Sommet<Case>>* voisins = _jeu->plateau()->voisins(_jeu->plateau()->sommet(_jeu->joueur()->position()));
-    for(Liste<Sommet<Case>>* sommet = voisins; sommet; sommet = sommet->next) {
+
+    Sommet<Case>* sommetActuel = _jeu->plateau()->sommet(_jeu->joueur()->position());
+    Liste<std::pair<Sommet<Case>*, Arete<Chemin, Case>*>>* voisins = _jeu->plateau()->adjacences(sommetActuel);
+
+    for(Liste<std::pair<Sommet<Case>*, Arete<Chemin, Case>*>>* sommet = voisins; sommet; sommet = sommet->next) {
         try {
             _joueur.setRotation(angle);
-            if(sommet->value->contenu().position() == p) {
+            if(sommet->value->first->contenu().position() == p) {
                 _jeu->joueur()->setPosition(p);
-                sommet->value->contenu().heberge(*(_jeu->joueur()));
-                genererSpriteElement(sommet->value->contenu());
+                sommet->value->first->contenu().heberge(*(_jeu->joueur()));
+                genererSpriteElement(sommet->value->first->contenu());
+
+                Arete<Chemin, Case>* arete = sommet->value->second;
+                arete->contenu().setChaleur(UINT8_MAX);
+
+                Position s1 = arete->debut()->contenu().position();
+                Position s2 = arete->fin()->contenu().position();
+                float vect_x = s2.x - s1.x;
+                float vect_y = s2.y - s1.y;
+
+                sf::Sprite sprite(ResourceLoader::getSprite(Sprite::COCAINE));
+                sprite.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
+                sprite.setPosition((s1.x + vect_x/2) * SPRITE_SIZE, (s1.y + vect_y/2) * SPRITE_SIZE);
+                _aretesMarquees[arete] = sprite;
+
+                break;
             }
         }
         catch(std::exception e) {}
     }
 
-    Liste<Sommet<Case>>::efface1(voisins);
+    Liste<std::pair<Sommet<Case>*, Arete<Chemin, Case>*>>::efface2(voisins);
 }
 
 void BoardView::onEvent(const sf::Event& event) {

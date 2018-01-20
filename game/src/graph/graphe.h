@@ -239,13 +239,13 @@ Liste<std::pair<Sommet<T>*, Arete<S, T>*>>* Graphe<S,T>::adjacences(const Sommet
     for(Liste<Arete<S,T>>* arete = _aretes; arete; arete = arete->next) {
         if(arete->value->debut() == sommet) {
             res = new Liste<std::pair<Sommet<T>*, Arete<S, T>*>>(
-                    std::make_pair<Sommet<T>*, Arete<S, T>*>(arete->value->fin(), arete->value),
+                    new std::pair<Sommet<T>*, Arete<S, T>*>(arete->value->fin(), arete->value),
                     res
             );
         }
         else if(arete->value->fin() == sommet) {
             res = new Liste<std::pair<Sommet<T>*, Arete<S, T>*>>(
-                    std::make_pair<Sommet<T>*, Arete<S, T>*>(arete->value->debut(), arete->value),
+                    new std::pair<Sommet<T>*, Arete<S, T>*>(arete->value->debut(), arete->value),
                     res
             );
         }

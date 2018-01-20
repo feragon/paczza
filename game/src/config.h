@@ -6,3 +6,5 @@
 #define HAUTEUR_FENETRE 640
 
 #define SPRITE_SIZE 64
+
+#define COOLDOWN_TIME 4

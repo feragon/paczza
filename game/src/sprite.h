@@ -23,5 +23,6 @@ enum Sprite {
         PIZZA,
         TOMATO_SMUDGE,
         SPACE,
+        COCAINE,
         SPRITE_FIN
 };

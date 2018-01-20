@@ -98,7 +98,7 @@ void Board::placerElementHasard(const Element& element, Liste<Position>* positio
     unsigned int i = 1;
     Position p((rand() % _width) + 1, (rand() % _height) + 1);
 
-    while(sommet(p)->contenu().element() && Liste<Position>::appartient(positionsReservees, PositionsEgales(p))) {
+    while(sommet(p)->contenu().element() || Liste<Position>::appartient(positionsReservees, PositionsEgales(p))) {
         if(i == limit) {
             throw std::runtime_error("Impossible de placer les éléments");
         }

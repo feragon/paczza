@@ -1,6 +1,6 @@
 #include "chemin.h"
 
-Chemin::Chemin(unsigned int chaleur) {
+Chemin::Chemin(double chaleur) {
     _chaleur = chaleur;
 }
 
