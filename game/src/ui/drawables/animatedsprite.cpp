@@ -3,10 +3,11 @@
 #include <cmath>
 #include <iostream>
 
-AnimatedSprite::AnimatedSprite(AnimatedSprite::AnimationType type, const sf::Sprite& base, double fps) {
+AnimatedSprite::AnimatedSprite(AnimatedSprite::AnimationType type, const sf::Sprite& base, double fps, bool infinite) {
     _type = type;
     _sprites.push_back(base);
     _fps = fps;
+    _infinite = infinite;
 
     reset();
 }
@@ -27,15 +28,31 @@ void AnimatedSprite::animate(double timeElapsed) {
 
     switch (_type) {
         case ANIMATION_LINERAR:
-            _frame = std::fmod(_frame + framesAdded, _sprites.size());
+            if(_infinite) {
+                _frame = std::fmod(_frame + framesAdded, _sprites.size());
+            }
+            else {
+                _frame = _frame + framesAdded;
+                if(_frame > _sprites.size()) {
+                    _frame = _sprites.size();
+                }
+                else if(_frame < 0) {
+                    _frame = 0;
+                }
+            }
             break;
 
         case ANIMATION_CIRCULAR:
             _frame += std::fmod(framesAdded, _sprites.size());
 
             if(_frame < 0) {
-                _forward = true;
-                _frame = -_frame;
+                if(_infinite) {
+                    _forward = true;
+                    _frame = -_frame;
+                }
+                else {
+                    _frame = 0;
+                }
             }
             if(_frame > _sprites.size()) {
                 _forward = false;

@@ -18,7 +18,7 @@ class AnimatedSprite : public sf::Drawable {
          * @param base Sprite de base
          * @param fps Nombre d'images par secondes
          */
-        AnimatedSprite(AnimationType type, const sf::Sprite& base, double fps);
+        AnimatedSprite(AnimationType type, const sf::Sprite& base, double fps, bool infinite);
 
         /**
          * @brief Ajoute une image à l'animation
@@ -51,4 +51,5 @@ class AnimatedSprite : public sf::Drawable {
         std::vector<sf::Sprite> _sprites;
         bool _forward;
         double _frame;
+        bool _infinite;
 };

@@ -5,7 +5,7 @@
 
 BoardView::BoardView(sf::RenderWindow* window, FenetreJeu* f) :
         View(window, f),
-        _joueur(AnimatedSprite::ANIMATION_CIRCULAR, sf::Sprite(ResourceLoader::getSprite(Sprite::OPEN_PIZZA_1)), 16) {
+        _joueur(AnimatedSprite::ANIMATION_CIRCULAR, sf::Sprite(ResourceLoader::getSprite(Sprite::OPEN_PIZZA_1)), 16, false) {
 
     _jeu = new Jeu(4);
     setFond(Sprite::EMPTY_CELL);
@@ -124,6 +124,8 @@ void BoardView::render(double timeElapsed) {
 }
 
 void BoardView::updatePlayer(int x, int y, int angle) {
+    _joueur.reset();
+
     Position p(x, y);
 
     Sommet<Case>* sommetActuel = _jeu->plateau()->sommet(_jeu->joueur()->position());
