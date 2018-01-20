@@ -3,7 +3,6 @@
 #include <board/case.h>
 #include <board/chemin.h>
 #include <sprite.h>
-#include <ui/elementgraphique.h>
 #include <board/board.h>
 #include "joueur.h"
 
