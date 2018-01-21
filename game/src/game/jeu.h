@@ -10,9 +10,10 @@ class Jeu {
     private:
         Board* _plateau;
         Joueur* _joueur;
+        Liste<Joueur>* _monstres;
 
     public:
-        Jeu(unsigned short nbMonstres);
+        Jeu(Liste<Position>* positionMonstres);
         virtual ~Jeu();
 
         /**
@@ -26,4 +27,10 @@ class Jeu {
          * @return Joueur
          */
         Joueur* joueur();
+
+        /**
+         * @brief Donne la liste des monstres
+         * @return Liste de monstres
+         */
+        Liste<Joueur>* monstres() const;
 };

@@ -118,6 +118,13 @@ void BoardView::render(double timeElapsed) {
         }
     }
 
+    for(Liste<Joueur>* monstres = _jeu->monstres(); monstres; monstres = monstres->next) {
+        sf::Sprite s(ResourceLoader::getSprite(RIGHT_PINEAPPLE));
+        s.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
+        s.setPosition(monstres->value->position().x * SPRITE_SIZE, monstres->value->position().y * SPRITE_SIZE);
+        window()->draw(s);
+    }
+
     _score = sf::Text("Score:"+std::to_string(_jeu->joueur()->points()), ResourceLoader::getFont(KONGTEXT), 32);
     _score.setPosition(window()->getView().getSize().x - _score.getLocalBounds().width - 20, window()->getView().getSize().y - _score.getLocalBounds().height - 20);
     window()->draw(_score);
