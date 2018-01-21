@@ -7,7 +7,8 @@ BoardView::BoardView(sf::RenderWindow* window, FenetreJeu* f) :
         View(window, f),
         _joueur(AnimatedSprite::ANIMATION_CIRCULAR, sf::Sprite(ResourceLoader::getSprite(Sprite::OPEN_PIZZA_1)), 16, false) {
 
-    _jeu = new Jeu(4);
+
+    _jeu = new Jeu();
     setFond(Sprite::EMPTY_CELL);
 
     _joueur.addSprite(sf::Sprite(ResourceLoader::getSprite(Sprite::OPEN_PIZZA_2)));
@@ -87,6 +88,8 @@ void BoardView::resize(const sf::Vector2f& size) {
 void BoardView::render(double timeElapsed) {
     View::render(timeElapsed);
 
+    _jeu->updateGame(timeElapsed);
+
     for(sf::Sprite sprite : _backgroundSprites) {
         window()->draw(sprite);
     }
@@ -118,7 +121,7 @@ void BoardView::render(double timeElapsed) {
         }
     }
 
-    for(Liste<Joueur>* monstres = _jeu->monstres(); monstres; monstres = monstres->next) {
+    for(Liste<Monster>* monstres = _jeu->monstres(); monstres; monstres = monstres->next) {
         sf::Sprite s(ResourceLoader::getSprite(RIGHT_PINEAPPLE));
         s.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
         s.setPosition(monstres->value->position().x * SPRITE_SIZE, monstres->value->position().y * SPRITE_SIZE);

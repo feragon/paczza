@@ -8,3 +8,4 @@
 #define SPRITE_SIZE 64
 
 #define COOLDOWN_TIME 4
+#define MOVEMENT_TIME 0.5

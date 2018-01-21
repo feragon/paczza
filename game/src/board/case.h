@@ -44,10 +44,10 @@ class Case {
         inline void setElement(const Element* element);
 
         /**
-         * @brief Fonction appelée quand un joueur passe sur la case
+         * @brief Fonction appelée quand un joueur physique passe sur la case
          * @param joueur Joueur
          */
-        void heberge(Joueur& joueur);
+        void heberge(Pacman& joueur);
 
         friend std::ostream& operator<<(std::ostream &, const Case&);
 };

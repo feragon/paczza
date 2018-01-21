@@ -45,7 +45,7 @@ void Case::clear() {
     _element = nullptr;
 }
 
-void Case::heberge(Joueur& joueur) {
+void Case::heberge(Pacman& joueur) {
     if(_element) {
         if(!_element->traversePar(joueur)) {
             delete _element;

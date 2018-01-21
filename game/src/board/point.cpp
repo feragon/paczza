@@ -1,3 +1,4 @@
+#include <game/pacman.h>
 #include "point.h"
 
 Point::Point(Sprite sprite, int points) :
@@ -6,7 +7,7 @@ Point::Point(Sprite sprite, int points) :
 
 }
 
-bool Point::traversePar(Joueur& joueur) const {
+bool Point::traversePar(Pacman& joueur) const {
     joueur.addPoints(_points);
 
     return false;

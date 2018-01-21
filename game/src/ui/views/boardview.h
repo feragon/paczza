@@ -4,7 +4,7 @@
 #include <SFML/Graphics/Text.hpp>
 #include <ui/fenetrejeu.h>
 #include <game/jeu.h>
-#include <game/joueur.h>
+#include <game/player.h>
 #include <ui/drawables/animatedsprite.h>
 #include "view.h"
 

@@ -1,8 +1,9 @@
 #pragma once
 
-#include <game/joueur.h>
+#include <game/player.h>
 #include <graph/conteneur.h>
 #include <sprite.h>
+#include <game/pacman.h>
 
 class Element {
     private:
@@ -28,7 +29,7 @@ class Element {
          * @param joueur Joueur concerné
          * @return Vrai si l'élément reste sur le plateau
          */
-        virtual bool traversePar(Joueur& joueur) const = 0;
+        virtual bool traversePar(Pacman& joueur) const = 0;
 
         /**
          * @brief Retourne une copie de l'élément

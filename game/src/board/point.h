@@ -9,7 +9,7 @@ class Point : public Element {
     public:
         Point(Sprite sprite, int points);
 
-        bool traversePar(Joueur& joueur) const override;
+        bool traversePar(Pacman& joueur) const override;
 
         Element* clone() const override;
 };

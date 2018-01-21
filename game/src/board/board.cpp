@@ -102,6 +102,19 @@ void Board::genererGraphe1(Liste<Position>* positionsReservees) {
         _cases[p] = creeSommet(Case(p, nullptr));
     }
 
+    //Monstres
+    creeArete(Chemin(0), _cases[Position(6,4)], _cases[Position(5,3)]);
+    creeArete(Chemin(0), _cases[Position(6,4)], _cases[Position(6,3)]);
+
+    creeArete(Chemin(0), _cases[Position(6,5)], _cases[Position(5,6)]);
+    creeArete(Chemin(0), _cases[Position(6,5)], _cases[Position(5,5)]);
+
+    creeArete(Chemin(0), _cases[Position(7,4)], _cases[Position(8,3)]);
+    creeArete(Chemin(0), _cases[Position(7,4)], _cases[Position(8,4)]);
+
+    creeArete(Chemin(0), _cases[Position(7,5)], _cases[Position(8,6)]);
+    creeArete(Chemin(0), _cases[Position(7,5)], _cases[Position(7,6)]);
+
     //Diags
     creeArete(Chemin(0), _cases[Position(1,2)], _cases[Position(2,1)]);
     creeArete(Chemin(0), _cases[Position(1,7)], _cases[Position(2,8)]);
