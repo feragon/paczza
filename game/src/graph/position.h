@@ -4,15 +4,15 @@
 
 class Position {
     public:
-        int x;
-        int y;
+        double x;
+        double y;
 
         /**
          * @brief Crée un nouveau point
          * @param x Abscisse du point
          * @param y Ordonnée du point
          */
-        Position(int x = 0, int y = 0);
+        Position(double x = 0, double y = 0);
 
         bool operator==(const Position& other) const;
         bool operator!=(const Position& other) const;

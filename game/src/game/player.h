@@ -1,10 +1,12 @@
 #pragma once
 
 #include <graph/position.h>
+#include <graph/liste.h>
 
 class Player {
     private:
         Position _position;
+        Liste<Position> *_deplacements;
 
     public:
         /**
@@ -23,6 +25,10 @@ class Player {
          * @param p Nouvelle position
          */
         inline void setPosition(Position p);
+
+        Position* prochainDeplacement();
+        void ajouterDeplacement(double x, double y);
+        void resetDeplacement();
 };
 
 Position Player::position() const {

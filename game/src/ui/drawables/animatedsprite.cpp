@@ -33,8 +33,8 @@ void AnimatedSprite::animate(double timeElapsed) {
             }
             else {
                 _frame = _frame + framesAdded;
-                if(_frame > _sprites.size()) {
-                    _frame = _sprites.size();
+                if(_frame >= _sprites.size()) {
+                    _frame = _sprites.size() - 1;
                 }
                 else if(_frame < 0) {
                     _frame = 0;
@@ -54,9 +54,9 @@ void AnimatedSprite::animate(double timeElapsed) {
                     _frame = 0;
                 }
             }
-            if(_frame > _sprites.size()) {
+            if(_frame >= _sprites.size()) {
                 _forward = false;
-                _frame = _sprites.size() * 2 - _frame;
+                _frame = (_sprites.size() - 1)  - fmod(_frame, _sprites.size());
             }
             break;
     }
