@@ -32,6 +32,7 @@ class Board : public Graphe<Chemin, Case> {
 
     private:
         void genererGraphe(Liste<Position>* positionsReservees);
+        void genererGraphe1(Liste<Position>* positionsReservees);
 
         /**
          * @brief Place un élément au hasard sur le graphe
