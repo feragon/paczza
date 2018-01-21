@@ -91,7 +91,9 @@ void BoardView::render(double timeElapsed) {
         window()->draw(sprite);
     }
 
-    _joueur.setPosition(_jeu->joueur()->position().x * SPRITE_SIZE, _jeu->joueur()->position().y * SPRITE_SIZE);
+    Position* pos = _jeu->joueur()->prochainDeplacement();
+
+    _joueur.setPosition(pos->x * SPRITE_SIZE, pos->y * SPRITE_SIZE);
     _joueur.animate(timeElapsed);
     window()->draw(_joueur);
 
@@ -135,17 +137,23 @@ void BoardView::updatePlayer(int x, int y, int angle) {
         try {
             _joueur.setRotation(angle);
             if(sommet->value->first->contenu().position() == p) {
-                _jeu->joueur()->setPosition(p);
-                sommet->value->first->contenu().heberge(*(_jeu->joueur()));
-                genererSpriteElement(sommet->value->first->contenu());
 
                 Arete<Chemin, Case>* arete = sommet->value->second;
                 arete->contenu().setChaleur(UINT8_MAX);
 
-                Position s1 = arete->debut()->contenu().position();
-                Position s2 = arete->fin()->contenu().position();
+                Position s1 = _jeu->joueur()->position();
+                Position s2 = p;
                 float vect_x = s2.x - s1.x;
                 float vect_y = s2.y - s1.y;
+
+                _jeu->joueur()->resetDeplacement();
+                for(double k = 1; k >= 0; k-= 0.07) {
+                    _jeu->joueur()->ajouterDeplacement(_jeu->joueur()->position().x + k*vect_x, _jeu->joueur()->position().y + k*vect_y);
+                }
+
+                _jeu->joueur()->setPosition(p);
+                sommet->value->first->contenu().heberge(*(_jeu->joueur()));
+                genererSpriteElement(sommet->value->first->contenu());
 
                 sf::Sprite sprite(ResourceLoader::getSprite(Sprite::COCAINE));
                 sprite.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
