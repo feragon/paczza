@@ -4,7 +4,7 @@ Jeu::Jeu(Liste<Position>* positionMonstres) {
     int i = 13;
     int j = 8;
 
-    Position positionJoueur(i/2, j/2);
+    Position positionJoueur(3, 5);
 
     Liste<Position>* positionsReservees = nullptr;
     positionsReservees = new Liste<Position>(&positionJoueur, positionsReservees);
