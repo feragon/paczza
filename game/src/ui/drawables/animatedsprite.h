@@ -41,7 +41,7 @@ class AnimatedSprite : public sf::Drawable {
         void setOrigin(double x, double y);
         void setPosition(double x, double y);
         void setRotation(double angle);
-
+        sf::FloatRect getGlobalBounds();
     protected:
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 

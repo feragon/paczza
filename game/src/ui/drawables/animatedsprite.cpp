@@ -88,3 +88,7 @@ void AnimatedSprite::setRotation(double angle) {
         sprite.setRotation(angle);
     }
 }
+
+sf::FloatRect AnimatedSprite::getGlobalBounds() {
+    return _sprites.front().getGlobalBounds();
+}

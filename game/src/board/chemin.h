@@ -21,6 +21,7 @@ class Chemin {
          * @param ch Chaleur
          */
         inline void setChaleur(double chaleur);
+        bool estAccessible();
 
         friend std::ostream& operator<<(std::ostream &, const Chemin&);
 };
