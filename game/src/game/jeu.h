@@ -12,9 +12,10 @@ class Jeu {
         Board* _plateau;
         Pacman* _joueur;
         Liste<Monster>* _monstres;
-        std::map<Monster*, Position<>> _oldPositions;
+        std::map<Player*, Position<>> _oldPositions;
         MonsterManager* _monsterManager;
         double _timeSinceMove;
+        Position<double> _newPlayerPosition;
 
     public:
         Jeu();
@@ -43,6 +44,18 @@ class Jeu {
          * @param timeElapsed Temps écoulé depuis la dernière mise à jour
          */
         void updateGame(double timeElapsed);
+
+        /**
+         * @brief Met à jour les joueurs
+         * @param timeElapsed Temps écoulé depuis la dernière mise à jour
+         */
+        void updatePlayers(double timeElapsed);
+
+        /**
+         * @brief Déplace le joueur
+         * @param newPosition Nouvelle position
+         */
+        void movePlayer(const Position<>& newPosition);
 };
 
 Board* Jeu::plateau() {

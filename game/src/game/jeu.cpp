@@ -22,6 +22,8 @@ Jeu::Jeu() {
     _plateau = new Board(i, j, positionsReservees);
 
     _joueur = new Pacman(positionJoueur);
+    _oldPositions[_joueur] = positionJoueur;
+    _newPlayerPosition = positionJoueur;
 
     _monsterManager = new DumbMonsterManager(_plateau);
 
@@ -46,7 +48,14 @@ Jeu::~Jeu() {
 }
 
 void Jeu::updateGame(double timeElapsed) {
+    updatePlayers(timeElapsed);
+}
+
+void Jeu::updatePlayers(double timeElapsed) {
     _timeSinceMove += timeElapsed;
+
+    double movement = timeElapsed / MOVEMENT_TIME;
+    _joueur->setPosition(_joueur->position() + (_newPlayerPosition - _oldPositions[_joueur]) * movement);
 
     if(_timeSinceMove > MOVEMENT_TIME) {
         for(Liste<Monster>* monsters = _monstres; monsters; monsters = monsters->next) {
@@ -55,15 +64,21 @@ void Jeu::updateGame(double timeElapsed) {
             _oldPositions[monsters->value] = newPosition;
         }
 
+        _joueur->setPosition(_newPlayerPosition);
+        _oldPositions[_joueur] = _newPlayerPosition;
+
         _timeSinceMove = 0;
 
         _monsterManager->moveMonsters();
 
     }
     else {
-        double movement = timeElapsed / MOVEMENT_TIME;
         for(Liste<Monster>* monsters = _monstres; monsters; monsters = monsters->next) {
             monsters->value->setPosition(monsters->value->position() + (_monsterManager->newPosition(monsters->value) - _oldPositions[monsters->value]) * movement);
         }
     }
+}
+
+void Jeu::movePlayer(const Position<>& newPosition) {
+    _newPlayerPosition = newPosition;
 }

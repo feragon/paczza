@@ -151,23 +151,18 @@ void BoardView::updatePlayer(int x, int y, int angle) {
                 Arete<Chemin, Case>* arete = sommet->value->second;
                 arete->contenu().setChaleur(UINT8_MAX);
 
-                Position<> s1 = _jeu->joueur()->position();
-                Position<> s2 = p;
-                float vect_x = s2.x - s1.x;
-                float vect_y = s2.y - s1.y;
+                Position<> oldPosition = _jeu->joueur()->position();
 
-                _jeu->joueur()->resetDeplacement();
-                for(double k = 1; k >= 0; k-= 0.07) {
-                    _jeu->joueur()->ajouterDeplacement(_jeu->joueur()->position().x + k*vect_x, _jeu->joueur()->position().y + k*vect_y);
-                }
+                Position<> moveVect = p - oldPosition;
 
-                _jeu->joueur()->setPosition(p);
+                _jeu->movePlayer(p);
+
                 sommet->value->first->contenu().heberge(*(_jeu->joueur()));
                 genererSpriteElement(sommet->value->first->contenu());
 
                 sf::Sprite sprite(ResourceLoader::getSprite(Sprite::COCAINE));
                 sprite.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
-                sprite.setPosition((s1.x + vect_x/2) * SPRITE_SIZE, (s1.y + vect_y/2) * SPRITE_SIZE);
+                sprite.setPosition((oldPosition.x + moveVect.x/2) * SPRITE_SIZE, (oldPosition.y + moveVect.y/2) * SPRITE_SIZE);
                 _aretesMarquees[arete] = sprite;
 
                 break;
