@@ -26,4 +26,5 @@ class Credits : public View {
 
         std::vector<sf::Text> _texts;
         float _position;
+        int _speed;
 };

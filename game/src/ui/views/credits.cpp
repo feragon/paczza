@@ -5,11 +5,13 @@
 #include <cstring>
 #include <cmath>
 #include <codecvt>
+#include <SFML/Window/Event.hpp>
 
 Credits::Credits(sf::RenderWindow* window, FenetreJeu* f) :
         View(window, f) {
 
     _position = 0;
+    _speed = 50;
     setFond(SPACE);
 }
 
@@ -22,7 +24,7 @@ void Credits::resize(const sf::Vector2f& size) {
 
 void Credits::render(double timeElapsed) {
     View::render(timeElapsed);
-    updateText(timeElapsed * 50);
+    updateText(timeElapsed * _speed);
 
     for(const sf::Text& text : _texts) {
         window()->draw(text);
@@ -30,7 +32,22 @@ void Credits::render(double timeElapsed) {
 }
 
 void Credits::onEvent(const sf::Event& event) {
-
+    if(event.type == sf::Event::EventType::KeyPressed) {
+        switch (event.key.code) {
+            case sf::Keyboard::Key::Space:
+            case sf::Keyboard::Key::Down:
+                _speed = 400;
+                break;
+        }
+    }
+    if(event.type == sf::Event::EventType::KeyReleased) {
+        switch (event.key.code) {
+            case sf::Keyboard::Key::Space:
+            case sf::Keyboard::Key::Down:
+                _speed = 50;
+                break;
+        }
+    }
 }
 
 void Credits::updateText(float yOffset) {
@@ -80,7 +97,7 @@ void Credits::createText(float initialYPosition) {
             }
         }
         else {
-            text.setFont(ResourceLoader::getFont(DOCOMO));
+            //text.setFont(ResourceLoader::getFont(DOCOMO));
             text.setPosition(25 + (window()->getView().getSize().x - 50 - text.getLocalBounds().width)/2, nextY);
             text.setColor(sf::Color(255,255,0));
             _texts.push_back(text);

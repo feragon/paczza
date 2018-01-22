@@ -129,13 +129,18 @@ void BoardView::render(double timeElapsed) {
         }
     }
 
+    sf::Rect<float> p(_joueur.getGlobalBounds().left + SPRITE_SIZE/4, _joueur.getGlobalBounds().top + SPRITE_SIZE/4, SPRITE_SIZE/2, SPRITE_SIZE/2);
+
     for(Liste<Monster>* monstres = _jeu->monstres(); monstres; monstres = monstres->next) {
         sf::Sprite s(ResourceLoader::getSprite(RIGHT_PINEAPPLE));
         s.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
         s.setPosition(monstres->value->position().x * SPRITE_SIZE, monstres->value->position().y * SPRITE_SIZE);
         window()->draw(s);
 
-        if(s.getGlobalBounds().intersects(_joueur.getGlobalBounds())) {
+        //Detecteur de collisions
+        sf::Rect<float> m(s.getGlobalBounds().left + SPRITE_SIZE/4, s.getGlobalBounds().top + SPRITE_SIZE/4, SPRITE_SIZE/2, SPRITE_SIZE/2);
+
+        if(p.intersects(m)) {
             sf::Text gameover = sf::Text("GAME OVER", ResourceLoader::getFont(KONGTEXT), 72);
             gameover.setOrigin(gameover.getLocalBounds().width / 2, gameover.getLocalBounds().height / 2);
             gameover.setPosition(window()->getView().getSize().x /2, window()->getView().getSize().y /2);
