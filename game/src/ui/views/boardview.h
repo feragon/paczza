@@ -7,8 +7,9 @@
 #include <game/player.h>
 #include <ui/drawables/animatedsprite.h>
 #include "view.h"
+#include <game/onplayerpositionchanged.h>
 
-class BoardView : public View {
+class BoardView : public View, public OnPlayerPositionChanged {
     public:
         BoardView(sf::RenderWindow* window, FenetreJeu* f);
         virtual ~BoardView();
@@ -19,7 +20,7 @@ class BoardView : public View {
 
         virtual void onEvent(const sf::Event& event) override;
 
-        void updatePlayer(int x, int y, int angle);
+        void onPlayerPositionChanged(const Position<>& oldPosition, const Position<>& newPosition) override;
 
     private:
         void genererSpritesElements();

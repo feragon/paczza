@@ -6,9 +6,13 @@
 #include <board/board.h>
 #include "player.h"
 #include "monstermanager.h"
+#include "direction.h"
+#include "onplayerpositionchanged.h"
 
 class Jeu {
     private:
+        Position<> getNextPlayerPosition();
+
         Board* _plateau;
         Pacman* _joueur;
         Liste<Monster>* _monstres;
@@ -16,6 +20,9 @@ class Jeu {
         MonsterManager* _monsterManager;
         double _timeSinceMove;
         Position<double> _newPlayerPosition;
+        Direction _direction;
+        Direction _newDirection;
+        OnPlayerPositionChanged* _onPlayerPositionChanged;
 
     public:
         Jeu();
@@ -52,10 +59,22 @@ class Jeu {
         void updatePlayers(double timeElapsed);
 
         /**
-         * @brief Déplace le joueur
-         * @param newPosition Nouvelle position
+         * @brief Change la direction du joueur
+         * @param newPosition Nouvelle direction
          */
-        void movePlayer(const Position<>& newPosition);
+        inline void setDirection(Direction newDirection);
+
+        /**
+         * @brief Donne la direction actuelle du joueur
+         * @return Direction
+         */
+        inline Direction direction() const;
+
+        /**
+         * @brief Définit la fonction appelée quand le joueur arrive sur une nouvelle case
+         * @param onPlayerPositionChanged Fonction appelée
+         */
+        inline void setOnPlayerPositionChanged(OnPlayerPositionChanged* onPlayerPositionChanged);
 };
 
 Board* Jeu::plateau() {
@@ -68,4 +87,16 @@ Pacman* Jeu::joueur() {
 
 Liste<Monster>* Jeu::monstres() const {
     return _monstres;
+}
+
+void Jeu::setDirection(Direction newDirection) {
+    _newDirection = newDirection;
+}
+
+Direction Jeu::direction() const {
+    return _direction;
+}
+
+void Jeu::setOnPlayerPositionChanged(OnPlayerPositionChanged* onPlayerPositionChanged) {
+    _onPlayerPositionChanged = onPlayerPositionChanged;
 }

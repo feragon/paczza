@@ -1,6 +1,7 @@
 #include <config.h>
 #include <ui/resourceloader.h>
 #include <SFML/Window/Event.hpp>
+#include <game/onplayerpositionchanged.h>
 #include "boardview.h"
 
 BoardView::BoardView(sf::RenderWindow* window, FenetreJeu* f) :
@@ -15,6 +16,8 @@ BoardView::BoardView(sf::RenderWindow* window, FenetreJeu* f) :
     _joueur.addSprite(sf::Sprite(ResourceLoader::getSprite(Sprite::OPEN_PIZZA_3)));
     _joueur.addSprite(sf::Sprite(ResourceLoader::getSprite(Sprite::PIZZA)));
     _joueur.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
+
+    _jeu->setOnPlayerPositionChanged(this);
 }
 
 BoardView::~BoardView() {
@@ -145,73 +148,53 @@ void BoardView::render(double timeElapsed) {
     window()->draw(_score);
 }
 
-void BoardView::updatePlayer(int x, int y, int angle) {
-    _joueur.reset();
-
-    Position<> p(x, y);
-
-    Sommet<Case>* sommetActuel = _jeu->plateau()->sommet(_jeu->joueur()->position());
-    Liste<std::pair<Sommet<Case>*, Arete<Chemin, Case>*>>* voisins = _jeu->plateau()->adjacences(sommetActuel);
-
-    for(Liste<std::pair<Sommet<Case>*, Arete<Chemin, Case>*>>* sommet = voisins; sommet; sommet = sommet->next) {
-        try {
-            _joueur.setRotation(angle);
-            if(sommet->value->first->contenu().position() == p
-               && sommet->value->second->contenu().estAccessible()) {
-
-                Arete<Chemin, Case>* arete = sommet->value->second;
-                arete->contenu().setChaleur(UINT8_MAX);
-
-                Position<> oldPosition = _jeu->joueur()->position();
-
-                Position<> moveVect = p - oldPosition;
-
-                _jeu->movePlayer(p);
-
-                sommet->value->first->contenu().heberge(*(_jeu->joueur()));
-                genererSpriteElement(sommet->value->first->contenu());
-
-                sf::Sprite sprite(ResourceLoader::getSprite(Sprite::COCAINE));
-                sprite.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
-                sprite.setPosition((oldPosition.x + moveVect.x/2) * SPRITE_SIZE, (oldPosition.y + moveVect.y/2) * SPRITE_SIZE);
-                _aretesMarquees[arete] = sprite;
-
-                break;
-            }
-        }
-        catch(std::exception e) {}
-    }
-
-    Liste<std::pair<Sommet<Case>*, Arete<Chemin, Case>*>>::efface2(voisins);
-}
-
 void BoardView::onEvent(const sf::Event& event) {
     if(event.type == sf::Event::EventType::KeyPressed) {
         switch(event.key.code) {
             case sf::Keyboard::Key::Numpad2:
-                updatePlayer(_jeu->joueur()->position().x, _jeu->joueur()->position().y + 1, 270);
+                _jeu->setDirection(DOWN);
                 break;
             case sf::Keyboard::Key::Numpad8:
-                updatePlayer(_jeu->joueur()->position().x, _jeu->joueur()->position().y - 1, 90);
+                _jeu->setDirection(UP);
                 break;
             case sf::Keyboard::Key::Numpad4:
-                updatePlayer(_jeu->joueur()->position().x - 1, _jeu->joueur()->position().y, 0);
+                _jeu->setDirection(LEFT);
                 break;
             case sf::Keyboard::Key::Numpad6:
-                updatePlayer(_jeu->joueur()->position().x + 1, _jeu->joueur()->position().y, 180);
+                _jeu->setDirection(RIGHT);
                 break;
             case sf::Keyboard::Key::Numpad1:
-                updatePlayer(_jeu->joueur()->position().x - 1, _jeu->joueur()->position().y + 1, 315);
+                _jeu->setDirection(LEFT_DOWN);
                 break;
             case sf::Keyboard::Key::Numpad3:
-                updatePlayer(_jeu->joueur()->position().x + 1, _jeu->joueur()->position().y + 1, 225);
+                _jeu->setDirection(RIGHT_DOWN);
                 break;
             case sf::Keyboard::Key::Numpad7:
-                updatePlayer(_jeu->joueur()->position().x - 1, _jeu->joueur()->position().y - 1, 45);
+                _jeu->setDirection(LEFT_UP);
                 break;
             case sf::Keyboard::Key::Numpad9:
-                updatePlayer(_jeu->joueur()->position().x + 1, _jeu->joueur()->position().y - 1, 135);
+                _jeu->setDirection(RIGHT_UP);
                 break;
         }
+    }
+}
+
+void BoardView::onPlayerPositionChanged(const Position<>& oldPosition, const Position<>& newPosition) {
+    Sommet<Case>* oldVertice = _jeu->plateau()->sommet(oldPosition);
+    Sommet<Case>* newVertice = _jeu->plateau()->sommet(newPosition);
+
+    _joueur.setRotation(_jeu->direction() * 45);
+    genererSpriteElement(newVertice->contenu());
+
+    if(oldPosition != newPosition) {
+        _joueur.reset();
+        Position<double> moveVect = newPosition - oldPosition;
+
+        sf::Sprite sprite(ResourceLoader::getSprite(Sprite::COCAINE));
+
+        sprite.setOrigin(SPRITE_SIZE / 2, SPRITE_SIZE / 2);
+        sprite.setPosition((oldPosition.x + moveVect.x / 2) * SPRITE_SIZE,
+                           (oldPosition.y + moveVect.y / 2) * SPRITE_SIZE);
+        _aretesMarquees[_jeu->plateau()->getAreteParSommets(oldVertice, newVertice)] = sprite;
     }
 }

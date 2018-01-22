@@ -56,7 +56,7 @@ set(SOURCE_FILES
         src/game/monstermanager.cpp
         src/game/dumbmonstermanager.cpp
         src/game/dumbmonstermanager.h
-)
+        src/game/onplayerpositionchanged.h)
 
 find_package(SFML 2 COMPONENTS graphics window system REQUIRED)
 include_directories(${SFML_INCLUDE_DIR})

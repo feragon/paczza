@@ -2,11 +2,11 @@
 
 enum Direction {
     LEFT,
-    RIGHT,
-    UP,
-    DOWN,
     LEFT_UP,
-    LEFT_DOWN,
+    UP,
     RIGHT_UP,
-    RIGHT_DOWN
+    RIGHT,
+    RIGHT_DOWN,
+    DOWN,
+    LEFT_DOWN,
 };
