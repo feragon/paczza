@@ -30,6 +30,7 @@ Jeu::Jeu() {
         Monster* monster = new Monster(*(monstres->value));
         _monsterManager->addMonster(monster);
         _monstres = new Liste<Monster>(monster, _monstres);
+        _oldPositions[monster] = monster->position();
     }
 
     Liste<Position<>>::efface1(positionsReservees);
@@ -49,21 +50,20 @@ void Jeu::updateGame(double timeElapsed) {
 
     if(_timeSinceMove > MOVEMENT_TIME) {
         for(Liste<Monster>* monsters = _monstres; monsters; monsters = monsters->next) {
-            monsters->value->setPosition(_monsterManager->newPosition(monsters->value));
+            Position<int> newPosition = _monsterManager->newPosition(monsters->value);
+            monsters->value->setPosition(newPosition);
+            _oldPositions[monsters->value] = newPosition;
         }
+
         _timeSinceMove = 0;
 
         _monsterManager->moveMonsters();
 
-        double movement = timeElapsed / MOVEMENT_TIME;
-        for(Liste<Monster>* monsters = _monstres; monsters; monsters = monsters->next) {
-            monsters->value->setPosition(monsters->value->position() + (_monsterManager->newPosition(monsters->value) - monsters->value->position()) * movement);
-        }
     }
     else {
         double movement = timeElapsed / MOVEMENT_TIME;
         for(Liste<Monster>* monsters = _monstres; monsters; monsters = monsters->next) {
-            monsters->value->setPosition(monsters->value->position() + (_monsterManager->newPosition(monsters->value) - monsters->value->position()) * movement);
+            monsters->value->setPosition(monsters->value->position() + (_monsterManager->newPosition(monsters->value) - _oldPositions[monsters->value]) * movement);
         }
     }
 }

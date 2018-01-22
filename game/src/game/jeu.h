@@ -12,6 +12,7 @@ class Jeu {
         Board* _plateau;
         Pacman* _joueur;
         Liste<Monster>* _monstres;
+        std::map<Monster*, Position<>> _oldPositions;
         MonsterManager* _monsterManager;
         double _timeSinceMove;
 

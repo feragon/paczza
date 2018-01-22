@@ -107,6 +107,9 @@ void Board::genererGraphe1(Liste<Position<>>* positionsReservees) {
     creeArete(Chemin(0), _cases[Position<>(6,4)], _cases[Position<>(5,3)]);
     creeArete(Chemin(0), _cases[Position<>(6,4)], _cases[Position<>(6,3)]);
 
+    creeArete(Chemin(0), _cases[Position<>(6,4)], _cases[Position<>(7,5)]);
+    creeArete(Chemin(0), _cases[Position<>(6,5)], _cases[Position<>(7,4)]);
+
     creeArete(Chemin(0), _cases[Position<>(6,5)], _cases[Position<>(5,6)]);
     creeArete(Chemin(0), _cases[Position<>(6,5)], _cases[Position<>(5,5)]);
 
