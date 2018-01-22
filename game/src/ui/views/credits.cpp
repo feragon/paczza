@@ -26,7 +26,7 @@ void Credits::render(double timeElapsed) {
     View::render(timeElapsed);
     updateText(timeElapsed * _speed);
 
-    for(const sf::Text& text : _texts) {
+    for(const MultipleFontText& text : _texts) {
         window()->draw(text);
     }
 }
@@ -58,7 +58,7 @@ void Credits::onEvent(const sf::Event& event) {
 void Credits::updateText(float yOffset) {
     _position += yOffset;
 
-    for(sf::Text& text : _texts) {
+    for(MultipleFontText& text : _texts) {
         text.move(0, -yOffset);
     }
 }
@@ -72,9 +72,9 @@ void Credits::createText(float initialYPosition) {
 
     while (!creditsFile.eof()) {
         creditsFile.getline(buf, BUFSIZ);
-        sf::Text text(buf, ResourceLoader::getFont(KONGTEXT), 32);
+        MultipleFontText text(buf, ResourceLoader::getFont(KONGTEXT), 32);
 
-        double ratio = text.getLocalBounds().width / (window()->getView().getSize().x - 50);
+        double ratio = text.bounds().width / (window()->getView().getSize().x - 50);
 
         if(ratio > 1) {
             std::wstring str(buf);
@@ -90,11 +90,11 @@ void Credits::createText(float initialYPosition) {
                 while(esp < str.size()-1 && esp > i && str.at(esp) != charEsp.at(0))
                     esp--;
 
-                text = sf::Text(str.substr(i, esp-i), ResourceLoader::getFont(KONGTEXT), 32);
+                text = MultipleFontText(str.substr(i, esp-i), ResourceLoader::getFont(KONGTEXT), 32);
 
-                text.setPosition(25 + (window()->getView().getSize().x - 50 - text.getLocalBounds().width)/2, nextY);
+                text.setPosition(25 + (window()->getView().getSize().x - 50 - text.bounds().width)/2, nextY);
                 text.setColor(sf::Color(255,255,0));
-                nextY += text.getCharacterSize() + 2;
+                nextY += text.fontSize() + 2;
 
                 _texts.push_back(text);
 
@@ -103,10 +103,10 @@ void Credits::createText(float initialYPosition) {
         }
         else {
             //text.setFont(ResourceLoader::getFont(DOCOMO));
-            text.setPosition(25 + (window()->getView().getSize().x - 50 - text.getLocalBounds().width)/2, nextY);
+            text.setPosition(25 + (window()->getView().getSize().x - 50 - text.bounds().width)/2, nextY);
             text.setColor(sf::Color(255,255,0));
             _texts.push_back(text);
-            nextY += text.getCharacterSize() + 2;
+            nextY += text.fontSize() + 2;
         }
     }
 

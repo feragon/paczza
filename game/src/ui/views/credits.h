@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics/Text.hpp>
+#include <ui/drawables/multiplefonttext.h>
 #include "view.h"
 
 class Credits : public View {
@@ -24,7 +25,7 @@ class Credits : public View {
          */
         void createText(float initialYPosition);
 
-        std::vector<sf::Text> _texts;
+        std::vector<MultipleFontText> _texts;
         float _position;
         int _speed;
 };
