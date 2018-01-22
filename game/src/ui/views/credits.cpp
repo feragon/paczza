@@ -38,12 +38,17 @@ void Credits::onEvent(const sf::Event& event) {
             case sf::Keyboard::Key::Down:
                 _speed = 400;
                 break;
+
+            case sf::Keyboard::Key::Up:
+                _speed = -400;
+                break;
         }
     }
     if(event.type == sf::Event::EventType::KeyReleased) {
         switch (event.key.code) {
             case sf::Keyboard::Key::Space:
             case sf::Keyboard::Key::Down:
+            case sf::Keyboard::Key::Up:
                 _speed = 50;
                 break;
         }
