@@ -4,7 +4,7 @@
 
 class Pacman : public Player {
     public:
-        Pacman(const Position& p);
+        Pacman(const Position<double>& p);
 
         /**
          * @brief Donne le nombre de points

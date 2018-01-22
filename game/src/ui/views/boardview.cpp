@@ -94,13 +94,13 @@ void BoardView::render(double timeElapsed) {
         window()->draw(sprite);
     }
 
-    Position* pos = _jeu->joueur()->prochainDeplacement();
+    Position<double>* pos = _jeu->joueur()->prochainDeplacement();
 
     _joueur.setPosition(pos->x * SPRITE_SIZE, pos->y * SPRITE_SIZE);
     _joueur.animate(timeElapsed);
     window()->draw(_joueur);
 
-    for(std::pair<const Position, sf::Sprite> p : _elements) {
+    for(std::pair<const Position<>, sf::Sprite> p : _elements) {
         window()->draw(p.second);
     }
 
@@ -138,7 +138,7 @@ void BoardView::render(double timeElapsed) {
 void BoardView::updatePlayer(int x, int y, int angle) {
     _joueur.reset();
 
-    Position p(x, y);
+    Position<> p(x, y);
 
     Sommet<Case>* sommetActuel = _jeu->plateau()->sommet(_jeu->joueur()->position());
     Liste<std::pair<Sommet<Case>*, Arete<Chemin, Case>*>>* voisins = _jeu->plateau()->adjacences(sommetActuel);
@@ -151,8 +151,8 @@ void BoardView::updatePlayer(int x, int y, int angle) {
                 Arete<Chemin, Case>* arete = sommet->value->second;
                 arete->contenu().setChaleur(UINT8_MAX);
 
-                Position s1 = _jeu->joueur()->position();
-                Position s2 = p;
+                Position<> s1 = _jeu->joueur()->position();
+                Position<> s2 = p;
                 float vect_x = s2.x - s1.x;
                 float vect_y = s2.y - s1.y;
 

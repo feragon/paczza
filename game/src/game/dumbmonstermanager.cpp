@@ -5,7 +5,7 @@ DumbMonsterManager::DumbMonsterManager(const Board* board) :
 }
 
 void DumbMonsterManager::moveMonsters() {
-    for(std::pair<const Monster* const, Position> pair : monsters()) {
+    for(std::pair<const Monster* const, Position<double>> pair : monsters()) {
         Liste<Sommet<Case>>* vertices = board()->voisins(board()->sommet(pair.first->position()));
         Liste<Sommet<Case>>* currentVertice = vertices;
         int verticeId = rand() % Liste<Sommet<Case>>::taille(vertices);

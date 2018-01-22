@@ -20,7 +20,7 @@ class MonsterManager {
          * @param monster Monstre
          * @return Nouvelle position
          */
-        Position newPosition(const Monster* monster) const;
+        Position<double> newPosition(const Monster* monster) const;
 
         /**
          * @brief Supprime un monstre
@@ -34,7 +34,7 @@ class MonsterManager {
         virtual void moveMonsters() = 0;
 
     protected:
-        inline std::map<const Monster*, Position>& monsters();
+        inline std::map<const Monster*, Position<double>>& monsters();
         inline const Board* board() const;
 
     private:
@@ -42,10 +42,10 @@ class MonsterManager {
         MonsterManager& operator = (const MonsterManager&);
 
         const Board* _board;
-        std::map<const Monster*, Position> _newPositions;
+        std::map<const Monster*, Position<double>> _newPositions;
 };
 
-std::map<const Monster*, Position>& MonsterManager::monsters() {
+std::map<const Monster*, Position<double>>& MonsterManager::monsters() {
     return _newPositions;
 }
 

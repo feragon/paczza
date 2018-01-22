@@ -8,7 +8,7 @@ void MonsterManager::addMonster(const Monster* monster) {
     _newPositions[monster] = monster->position();
 }
 
-Position MonsterManager::newPosition(const Monster* monster) const {
+Position<double> MonsterManager::newPosition(const Monster* monster) const {
     return _newPositions.at(monster);
 }
 

@@ -4,7 +4,7 @@
 
 class Monster : public Player {
     public:
-        Monster(const Position& p);
+        Monster(const Position<double>& p);
 
         /**
          * @return Vrai si le monstre est vulnérable

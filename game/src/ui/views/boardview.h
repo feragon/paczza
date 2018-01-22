@@ -28,7 +28,7 @@ class BoardView : public View {
         BoardView(const BoardView&);
         BoardView& operator = (const BoardView&);
 
-        std::map<Position, sf::Sprite, cmpPosition> _elements;
+        std::map<Position<>, sf::Sprite, cmpPosition<>> _elements;
 
         std::vector<sf::Sprite> _backgroundSprites;
         Jeu* _jeu;

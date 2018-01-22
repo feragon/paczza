@@ -1,6 +1,6 @@
 #include "case.h"
 
-Case::Case(const Position& position, const Element* element) {
+Case::Case(const Position<>& position, const Element* element) {
     _position = position;
 
     if(element) {

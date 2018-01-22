@@ -1,19 +1,19 @@
 #pragma once
 
 #include <ostream>
-#include <graph/position.h>
+#include <board/position.h>
 #include "element.h"
 
 class Case {
     private:
-        Position _position;
+        Position<> _position;
         Element* _element;
 
         void copy(const Case& c);
         void clear();
 
     public:
-        Case(const Position& position, const Element* element);
+        Case(const Position<>& position, const Element* element);
         Case(const Case& c);
         ~Case();
 
@@ -23,7 +23,7 @@ class Case {
          * @brief Donne la position de la case
          * @return Position
          */
-        inline Position position() const;
+        inline Position<> position() const;
 
         /**
          * @brief Donne l'élément de la case, ou nullptr si la case est vide
@@ -35,7 +35,7 @@ class Case {
          * @brief Définit la nouvelle position de la case
          * @param position Nouvelle position
          */
-        inline void setPosition(const Position& position);
+        inline void setPosition(const Position<>& position);
 
         /**
          * @brief Définit l'élément de la case
@@ -52,11 +52,11 @@ class Case {
         friend std::ostream& operator<<(std::ostream &, const Case&);
 };
 
-Position Case::position() const {
+Position<> Case::position() const {
     return _position;
 }
 
-void Case::setPosition(const Position& position) {
+void Case::setPosition(const Position<>& position) {
     _position = position;
 }
 

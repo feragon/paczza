@@ -6,15 +6,16 @@
 #include "element.h"
 #include <map>
 
+template <typename T = int>
 struct cmpPosition {
-    bool operator()(const Position& a, const Position& b) const {
+    bool operator()(const Position<T>& a, const Position<T>& b) const {
         return (a.x < b.x) || (a.x == b.x && a.y < b.y);
     }
 };
 
 class Board : public Graphe<Chemin, Case> {
     public:
-        Board(unsigned int width, unsigned int height, Liste<Position>* positionsReservees);
+        Board(unsigned int width, unsigned int height, Liste<Position<>>* positionsReservees);
 
         /**
          * @brief Donne le nombre de colonnes du plateau
@@ -28,11 +29,11 @@ class Board : public Graphe<Chemin, Case> {
          */
         inline unsigned int height() const;
 
-        inline Sommet<Case>* sommet(const Position& position) const;
+        inline Sommet<Case>* sommet(const Position<>& position) const;
 
     private:
-        void genererGraphe(Liste<Position>* positionsReservees);
-        void genererGraphe1(Liste<Position>* positionsReservees);
+        void genererGraphe(Liste<Position<>>* positionsReservees);
+        void genererGraphe1(Liste<Position<>>* positionsReservees);
 
         /**
          * @brief Place un élément au hasard sur le graphe
@@ -41,13 +42,13 @@ class Board : public Graphe<Chemin, Case> {
          * @param limit Nombre de tentatives de placement maximales
          * @throws std::runtime_exception si l'élément n'a pas pu être placé
          */
-        void placerElementHasard(const Element& element, Liste<Position>* positionsReservees, unsigned int limit = 10);
+        void placerElementHasard(const Element& element, Liste<Position<>>* positionsReservees, unsigned int limit = 10);
 
         unsigned int _width;
         unsigned int _height;
 
-        std::map<Position, Sommet<Case>*, cmpPosition> _cases;
-        std::map<Position, Element*, cmpPosition> _elements;
+        std::map<Position<>, Sommet<Case>*, cmpPosition<>> _cases;
+        std::map<Position<>, Element*, cmpPosition<>> _elements;
 };
 
 unsigned int Board::width() const {
@@ -58,6 +59,6 @@ unsigned int Board::height() const {
     return _height;
 }
 
-Sommet<Case>* Board::sommet(const Position& position) const {
+Sommet<Case>* Board::sommet(const Position<>& position) const {
     return _cases.at(position);
 }
