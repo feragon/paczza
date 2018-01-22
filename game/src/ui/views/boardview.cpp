@@ -76,6 +76,9 @@ void BoardView::resize(const sf::Vector2f& size) {
         if(vect_x != 0 && vect_y != 0)
             sprite.setTexture(ResourceLoader::getSprite(Sprite::DIAGONAL_PATH));
 
+        if(!arete->value->contenu().estAccessible())
+            sprite.setTexture(ResourceLoader::getSprite(Sprite::DOOR));
+
         sprite.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
         sprite.setRotation(angle);
         sprite.setPosition((s1_x + vect_x/2) * SPRITE_SIZE, (s1_y + vect_y/2) * SPRITE_SIZE);
@@ -128,6 +131,13 @@ void BoardView::render(double timeElapsed) {
         s.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
         s.setPosition(monstres->value->position().x * SPRITE_SIZE, monstres->value->position().y * SPRITE_SIZE);
         window()->draw(s);
+
+        if(s.getGlobalBounds().intersects(_joueur.getGlobalBounds())) {
+            sf::Text gameover = sf::Text("GAME OVER", ResourceLoader::getFont(KONGTEXT), 72);
+            gameover.setOrigin(gameover.getLocalBounds().width / 2, gameover.getLocalBounds().height / 2);
+            gameover.setPosition(window()->getView().getSize().x /2, window()->getView().getSize().y /2);
+            window()->draw(gameover);
+        }
     }
 
     _score = sf::Text("Score:"+std::to_string(_jeu->joueur()->points()), ResourceLoader::getFont(KONGTEXT), 32);
@@ -146,7 +156,8 @@ void BoardView::updatePlayer(int x, int y, int angle) {
     for(Liste<std::pair<Sommet<Case>*, Arete<Chemin, Case>*>>* sommet = voisins; sommet; sommet = sommet->next) {
         try {
             _joueur.setRotation(angle);
-            if(sommet->value->first->contenu().position() == p) {
+            if(sommet->value->first->contenu().position() == p
+               && sommet->value->second->contenu().estAccessible()) {
 
                 Arete<Chemin, Case>* arete = sommet->value->second;
                 arete->contenu().setChaleur(UINT8_MAX);

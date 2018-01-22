@@ -24,5 +24,6 @@ enum Sprite {
         TOMATO_SMUDGE,
         SPACE,
         COCAINE,
+        DOOR,
         SPRITE_FIN
 };
