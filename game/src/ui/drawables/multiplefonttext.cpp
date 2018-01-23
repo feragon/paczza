@@ -12,22 +12,25 @@ MultipleFontText::MultipleFontText(const std::wstring& text, const sf::Font& fon
     _needsUpdate = true;
 }
 
-sf::Sprite MultipleFontText::createText() const {
+void MultipleFontText::createText() const {
     _needsUpdate = false;
 
     _glyphs.clear();
     _bounds = sf::FloatRect();
+    _bounds.height = _fontSize;
 
+    sf::Uint32 lastChar = 0;
     for(sf::Uint32 c : _text) {
         sf::Font& font = getFont(c);
 
-        const sf::Glyph& glyph = _defaultFont.getGlyph(c, _fontSize, false);
-        sf::Sprite s(_defaultFont.getTexture(_fontSize), glyph.textureRect);
+        _bounds.width += font.getKerning(lastChar, c, _fontSize);
+        lastChar = c;
 
-        s.move(_bounds.width + 1, 0);
+        const sf::Glyph& glyph = font.getGlyph(c, _fontSize, false);
+        sf::Sprite s(font.getTexture(_fontSize), glyph.textureRect);
+        s.setPosition(_bounds.width + glyph.bounds.left, glyph.bounds.top);
 
-        _bounds.width += glyph.bounds.width + 1;
-        _bounds.height = std::max(_bounds.height, glyph.bounds.height);
+        _bounds.width += glyph.advance;
 
         _glyphs.push_back(s);
     }
@@ -43,8 +46,8 @@ sf::Font& MultipleFontText::getFont(sf::Uint32 c) const {
     return _defaultFont;
 }
 
-void MultipleFontText::addFont(int begin, int end, const sf::Font& font) {
-    _fonts.push_back(std::pair<std::pair<int, int>, sf::Font>(std::pair<int, int>(begin, end), font));
+void MultipleFontText::addFont(sf::Uint32 begin, sf::Uint32 end, const sf::Font& font) {
+    _fonts.emplace_back(std::pair<int, int>(begin, end), font);
 
     createText();
     _needsUpdate = true;

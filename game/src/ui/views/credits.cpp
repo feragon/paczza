@@ -73,6 +73,8 @@ void Credits::createText(float initialYPosition) {
     while (!creditsFile.eof()) {
         creditsFile.getline(buf, BUFSIZ);
         MultipleFontText text(buf, ResourceLoader::getFont(KONGTEXT), 32);
+        text.addFont(1000, 10000000, ResourceLoader::getFont(DOCOMO));
+        text.addFont(L'0', L'9', ResourceLoader::getFont(DOCOMO));
 
         double ratio = text.bounds().width / (window()->getView().getSize().x - 50);
 
@@ -91,6 +93,8 @@ void Credits::createText(float initialYPosition) {
                     esp--;
 
                 text = MultipleFontText(str.substr(i, esp-i), ResourceLoader::getFont(KONGTEXT), 32);
+                text.addFont(1000, 10000000, ResourceLoader::getFont(DOCOMO));
+                text.addFont(L'0', L'9', ResourceLoader::getFont(DOCOMO));
 
                 text.setPosition(25 + (window()->getView().getSize().x - 50 - text.bounds().width)/2, nextY);
                 text.setColor(sf::Color(255,255,0));
@@ -102,7 +106,6 @@ void Credits::createText(float initialYPosition) {
             }
         }
         else {
-            //text.setFont(ResourceLoader::getFont(DOCOMO));
             text.setPosition(25 + (window()->getView().getSize().x - 50 - text.bounds().width)/2, nextY);
             text.setColor(sf::Color(255,255,0));
             _texts.push_back(text);

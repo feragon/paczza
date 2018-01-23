@@ -17,7 +17,7 @@ class MultipleFontText : public sf::Drawable, public sf::Transformable {
          * @param end Caractère de fin d'intervalle
          * @param font Police
          */
-        void addFont(int begin, int end, const sf::Font& font);
+        void addFont(sf::Uint32 begin, sf::Uint32 end, const sf::Font& font);
 
         /**
          * @brief Donne les bordures du texte
@@ -32,7 +32,7 @@ class MultipleFontText : public sf::Drawable, public sf::Transformable {
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
     private:
-        sf::Sprite createText() const;
+        void createText() const;
         sf::Font& getFont(sf::Uint32 c) const;
 
         sf::String _text;
