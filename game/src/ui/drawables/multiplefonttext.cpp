@@ -49,11 +49,15 @@ sf::Font& MultipleFontText::getFont(sf::Uint32 c) const {
 void MultipleFontText::addFont(sf::Uint32 begin, sf::Uint32 end, const sf::Font& font) {
     _fonts.emplace_back(std::pair<int, int>(begin, end), font);
 
-    createText();
     _needsUpdate = true;
 }
 
 const sf::FloatRect& MultipleFontText::bounds() const {
+    if(_needsUpdate) {
+        createText();
+        _needsUpdate = true;
+    }
+
     return _bounds;
 }
 
