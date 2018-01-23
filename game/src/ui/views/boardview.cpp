@@ -16,6 +16,7 @@ BoardView::BoardView(sf::RenderWindow* window, FenetreJeu* f) :
     _joueur.addSprite(sf::Sprite(ResourceLoader::getSprite(Sprite::OPEN_PIZZA_3)));
     _joueur.addSprite(sf::Sprite(ResourceLoader::getSprite(Sprite::PIZZA)));
     _joueur.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
+    _joueur.setRotation(_jeu->direction() * 45);
 
     _jeu->setOnPlayerPositionChanged(this);
 }

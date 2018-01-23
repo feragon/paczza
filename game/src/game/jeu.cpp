@@ -22,9 +22,11 @@ Jeu::Jeu() {
     _plateau = new Board(i, j, positionsReservees);
 
     _joueur = new Pacman(positionJoueur);
+
     _oldPositions[_joueur] = positionJoueur;
-    _newPlayerPosition = positionJoueur;
     _direction = UP;
+    _newDirection = UP;
+    _newPlayerPosition = getNextPlayerPosition();
 
     _monsterManager = new DumbMonsterManager(_plateau);
 
@@ -68,8 +70,16 @@ void Jeu::updatePlayers(double timeElapsed) {
         _monsterManager->moveMonsters();
 
         _joueur->setPosition(_newPlayerPosition);
+
+        Direction oldDirection = _direction;
         _direction = _newDirection;
         Position<> nextPlayerPosition = getNextPlayerPosition();
+
+        if(nextPlayerPosition == _newPlayerPosition && oldDirection != _direction) {
+            _direction = oldDirection;
+            _newDirection = oldDirection;
+            nextPlayerPosition = getNextPlayerPosition();
+        }
 
         if (_onPlayerPositionChanged) {
             _onPlayerPositionChanged->onPlayerPositionChanged(_oldPositions[_joueur], _newPlayerPosition);
