@@ -56,7 +56,15 @@ set(SOURCE_FILES
         src/game/monstermanager.cpp
         src/game/dumbmonstermanager.cpp
         src/game/dumbmonstermanager.h
-        src/game/onplayerpositionchanged.h src/ui/drawables/multiplefonttext.cpp src/ui/drawables/multiplefonttext.h)
+        src/game/onplayerpositionchanged.h
+        src/ui/drawables/multiplefonttext.cpp
+        src/ui/drawables/multiplefonttext.h
+        src/game/playernotinsight.h
+        src/sprite.h
+        src/fonts.h
+        src/game/direction.h
+        src/game/sensemonstermanager.cpp
+        src/game/sensemonstermanager.h src/game/noheatededgefound.h)
 
 find_package(SFML 2 COMPONENTS graphics window system REQUIRED)
 include_directories(${SFML_INCLUDE_DIR})
@@ -66,5 +74,5 @@ include_directories(src)
 add_executable(paczza ${SOURCE_FILES})
 target_link_libraries(paczza ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
 
-add_library(game ${SOURCE_FILES} src/sprite.h src/fonts.h src/game/direction.h)
+add_library(game ${SOURCE_FILES})
 target_link_libraries(game ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})

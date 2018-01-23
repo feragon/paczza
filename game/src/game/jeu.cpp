@@ -1,6 +1,7 @@
 #include <config.h>
 #include "jeu.h"
 #include "dumbmonstermanager.h"
+#include "sensemonstermanager.h"
 
 Jeu::Jeu() {
     int i = 13;
@@ -28,7 +29,7 @@ Jeu::Jeu() {
     _newDirection = UP;
     _newPlayerPosition = getNextPlayerPosition();
 
-    _monsterManager = new DumbMonsterManager(_plateau);
+    _monsterManager = new SenseMonsterManager(_plateau);
 
     _monstres = nullptr;
     for(Liste<Position<>>* monstres = positionsReservees->next; monstres; monstres = monstres->next) {
@@ -67,7 +68,7 @@ void Jeu::updatePlayers(double timeElapsed) {
             monsters->value->setPosition(newPosition);
             _oldPositions[monsters->value] = newPosition;
         }
-        _monsterManager->moveMonsters();
+        _monsterManager->moveMonsters(_newPlayerPosition);
 
         _joueur->setPosition(_newPlayerPosition);
 

@@ -12,6 +12,7 @@ class Conteneur : public Identifiable {
         Conteneur(int identifiant, const T& contenu);
 
         inline T& contenu();
+        inline T contenu() const;
         inline void setContenu(const T& contenu);
 
         operator std::string() const;
@@ -29,6 +30,11 @@ Conteneur<T>::Conteneur(int identifiant, const T& contenu) :
 
 template <class T>
 T& Conteneur<T>::contenu() {
+    return _contenu;
+}
+
+template <class T>
+T Conteneur<T>::contenu() const {
     return _contenu;
 }
 

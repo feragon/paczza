@@ -31,7 +31,7 @@ class MonsterManager {
         /**
          * @brief Déplace les monstres gérés
          */
-        virtual void moveMonsters() = 0;
+        virtual void moveMonsters(const Position<>& playerPosition) = 0;
 
     protected:
         inline std::map<const Monster*, Position<double>>& monsters();
