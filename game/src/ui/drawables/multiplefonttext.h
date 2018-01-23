@@ -36,6 +36,7 @@ class MultipleFontText : public sf::Drawable, public sf::Transformable {
         sf::Font& getFont(sf::Uint32 c) const;
 
         sf::String _text;
+        sf::Color _color;
         mutable sf::Font _defaultFont;
         unsigned int _fontSize;
 

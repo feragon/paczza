@@ -6,10 +6,12 @@ MultipleFontText::MultipleFontText(const std::wstring& text, const sf::Font& fon
     _text(text),
     _defaultFont(font),
     _fontSize(fontSize),
-    _bounds(0, 0, 0, 0) {
+    _bounds(0, 0, 0, 0),
+    _color(255, 255, 255) {
 
     createText();
     _needsUpdate = true;
+
 }
 
 void MultipleFontText::createText() const {
@@ -29,6 +31,7 @@ void MultipleFontText::createText() const {
         const sf::Glyph& glyph = font.getGlyph(c, _fontSize, false);
         sf::Sprite s(font.getTexture(_fontSize), glyph.textureRect);
         s.setPosition(_bounds.width + glyph.bounds.left, glyph.bounds.top);
+        s.setColor(_color);
 
         _bounds.width += glyph.advance;
 
@@ -74,6 +77,7 @@ void MultipleFontText::draw(sf::RenderTarget& target, sf::RenderStates states) c
 }
 
 void MultipleFontText::setColor(const sf::Color& color) {
+    _color = color;
     for(sf::Sprite& sprite : _glyphs) {
         sprite.setColor(color);
     }
