@@ -6,6 +6,7 @@
 #include <cmath>
 #include <codecvt>
 #include <SFML/Window/Event.hpp>
+#include <ui/fenetrejeu.h>
 
 Credits::Credits(sf::RenderWindow* window, FenetreJeu* f) :
         View(window, f) {
@@ -25,10 +26,15 @@ void Credits::resize(const sf::Vector2f& size) {
 void Credits::render(double timeElapsed) {
     View::render(timeElapsed);
     updateText(timeElapsed * _speed);
+    bool creditsOver = true;
 
     for(const MultipleFontText& text : _texts) {
         window()->draw(text);
+        if(text.getPosition().y > -60) creditsOver = false;
     }
+
+    if(creditsOver)
+        fenetreJeu()->vuePrecedente();
 }
 
 void Credits::onEvent(const sf::Event& event) {
