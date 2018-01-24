@@ -104,8 +104,8 @@ void Jeu::updatePlayers(double timeElapsed) {
     }
 
     for(Liste<Monster>* monsters = _monstres; monsters; monsters = monsters->next) {
-        if(std::abs(_joueur->position().x - monsters->value->position().x) < 0.5 &&
-           std::abs(_joueur->position().y - monsters->value->position().y) < 0.5) {
+        if(std::abs(_joueur->position().x - monsters->value->position().x) < 0.25 &&
+           std::abs(_joueur->position().y - monsters->value->position().y) < 0.25) {
             _gameOver = true;
         }
     }
