@@ -1,5 +1,6 @@
 #include <config.h>
 #include "jeu.h"
+#include <cmath>
 #include "dumbmonstermanager.h"
 #include "sensemonstermanager.h"
 
@@ -71,6 +72,7 @@ void Jeu::updatePlayers(double timeElapsed) {
         for(Liste<Monster>* monsters = _monstres; monsters; monsters = monsters->next) {
             Position<int> newPosition = _monsterManager->newPosition(monsters->value);
             monsters->value->setPosition(newPosition);
+
             _oldPositions[monsters->value] = newPosition;
         }
         _monsterManager->moveMonsters(_newPlayerPosition);
@@ -97,7 +99,18 @@ void Jeu::updatePlayers(double timeElapsed) {
     else {
         double movement = timeElapsed / MOVEMENT_TIME;
         for(Liste<Monster>* monsters = _monstres; monsters; monsters = monsters->next) {
-            monsters->value->setPosition(monsters->value->position() + (_monsterManager->newPosition(monsters->value) - _oldPositions[monsters->value]) * movement);
+            Position<double> vect = _monsterManager->newPosition(monsters->value) - _oldPositions[monsters->value];
+
+            if(vect.x < 0)
+                monsters->value->setDirection(LEFT);
+            else if(vect.x == 0)
+                monsters->value->setDirection(DOWN);
+            else if(vect.x > 0)
+                monsters->value->setDirection(RIGHT);
+            if(vect.y < 0)
+                monsters->value->setDirection(UP);
+
+            monsters->value->setPosition(monsters->value->position() + vect * movement);
         }
 
         _joueur->setPosition(_joueur->position() + (_newPlayerPosition - _oldPositions[_joueur]) * movement);

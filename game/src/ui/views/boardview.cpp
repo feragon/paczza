@@ -134,6 +134,14 @@ void BoardView::render(double timeElapsed) {
 
     for(Liste<Monster>* monstres = _jeu->monstres(); monstres; monstres = monstres->next) {
         sf::Sprite s(ResourceLoader::getSprite(RIGHT_PINEAPPLE));
+
+        if(monstres->value->direction() == UP)
+            s.setTexture(ResourceLoader::getSprite(UP_PINEAPPLE));
+        if(monstres->value->direction() == LEFT)
+            s.setTexture(ResourceLoader::getSprite(LEFT_PINEAPPLE));
+        if(monstres->value->direction() == DOWN)
+            s.setTexture(ResourceLoader::getSprite(DOWN_PINEAPPLE));
+
         s.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
         s.setPosition(monstres->value->position().x * SPRITE_SIZE, monstres->value->position().y * SPRITE_SIZE);
         window()->draw(s);
