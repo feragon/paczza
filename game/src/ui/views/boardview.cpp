@@ -137,21 +137,18 @@ void BoardView::render(double timeElapsed) {
         s.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
         s.setPosition(monstres->value->position().x * SPRITE_SIZE, monstres->value->position().y * SPRITE_SIZE);
         window()->draw(s);
-
-        //Detecteur de collisions
-        sf::Rect<float> m(s.getGlobalBounds().left + SPRITE_SIZE/4, s.getGlobalBounds().top + SPRITE_SIZE/4, SPRITE_SIZE/2, SPRITE_SIZE/2);
-
-        if(p.intersects(m)) {
-            sf::Text gameover = sf::Text("GAME OVER", ResourceLoader::getFont(KONGTEXT), 72);
-            gameover.setOrigin(gameover.getLocalBounds().width / 2, gameover.getLocalBounds().height / 2);
-            gameover.setPosition(window()->getView().getSize().x /2, window()->getView().getSize().y /2);
-            window()->draw(gameover);
-        }
     }
 
     _score = sf::Text("Score:"+std::to_string(_jeu->joueur()->points()), ResourceLoader::getFont(KONGTEXT), 32);
     _score.setPosition(window()->getView().getSize().x - _score.getLocalBounds().width - 20, window()->getView().getSize().y - _score.getLocalBounds().height - 20);
     window()->draw(_score);
+
+    if(_jeu->gameOver()) {
+        sf::Text gameover = sf::Text("GAME OVER", ResourceLoader::getFont(KONGTEXT), 72);
+        gameover.setOrigin(gameover.getLocalBounds().width / 2, gameover.getLocalBounds().height / 2);
+        gameover.setPosition(window()->getView().getSize().x / 2, window()->getView().getSize().y / 2);
+        window()->draw(gameover);
+    }
 }
 
 void BoardView::onEvent(const sf::Event& event) {

@@ -43,6 +43,7 @@ Jeu::Jeu() {
 
     _timeSinceMove = 0;
 
+    _gameOver = false;
     _onPlayerPositionChanged = nullptr;
 }
 
@@ -58,6 +59,10 @@ void Jeu::updateGame(double timeElapsed) {
 }
 
 void Jeu::updatePlayers(double timeElapsed) {
+    if(_gameOver) {
+        return;
+    }
+
     _timeSinceMove += timeElapsed;
 
     if(_timeSinceMove > MOVEMENT_TIME) {
@@ -96,6 +101,13 @@ void Jeu::updatePlayers(double timeElapsed) {
         }
 
         _joueur->setPosition(_joueur->position() + (_newPlayerPosition - _oldPositions[_joueur]) * movement);
+    }
+
+    for(Liste<Monster>* monsters = _monstres; monsters; monsters = monsters->next) {
+        if(std::abs(_joueur->position().x - monsters->value->position().x) < 0.5 &&
+           std::abs(_joueur->position().y - monsters->value->position().y) < 0.5) {
+            _gameOver = true;
+        }
     }
 }
 

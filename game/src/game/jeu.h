@@ -23,6 +23,7 @@ class Jeu {
         Direction _direction;
         Direction _newDirection;
         OnPlayerPositionChanged* _onPlayerPositionChanged;
+        bool _gameOver;
 
     public:
         Jeu();
@@ -75,6 +76,12 @@ class Jeu {
          * @param onPlayerPositionChanged Fonction appelée
          */
         inline void setOnPlayerPositionChanged(OnPlayerPositionChanged* onPlayerPositionChanged);
+
+        /**
+         * @brief Donne l'état du jeu
+         * @return Vrai si le joueur a perdu
+         */
+        inline bool gameOver() const;
 };
 
 Board* Jeu::plateau() {
@@ -99,4 +106,8 @@ Direction Jeu::direction() const {
 
 void Jeu::setOnPlayerPositionChanged(OnPlayerPositionChanged* onPlayerPositionChanged) {
     _onPlayerPositionChanged = onPlayerPositionChanged;
+}
+
+bool Jeu::gameOver() const {
+    return _gameOver;
 }
