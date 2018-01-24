@@ -3,32 +3,34 @@
 #include <cmath>
 #include "dumbmonstermanager.h"
 #include "sensemonstermanager.h"
+#include "noremaininglife.h"
 
-Jeu::Jeu() {
+Jeu::Jeu() :
+        _originalPlayerPosition(3,5) {
     int i = 13;
     int j = 8;
 
-    Position<> positionJoueur(3,5);
+
     Position<> m1(6,4);
     Position<> m2(6,5);
     Position<> m3(7,4);
     Position<> m4(7,5);
+
+    _originalMonstersPositions.push_back(m1);
+    _originalMonstersPositions.push_back(m2);
+    _originalMonstersPositions.push_back(m3);
+    _originalMonstersPositions.push_back(m4);
 
     Liste<Position<>>* positionsReservees = nullptr;
     positionsReservees = new Liste<Position<>>(&m1, positionsReservees);
     positionsReservees = new Liste<Position<>>(&m2, positionsReservees);
     positionsReservees = new Liste<Position<>>(&m3, positionsReservees);
     positionsReservees = new Liste<Position<>>(&m4, positionsReservees);
-    positionsReservees = new Liste<Position<>>(&positionJoueur, positionsReservees);
+    positionsReservees = new Liste<Position<>>(&_originalPlayerPosition, positionsReservees);
 
     _plateau = new Board(i, j, positionsReservees);
 
-    _joueur = new Pacman(positionJoueur);
-
-    _oldPositions[_joueur] = positionJoueur;
-    _direction = UP;
-    _newDirection = UP;
-    _newPlayerPosition = getNextPlayerPosition();
+    _joueur = new Pacman(_originalPlayerPosition, 3);
 
     _monsterManager = new SenseMonsterManager(_plateau);
 
@@ -37,14 +39,11 @@ Jeu::Jeu() {
         Monster* monster = new Monster(*(monstres->value));
         _monsterManager->addMonster(monster);
         _monstres = new Liste<Monster>(monster, _monstres);
-        _oldPositions[monster] = monster->position();
     }
 
     Liste<Position<>>::efface1(positionsReservees);
 
-    _timeSinceMove = 0;
-
-    _gameOver = false;
+    _stopped = true;
     _onPlayerPositionChanged = nullptr;
 }
 
@@ -60,13 +59,13 @@ void Jeu::updateGame(double timeElapsed) {
 }
 
 void Jeu::updatePlayers(double timeElapsed) {
-    if(_gameOver) {
+    if(_stopped) {
         return;
     }
 
     _timeSinceMove += timeElapsed;
 
-    if(_timeSinceMove > MOVEMENT_TIME) {
+    if(_timeSinceMove >= MOVEMENT_TIME) {
         _timeSinceMove = 0;
 
         for(Liste<Monster>* monsters = _monstres; monsters; monsters = monsters->next) {
@@ -119,7 +118,7 @@ void Jeu::updatePlayers(double timeElapsed) {
     for(Liste<Monster>* monsters = _monstres; monsters; monsters = monsters->next) {
         if(std::abs(_joueur->position().x - monsters->value->position().x) < 0.25 &&
            std::abs(_joueur->position().y - monsters->value->position().y) < 0.25) {
-            _gameOver = true;
+            _stopped = true;
         }
     }
 }
@@ -185,4 +184,40 @@ Position<> Jeu::getNextPlayerPosition() {
 
     Liste<std::pair<Sommet<Case>*, Arete<Chemin, Case>*>>::efface2(voisins);
     return actuelle;
+}
+
+void Jeu::start() {
+    if(!_stopped) {
+        return;
+    }
+
+    try {
+        joueur()->takeLife();
+
+        _timeSinceMove = 0;
+
+        _oldPositions[_joueur] = _originalPlayerPosition;
+        _direction = UP;
+        _newDirection = UP;
+        joueur()->setPosition(_originalPlayerPosition);
+        _newPlayerPosition = getNextPlayerPosition();
+
+        int i = 0;
+        for(Liste<Monster>* monsters = monstres(); monsters; monsters = monsters->next) {
+            monsters->value->setPosition(_originalMonstersPositions[i]);
+            _oldPositions[monsters->value] = _originalMonstersPositions[i];
+            i++;
+        }
+
+        _monsterManager->reset();
+
+        for(Liste<Arete<Chemin, Case>>* aretes = _plateau->aretes(); aretes; aretes = aretes->next) {
+            aretes->value->contenu().setChaleur(0);
+        }
+
+        _stopped = false;
+    }
+    catch(NoRemainingLife e) {
+
+    }
 }

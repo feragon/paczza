@@ -50,6 +50,8 @@ void BoardView::genererSpriteElement(const Case& c) {
 void BoardView::resize(const sf::Vector2f& size) {
     View::resize(size);
 
+    generateLifesIndicator(size);
+
     for(Liste<Sommet<Case>>* sommet = _jeu->plateau()->sommets(); sommet; sommet = sommet->next) {
         if(sommet->value->degre() > 0) {
             sf::Sprite sprite(ResourceLoader::getSprite(Sprite::CELL));
@@ -151,7 +153,11 @@ void BoardView::render(double timeElapsed) {
     _score.setPosition(window()->getView().getSize().x - _score.getLocalBounds().width - 20, window()->getView().getSize().y - _score.getLocalBounds().height - 20);
     window()->draw(_score);
 
-    if(_jeu->gameOver()) {
+    for(sf::Sprite sprite : _lifes) {
+        window()->draw(sprite);
+    }
+
+    if(_jeu->stopped()) {
         sf::Text gameover = sf::Text("GAME OVER", ResourceLoader::getFont(KONGTEXT), 72);
         gameover.setOrigin(gameover.getLocalBounds().width / 2, gameover.getLocalBounds().height / 2);
         gameover.setPosition(window()->getView().getSize().x / 2, window()->getView().getSize().y / 2);
@@ -186,6 +192,9 @@ void BoardView::onEvent(const sf::Event& event) {
             case sf::Keyboard::Key::Numpad9:
                 _jeu->setDirection(RIGHT_UP);
                 break;
+            case sf::Keyboard::Key::BackSpace:
+                _jeu->start();
+                break;
         }
     }
 }
@@ -199,6 +208,12 @@ void BoardView::onPlayerPositionChanged(const Position<>& oldPosition, const Pos
 
     if(oldPosition != newPosition) {
         _joueur.reset();
+        Arete<Chemin, Case>* arete = _jeu->plateau()->getAreteParSommets(oldVertice, newVertice);
+
+        if(!arete) {
+            return; //TODO
+        }
+
         Position<double> moveVect = newPosition - oldPosition;
 
         sf::Sprite sprite(ResourceLoader::getSprite(Sprite::COCAINE));
@@ -206,6 +221,25 @@ void BoardView::onPlayerPositionChanged(const Position<>& oldPosition, const Pos
         sprite.setOrigin(SPRITE_SIZE / 2, SPRITE_SIZE / 2);
         sprite.setPosition((oldPosition.x + moveVect.x / 2) * SPRITE_SIZE,
                            (oldPosition.y + moveVect.y / 2) * SPRITE_SIZE);
-        _aretesMarquees[_jeu->plateau()->getAreteParSommets(oldVertice, newVertice)] = sprite;
+
+
+        _aretesMarquees[arete] = sprite;
+    }
+}
+
+void BoardView::generateLifesIndicator(const sf::Vector2f& windowSize) {
+    const sf::Texture& texture = ResourceLoader::getSprite(OPEN_PIZZA_1);
+    double space = texture.getSize().x * 1.5;
+    double x = texture.getSize().x / 2;
+    double y = windowSize.y - texture.getSize().y - 10;
+
+
+    for(int i = 0; i < _jeu->joueur()->nbLifes(); i++) {
+        sf::Sprite s(texture);
+
+        s.setPosition(x, y);
+        x += space;
+
+        _lifes.push_back(s);
     }
 }

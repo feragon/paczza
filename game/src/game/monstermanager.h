@@ -33,6 +33,11 @@ class MonsterManager {
          */
         virtual void moveMonsters(const Position<>& playerPosition) = 0;
 
+        /**
+         * @brief Remet à zéro les prochaines positions des monstres
+         */
+        void reset();
+
     protected:
         inline std::map<const Monster*, Position<double>>& monsters();
         inline const Board* board() const;

@@ -23,7 +23,10 @@ class Jeu {
         Direction _direction;
         Direction _newDirection;
         OnPlayerPositionChanged* _onPlayerPositionChanged;
-        bool _gameOver;
+        bool _stopped;
+
+        Position<> _originalPlayerPosition;
+        std::vector<Position<>> _originalMonstersPositions;
 
     public:
         Jeu();
@@ -79,9 +82,14 @@ class Jeu {
 
         /**
          * @brief Donne l'état du jeu
-         * @return Vrai si le joueur a perdu
+         * @return Vrai si le jeu est en pause
          */
-        inline bool gameOver() const;
+        inline bool stopped() const;
+
+        /**
+         * @brief Démarre la partie
+         */
+        void start();
 };
 
 Board* Jeu::plateau() {
@@ -108,6 +116,6 @@ void Jeu::setOnPlayerPositionChanged(OnPlayerPositionChanged* onPlayerPositionCh
     _onPlayerPositionChanged = onPlayerPositionChanged;
 }
 
-bool Jeu::gameOver() const {
-    return _gameOver;
+bool Jeu::stopped() const {
+    return _stopped;
 }

@@ -25,6 +25,7 @@ class BoardView : public View, public OnPlayerPositionChanged {
     private:
         void genererSpritesElements();
         void genererSpriteElement(const Case& c);
+        void generateLifesIndicator(const sf::Vector2f& windowSize);
 
         BoardView(const BoardView&);
         BoardView& operator = (const BoardView&);
@@ -32,6 +33,7 @@ class BoardView : public View, public OnPlayerPositionChanged {
         std::map<Position<>, sf::Sprite, cmpPosition<>> _elements;
 
         std::vector<sf::Sprite> _backgroundSprites;
+        std::vector<sf::Sprite> _lifes;
         Jeu* _jeu;
 
         AnimatedSprite _joueur;
