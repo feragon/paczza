@@ -50,8 +50,6 @@ void BoardView::genererSpriteElement(const Case& c) {
 void BoardView::resize(const sf::Vector2f& size) {
     View::resize(size);
 
-    generateLifesIndicator(size);
-
     for(Liste<Sommet<Case>>* sommet = _jeu->plateau()->sommets(); sommet; sommet = sommet->next) {
         if(sommet->value->degre() > 0) {
             sf::Sprite sprite(ResourceLoader::getSprite(Sprite::CELL));
@@ -99,7 +97,7 @@ void BoardView::render(double timeElapsed) {
 
     _jeu->updateGame(timeElapsed);
 
-    for(sf::Sprite sprite : _backgroundSprites) {
+    for(sf::Sprite &sprite : _backgroundSprites) {
         window()->draw(sprite);
     }
 
@@ -132,8 +130,6 @@ void BoardView::render(double timeElapsed) {
         }
     }
 
-    sf::Rect<float> p(_joueur.getGlobalBounds().left + SPRITE_SIZE/4, _joueur.getGlobalBounds().top + SPRITE_SIZE/4, SPRITE_SIZE/2, SPRITE_SIZE/2);
-
     for(Liste<Monster>* monstres = _jeu->monstres(); monstres; monstres = monstres->next) {
         sf::Sprite s(ResourceLoader::getSprite(RIGHT_PINEAPPLE));
 
@@ -153,12 +149,11 @@ void BoardView::render(double timeElapsed) {
     _score.setPosition(window()->getView().getSize().x - _score.getLocalBounds().width - 20, window()->getView().getSize().y - _score.getLocalBounds().height - 20);
     window()->draw(_score);
 
-    for(sf::Sprite sprite : _lifes) {
-        window()->draw(sprite);
-    }
+    generateLifesIndicator(window()->getView().getSize());
 
     if(_jeu->stopped()) {
-        sf::Text gameover = sf::Text("GAME OVER", ResourceLoader::getFont(KONGTEXT), 72);
+        const char* title = _jeu->joueur()->nbLifes() > 0 ? "READY?!" : "GAME OVER!";
+        sf::Text gameover = sf::Text(title, ResourceLoader::getFont(KONGTEXT), 72);
         gameover.setOrigin(gameover.getLocalBounds().width / 2, gameover.getLocalBounds().height / 2);
         gameover.setPosition(window()->getView().getSize().x / 2, window()->getView().getSize().y / 2);
         window()->draw(gameover);
@@ -193,7 +188,10 @@ void BoardView::onEvent(const sf::Event& event) {
                 _jeu->setDirection(RIGHT_UP);
                 break;
             case sf::Keyboard::Key::BackSpace:
-                _jeu->start();
+                if(_jeu->joueur()->nbLifes() == 0)
+                    fenetreJeu()->vuePrecedente();
+                else
+                    _jeu->start();
                 break;
         }
     }
@@ -229,8 +227,8 @@ void BoardView::onPlayerPositionChanged(const Position<>& oldPosition, const Pos
 
 void BoardView::generateLifesIndicator(const sf::Vector2f& windowSize) {
     const sf::Texture& texture = ResourceLoader::getSprite(OPEN_PIZZA_1);
-    double space = texture.getSize().x * 1.5;
-    double x = texture.getSize().x / 2;
+    double space, x;
+    x = space = texture.getSize().x / 2;
     double y = windowSize.y - texture.getSize().y - 10;
 
 
@@ -240,6 +238,6 @@ void BoardView::generateLifesIndicator(const sf::Vector2f& windowSize) {
         s.setPosition(x, y);
         x += space;
 
-        _lifes.push_back(s);
+        window()->draw(s);
     }
 }
