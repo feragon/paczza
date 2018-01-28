@@ -2,39 +2,82 @@
 
 #include <board/position.h>
 #include <graph/liste.h>
+#include <graph/sommet.h>
+#include "direction.h"
+
+class Case;
 
 class Player {
     private:
-        Position<double> _position;
-        Liste<Position<double>> *_deplacements;
+        const Sommet<Case>* _position;
+        Direction _direction;
+        double _avancement;
 
     public:
         /**
          * @brief Crée un nouveau joueur
+         * @param p Position
+         * @param direction Direction
          */
-        Player(Position<double> p);
+        Player(const Sommet<Case>* p, Direction direction);
 
         /**
          * @brief Donne la position du joueur
          * @return Position
          */
-        inline Position<double> position() const;
+        inline const Sommet<Case>* position() const;
 
         /**
          * @brief Définit la position du joueur
          * @param p Nouvelle position
          */
-        inline void setPosition(Position<double> p);
+        inline void setPosition(const Sommet<Case>* p);
 
-        Position<double>* prochainDeplacement();
-        void ajouterDeplacement(double x, double y);
-        void resetDeplacement();
+        /**
+         * @brief Donne la direction du joueur
+         * @return Direction
+         */
+        inline Direction direction();
+
+        /**
+         * @brief Définit la direction du joueur
+         * @param d Nouvelle direction
+         */
+        inline void setDirection(Direction d);
+
+        /**
+         * @brief Donne l'avancement du joueur sur son prochain déplacement
+         * @return Avancement
+         */
+        inline double avancement() const;
+
+        /**
+         * @brief Définit l'avancement du déplacement
+         * @param avancement
+         */
+        inline void setAvancement(double avancement);
 };
 
-Position<double> Player::position() const {
+const Sommet<Case>* Player::position() const {
     return _position;
 }
 
-void Player::setPosition(Position<double> p) {
+void Player::setPosition(const Sommet<Case>* p) {
     _position = p;
+}
+
+Direction Player::direction() {
+    return _direction;
+}
+
+void Player::setDirection(Direction d) {
+    _direction = d;
+}
+
+double Player::avancement() const {
+    return _avancement;
+}
+
+void Player::setAvancement(double avancement) {
+    _avancement = avancement;
 }

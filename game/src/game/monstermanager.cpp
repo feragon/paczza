@@ -5,7 +5,7 @@ MonsterManager::MonsterManager(const Board* board) {
 }
 
 void MonsterManager::addMonster(const Monster* monster) {
-    _newPositions[monster] = monster->position();
+    _newPositions[monster] = monster->position()->contenu().position();
 }
 
 Position<double> MonsterManager::newPosition(const Monster* monster) const {
@@ -18,6 +18,6 @@ void MonsterManager::removeMonster(const Monster* monster) {
 
 void MonsterManager::reset() {
     for(std::pair<const Monster* const, Position<double>> pair : _newPositions) {
-        _newPositions[pair.first] = pair.first->position();
+        _newPositions[pair.first] = pair.first->position()->contenu().position();
     }
 }

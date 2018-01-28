@@ -2,6 +2,7 @@
 #include <ui/resourceloader.h>
 #include <SFML/Window/Event.hpp>
 #include <game/onplayerpositionchanged.h>
+#include <cmath>
 #include "boardview.h"
 
 BoardView::BoardView(sf::RenderWindow* window, FenetreJeu* f) :
@@ -16,7 +17,7 @@ BoardView::BoardView(sf::RenderWindow* window, FenetreJeu* f) :
     _joueur.addSprite(sf::Sprite(ResourceLoader::getSprite(Sprite::OPEN_PIZZA_3)));
     _joueur.addSprite(sf::Sprite(ResourceLoader::getSprite(Sprite::PIZZA)));
     _joueur.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
-    _joueur.setRotation(_jeu->direction() * 45);
+    _joueur.setRotation(_jeu->joueur()->direction() * 45);
 
     _jeu->setOnPlayerPositionChanged(this);
 }
@@ -99,13 +100,15 @@ void BoardView::render(double timeElapsed) {
 
     _jeu->updateGame(timeElapsed);
 
-    for(sf::Sprite sprite : _backgroundSprites) {
+    for(const sf::Sprite& sprite : _backgroundSprites) {
         window()->draw(sprite);
     }
 
-    Position<double>* pos = _jeu->joueur()->prochainDeplacement();
+    Position<> pos = _jeu->joueur()->position()->contenu().position();
+    double avancement = _jeu->joueur()->avancement();
 
-    _joueur.setPosition(pos->x * SPRITE_SIZE, pos->y * SPRITE_SIZE);
+    _joueur.setPosition((pos.x - avancement * cos(_jeu->joueur()->direction() * 45 * M_PI / 180)) * SPRITE_SIZE,
+                        (pos.y - avancement * sin(_jeu->joueur()->direction() * 45 * M_PI / 180)) * SPRITE_SIZE); //TODO: optimiser
     _joueur.animate(timeElapsed);
     window()->draw(_joueur);
 
@@ -145,7 +148,10 @@ void BoardView::render(double timeElapsed) {
             s.setTexture(ResourceLoader::getSprite(DOWN_PINEAPPLE));
 
         s.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
-        s.setPosition(monstres->value->position().x * SPRITE_SIZE, monstres->value->position().y * SPRITE_SIZE);
+        Position<> monsterPos = monstres->value->position()->contenu().position();
+        double avancement = monstres->value->avancement();
+        s.setPosition((monsterPos.x - avancement * cos(monstres->value->direction() * 45 * M_PI / 180)) * SPRITE_SIZE,
+                      (monsterPos.y - avancement * sin(monstres->value->direction() * 45 * M_PI / 180)) * SPRITE_SIZE); //TODO: optimiser
         window()->draw(s);
     }
 
@@ -153,7 +159,7 @@ void BoardView::render(double timeElapsed) {
     _score.setPosition(window()->getView().getSize().x - _score.getLocalBounds().width - 20, window()->getView().getSize().y - _score.getLocalBounds().height - 20);
     window()->draw(_score);
 
-    for(sf::Sprite sprite : _lifes) {
+    for(const sf::Sprite& sprite : _lifes) {
         window()->draw(sprite);
     }
 
@@ -203,7 +209,7 @@ void BoardView::onPlayerPositionChanged(const Position<>& oldPosition, const Pos
     Sommet<Case>* oldVertice = _jeu->plateau()->sommet(oldPosition);
     Sommet<Case>* newVertice = _jeu->plateau()->sommet(newPosition);
 
-    _joueur.setRotation(_jeu->direction() * 45);
+    _joueur.setRotation(_jeu->joueur()->direction() * 45);
     genererSpriteElement(newVertice->contenu());
 
     if(oldPosition != newPosition) {

@@ -30,13 +30,13 @@ Jeu::Jeu() :
 
     _plateau = new Board(i, j, positionsReservees);
 
-    _joueur = new Pacman(_originalPlayerPosition, 3);
+    _joueur = new Pacman(_plateau->sommet(_originalPlayerPosition), UP, 3);
 
     _monsterManager = new SenseMonsterManager(_plateau);
 
     _monstres = nullptr;
     for(Liste<Position<>>* monstres = positionsReservees->next; monstres; monstres = monstres->next) {
-        Monster* monster = new Monster(*(monstres->value));
+        Monster* monster = new Monster(_plateau->sommet(*(monstres->value)), UP);
         _monsterManager->addMonster(monster);
         _monstres = new Liste<Monster>(monster, _monstres);
     }
@@ -70,26 +70,28 @@ void Jeu::updatePlayers(double timeElapsed) {
 
         for(Liste<Monster>* monsters = _monstres; monsters; monsters = monsters->next) {
             Position<int> newPosition = _monsterManager->newPosition(monsters->value);
-            monsters->value->setPosition(newPosition);
+            monsters->value->setPosition(_plateau->sommet(newPosition));
+            monsters->value->setAvancement(0);
 
-            _oldPositions[monsters->value] = newPosition;
+            _oldPositions[monsters->value] = _plateau->sommet(newPosition);
         }
-        _monsterManager->moveMonsters(_newPlayerPosition);
+        _monsterManager->moveMonsters(_newPlayerPosition->contenu().position());
 
         _joueur->setPosition(_newPlayerPosition);
+        _joueur->setAvancement(0);
 
-        Direction oldDirection = _direction;
-        _direction = _newDirection;
-        Position<> nextPlayerPosition = getNextPlayerPosition();
+        Direction oldDirection = _joueur->direction();
+        _joueur->setDirection(_newDirection);
+        const Sommet<Case>* nextPlayerPosition = getNextPlayerPosition();
 
-        if(nextPlayerPosition == _newPlayerPosition && oldDirection != _direction) {
-            _direction = oldDirection;
+        if(nextPlayerPosition == _newPlayerPosition && oldDirection != _joueur->direction()) {
+            _joueur->setDirection(oldDirection);
             _newDirection = oldDirection;
             nextPlayerPosition = getNextPlayerPosition();
         }
 
         if (_onPlayerPositionChanged) {
-            _onPlayerPositionChanged->onPlayerPositionChanged(_oldPositions[_joueur], _newPlayerPosition);
+            _onPlayerPositionChanged->onPlayerPositionChanged(_oldPositions[_joueur]->contenu().position(), _newPlayerPosition->contenu().position());
         }
 
         _oldPositions[_joueur] = _newPlayerPosition;
@@ -98,35 +100,62 @@ void Jeu::updatePlayers(double timeElapsed) {
     else {
         double movement = timeElapsed / MOVEMENT_TIME;
         for(Liste<Monster>* monsters = _monstres; monsters; monsters = monsters->next) {
-            Position<double> vect = _monsterManager->newPosition(monsters->value) - _oldPositions[monsters->value];
+            Position<double> vect = _monsterManager->newPosition(monsters->value) - _oldPositions[monsters->value]->contenu().position();
 
-            if(vect.x < 0)
-                monsters->value->setDirection(LEFT);
-            else if(vect.x == 0)
-                monsters->value->setDirection(DOWN);
-            else if(vect.x > 0)
-                monsters->value->setDirection(RIGHT);
-            if(vect.y < 0)
-                monsters->value->setDirection(UP);
+            if(vect.x < 0) {
+                if(vect.y == 0) {
+                    monsters->value->setDirection(LEFT);
+                }
+                else if(vect.y < 0) {
+                    monsters->value->setDirection(LEFT_UP);
+                }
+                else {
+                    monsters->value->setDirection(LEFT_DOWN);
+                }
+            }
+            else if(vect.x == 0) {
+                if(vect.y < 0) {
+                    monsters->value->setDirection(UP);
+                }
+                else {
+                    monsters->value->setDirection(DOWN);
+                }
+            }
+            else {
+                if(vect.y == 0) {
+                    monsters->value->setDirection(RIGHT);
+                }
+                else if(vect.y < 0) {
+                    monsters->value->setDirection(RIGHT_UP);
+                }
+                else {
+                    monsters->value->setDirection(RIGHT_DOWN);
+                }
+            }
 
-            monsters->value->setPosition(monsters->value->position() + vect * movement);
+            if(_monsterManager->newPosition(monsters->value) != _oldPositions[monsters->value]->contenu().position()) {
+                monsters->value->setAvancement(monsters->value->avancement() + movement);
+            }
         }
 
-        _joueur->setPosition(_joueur->position() + (_newPlayerPosition - _oldPositions[_joueur]) * movement);
+        if(_joueur->position()->contenu().position() != _newPlayerPosition->contenu().position()) {
+            _joueur->setAvancement(_joueur->avancement() + movement);
+        }
     }
 
-    for(Liste<Monster>* monsters = _monstres; monsters; monsters = monsters->next) {
+    /*for(Liste<Monster>* monsters = _monstres; monsters; monsters = monsters->next) {
         if(std::abs(_joueur->position().x - monsters->value->position().x) < 0.25 &&
            std::abs(_joueur->position().y - monsters->value->position().y) < 0.25) {
-            _stopped = true;
+            _stopped = true; TODO: update this
         }
-    }
+    }*/
 }
 
-Position<> Jeu::getNextPlayerPosition() {
-    Position<> actuelle = _joueur->position();
+const Sommet<Case>* Jeu::getNextPlayerPosition() {
+    const Sommet<Case>* actuelle = _joueur->position();
+
     Position<> moveVect;
-    switch (_direction) {
+    switch (_joueur->direction()) {
         case LEFT:
             moveVect = Position<>(-1, 0);
             break;
@@ -160,10 +189,9 @@ Position<> Jeu::getNextPlayerPosition() {
             break;
     }
 
-    Position<> next = actuelle + moveVect;
+    Position<> next = actuelle->contenu().position() + moveVect;
 
-    Sommet<Case>* sommetActuel = _plateau->sommet(actuelle);
-    Liste<std::pair<Sommet<Case>*, Arete<Chemin, Case>*>>* voisins = _plateau->adjacences(sommetActuel);
+    Liste<std::pair<Sommet<Case>*, Arete<Chemin, Case>*>>* voisins = _plateau->adjacences(actuelle);
 
     for(Liste<std::pair<Sommet<Case>*, Arete<Chemin, Case>*>>* sommet = voisins; sommet; sommet = sommet->next) {
         try {
@@ -175,8 +203,9 @@ Position<> Jeu::getNextPlayerPosition() {
 
                 sommet->value->first->contenu().heberge(*(_joueur));
 
+                const Sommet<Case>* nextVertice = sommet->value->first;
                 Liste<std::pair<Sommet<Case>*, Arete<Chemin, Case>*>>::efface2(voisins);
-                return next;
+                return nextVertice;
             }
         }
         catch(std::exception e) {}
@@ -196,16 +225,16 @@ void Jeu::start() {
 
         _timeSinceMove = 0;
 
-        _oldPositions[_joueur] = _originalPlayerPosition;
-        _direction = UP;
+        _oldPositions[_joueur] = _plateau->sommet(_originalPlayerPosition);
+        _joueur->setDirection(UP);
         _newDirection = UP;
-        joueur()->setPosition(_originalPlayerPosition);
+        joueur()->setPosition(_plateau->sommet(_originalPlayerPosition));
         _newPlayerPosition = getNextPlayerPosition();
 
         int i = 0;
         for(Liste<Monster>* monsters = monstres(); monsters; monsters = monsters->next) {
-            monsters->value->setPosition(_originalMonstersPositions[i]);
-            _oldPositions[monsters->value] = _originalMonstersPositions[i];
+            monsters->value->setPosition(_plateau->sommet(_originalMonstersPositions[i]));
+            _oldPositions[monsters->value] = _plateau->sommet(_originalMonstersPositions[i]);
             i++;
         }
 

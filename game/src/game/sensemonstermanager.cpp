@@ -10,7 +10,7 @@ SenseMonsterManager::SenseMonsterManager(const Board* board) :
 
 void SenseMonsterManager::moveMonsters(const Position<>& playerPosition) {
     for(std::pair<const Monster* const, Position<double>> pair : monsters()) {
-        Sommet<Case>* monsterVertice = board()->sommet(pair.first->position());
+        Sommet<Case>* monsterVertice = board()->sommet(pair.first->position()->contenu().position());
         try {
             monsters()[pair.first] = nextPositionBySight(monsterVertice, playerPosition);
         }

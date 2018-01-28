@@ -1,10 +1,11 @@
 #pragma once
 
 #include "player.h"
+#include <graph/sommet.h>
 
 class Pacman : public Player {
     public:
-        Pacman(const Position<double>& p, unsigned short nbLifes);
+        Pacman(const Sommet<Case>* p, Direction direction, unsigned short nbLifes);
 
         /**
          * @brief Donne le nombre de points

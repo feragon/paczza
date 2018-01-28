@@ -5,7 +5,7 @@
 
 class Monster : public Player {
     public:
-        Monster(const Position<double>& p);
+        Monster(const Sommet<Case>* p, Direction direction);
 
         /**
          * @return Vrai si le monstre est vulnérable
@@ -18,12 +18,8 @@ class Monster : public Player {
          */
         inline void setWeak(bool isWeak);
 
-        inline Direction direction();
-        inline void setDirection(Direction d);
-
     private:
         bool _isWeak;
-        Direction _direction;
 };
 
 bool Monster::weak() const {
@@ -32,12 +28,4 @@ bool Monster::weak() const {
 
 void Monster::setWeak(bool isWeak) {
     _isWeak = isWeak;
-}
-
-Direction Monster::direction() {
-    return _direction;
-}
-
-void Monster::setDirection(Direction d) {
-    _direction = d;
 }

@@ -11,16 +11,15 @@
 
 class Jeu {
     private:
-        Position<> getNextPlayerPosition();
+        const Sommet<Case>* getNextPlayerPosition();
 
         Board* _plateau;
         Pacman* _joueur;
         Liste<Monster>* _monstres;
-        std::map<Player*, Position<>> _oldPositions;
+        std::map<Player*, const Sommet<Case>*> _oldPositions;
         MonsterManager* _monsterManager;
         double _timeSinceMove;
-        Position<double> _newPlayerPosition;
-        Direction _direction;
+        const Sommet<Case>* _newPlayerPosition;
         Direction _newDirection;
         OnPlayerPositionChanged* _onPlayerPositionChanged;
         bool _stopped;
@@ -63,16 +62,10 @@ class Jeu {
         void updatePlayers(double timeElapsed);
 
         /**
-         * @brief Change la direction du joueur
+         * @brief Change la nouvelle direction du joueur
          * @param newPosition Nouvelle direction
          */
         inline void setDirection(Direction newDirection);
-
-        /**
-         * @brief Donne la direction actuelle du joueur
-         * @return Direction
-         */
-        inline Direction direction() const;
 
         /**
          * @brief Définit la fonction appelée quand le joueur arrive sur une nouvelle case
@@ -106,10 +99,6 @@ Liste<Monster>* Jeu::monstres() const {
 
 void Jeu::setDirection(Direction newDirection) {
     _newDirection = newDirection;
-}
-
-Direction Jeu::direction() const {
-    return _direction;
 }
 
 void Jeu::setOnPlayerPositionChanged(OnPlayerPositionChanged* onPlayerPositionChanged) {
