@@ -65,6 +65,7 @@ void Jeu::updatePlayers(double timeElapsed) {
 
     _timeSinceMove += timeElapsed;
 
+
     if(_timeSinceMove >= MOVEMENT_TIME) {
         _timeSinceMove = 0;
 
@@ -98,7 +99,7 @@ void Jeu::updatePlayers(double timeElapsed) {
         _newPlayerPosition = nextPlayerPosition;
     }
     else {
-        double movement = timeElapsed / MOVEMENT_TIME;
+        double movement = _timeSinceMove / MOVEMENT_TIME;
         for(Liste<Monster>* monsters = _monstres; monsters; monsters = monsters->next) {
             Position<double> vect = _monsterManager->newPosition(monsters->value) - _oldPositions[monsters->value]->contenu().position();
 
@@ -134,12 +135,12 @@ void Jeu::updatePlayers(double timeElapsed) {
             }
 
             if(_monsterManager->newPosition(monsters->value) != _oldPositions[monsters->value]->contenu().position()) {
-                monsters->value->setAvancement(monsters->value->avancement() + movement);
+                monsters->value->setAvancement(movement);
             }
         }
 
         if(_joueur->position()->contenu().position() != _newPlayerPosition->contenu().position()) {
-            _joueur->setAvancement(_joueur->avancement() + movement);
+            _joueur->setAvancement(movement);
         }
     }
 
