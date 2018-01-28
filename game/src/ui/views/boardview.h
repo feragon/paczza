@@ -33,7 +33,6 @@ class BoardView : public View, public OnPlayerPositionChanged {
         std::map<Position<>, sf::Sprite, cmpPosition<>> _elements;
 
         std::vector<sf::Sprite> _backgroundSprites;
-        std::vector<sf::Sprite> _lifes;
         Jeu* _jeu;
 
         AnimatedSprite _joueur;
