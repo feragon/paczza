@@ -7,6 +7,7 @@
 class AStarFunctions {
     public:
         static double hh(const Sommet<Case>* sommet);
+        static bool estFinal(const Sommet<Case>* sommet);
         static Sommet<Case>* destination;
 };
 
@@ -16,7 +17,7 @@ class AStarFunctions {
  */
 void libereToutSommet(Graphe<InfoArete, InfoSommet>& graphe);
 
-double hh(const Sommet<InfoSommet>* sommet);
+double hh(const Sommet<Case>* sommet);
 
 Liste<std::pair<Sommet<InfoSommet>*,double>>*
 listeVoisins(const Sommet<InfoSommet>* s, const Graphe<InfoArete, InfoSommet>& graphe);

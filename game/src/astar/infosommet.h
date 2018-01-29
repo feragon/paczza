@@ -14,22 +14,49 @@ class InfoSommet {
          * @brief Donne l'état du sommet
          * @return État
          */
-        inline Etat& etat();
+        inline int& etat();
 
         /**
-         * @brief Définit l'état du sommet
-         * @param etat nouvel état
+         * @brief Donne le père du sommet
+         * @return Père
          */
-        inline void setEtat(Etat etat);
+        Sommet<InfoSommet>*& parent();
+
+        double& c() const;
+
+        double& h() const;
+
+        double& g() const;
 
     private:
-        Etat _etat;
+        int _etat;
+        Sommet<InfoSommet>* _parent;
+        double _c;
+        double _h;
+        double _g;
 };
 
-InfoSommet::Etat& InfoSommet::etat() {
+InfoSommet::InfoSommet() {
+    _etat = LIBRE;
+    _parent = nullptr;
+}
+
+int& InfoSommet::etat() {
     return _etat;
 }
 
-void InfoSommet::setEtat(InfoSommet::Etat etat) {
-    _etat = etat;
+Sommet<InfoSommet>*& InfoSommet::parent() {
+    return _parent;
+}
+
+double& InfoSommet::c() const {
+    return _c;
+}
+
+double& InfoSommet::h() const {
+    return _h;
+}
+
+double& InfoSommet::g() const {
+    return _g;
 }
