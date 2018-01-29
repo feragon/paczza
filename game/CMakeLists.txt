@@ -64,7 +64,7 @@ set(SOURCE_FILES
         src/fonts.h
         src/game/direction.h
         src/game/sensemonstermanager.cpp
-        src/game/sensemonstermanager.h src/game/noheatededgefound.h src/game/noremaininglife.h)
+        src/game/sensemonstermanager.h src/game/noheatededgefound.h src/game/noremaininglife.h src/astar/astart.h src/astar/fonctions.cpp src/astar/fonctions.h src/astar/infoarete.h)
 
 find_package(SFML 2 COMPONENTS graphics window system REQUIRED)
 include_directories(${SFML_INCLUDE_DIR})
@@ -74,5 +74,5 @@ include_directories(src)
 add_executable(paczza ${SOURCE_FILES})
 target_link_libraries(paczza ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
 
-add_library(game ${SOURCE_FILES})
+add_library(game ${SOURCE_FILES} src/astar/infosommet.h)
 target_link_libraries(game ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
