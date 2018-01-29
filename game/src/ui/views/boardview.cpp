@@ -104,9 +104,24 @@ void BoardView::render(double timeElapsed) {
 
     Position<> pos = _jeu->joueur()->position()->contenu().position();
     double avancement = _jeu->joueur()->avancement();
+    double x = 0;
+    double y = 0;
+    Direction d = _jeu->joueur()->direction();
+    if(d == LEFT || d == LEFT_UP || d == LEFT_DOWN) {
+        x = -1;
+    }
+    else if(d == RIGHT || d == RIGHT_DOWN || d == RIGHT_UP) {
+        x = 1;
+    }
 
-    _joueur.setPosition((pos.x - avancement * cos(_jeu->joueur()->direction() * 45 * M_PI / 180)) * SPRITE_SIZE,
-                        (pos.y - avancement * sin(_jeu->joueur()->direction() * 45 * M_PI / 180)) * SPRITE_SIZE); //TODO: optimiser
+    if(d == UP || d == LEFT_UP || d == RIGHT_UP) {
+        y = -1;
+    }
+    else if(d == DOWN || d == LEFT_DOWN || d == RIGHT_DOWN) {
+        y = 1;
+    }
+
+    _joueur.setPosition((pos.x + avancement * x) * SPRITE_SIZE, (pos.y + avancement * y) * SPRITE_SIZE);
     _joueur.animate(timeElapsed);
     window()->draw(_joueur);
 
