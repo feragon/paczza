@@ -1,4 +1,12 @@
-#include "fonctions.h"
+#include <board/case.h>
+#include <cmath>
+#include "astarfunctions.h"
+
+double AStarFunctions::hh(const Sommet<Case>* sommet) {
+    Position<> pos = sommet->contenu().position() - destination->contenu().position();
+
+    return sqrt(pow(pos.x, 2) + pow(pos.y, 2));
+}
 
 void libereToutSommet(Graphe<InfoArete, InfoSommet>& graphe) {
     for(Liste<Sommet<InfoSommet>>* sommets = graphe.sommets(); sommets; sommets = sommets->next) {
@@ -7,7 +15,7 @@ void libereToutSommet(Graphe<InfoArete, InfoSommet>& graphe) {
 }
 
 double hh(const Sommet<InfoSommet>* sommet) {
-    return 0;
+    return AStarFunctions::hh(sommet);
 }
 
 Liste<std::pair<Sommet<InfoSommet>*, double>>*
@@ -16,23 +24,27 @@ listeVoisins(const Sommet<InfoSommet>* s, const Graphe<InfoArete, InfoSommet>& g
 }
 
 Sommet<InfoSommet>*& pere(Sommet<InfoSommet>* sommet) {
-    return <#initializer#>;
+    return sommet;
 }
 
 int& etat(Sommet<InfoSommet>* sommet) {
-    return <#initializer#>;
+    int e;
+    return e;
 }
 
 double& c(Sommet<InfoSommet>* sommet) {
-    return <#initializer#>;
+    double c;
+    return c;
 }
 
 double& h(Sommet<InfoSommet>* sommet) {
-    return <#initializer#>;
+    double h;
+    return h;
 }
 
 double& g(Sommet<InfoSommet>* sommet) {
-    return <#initializer#>;
+    double g;
+    return g;
 }
 
 bool estFinal(const Sommet<InfoSommet>* sommet) {

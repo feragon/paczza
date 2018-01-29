@@ -64,7 +64,7 @@ set(SOURCE_FILES
         src/fonts.h
         src/game/direction.h
         src/game/sensemonstermanager.cpp
-        src/game/sensemonstermanager.h src/game/noheatededgefound.h src/game/noremaininglife.h src/astar/astart.h src/astar/fonctions.cpp src/astar/fonctions.h src/astar/infoarete.h)
+        src/game/sensemonstermanager.h src/game/noheatededgefound.h src/game/noremaininglife.h src/astar/astart.h src/game/astarfunctions.cpp src/game/astarfunctions.h src/astar/infoarete.h)
 
 find_package(SFML 2 COMPONENTS graphics window system REQUIRED)
 include_directories(${SFML_INCLUDE_DIR})

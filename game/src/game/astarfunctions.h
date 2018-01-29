@@ -1,8 +1,14 @@
 #pragma once
 
 #include <graph/graphe.h>
-#include "infoarete.h"
-#include "infosommet.h"
+#include "astar/infoarete.h"
+#include "astar/infosommet.h"
+
+class AStarFunctions {
+    public:
+        static double hh(const Sommet<Case>* sommet);
+        static Sommet<Case>* destination;
+};
 
 /**
  * @brief Libère tous les sommets du graphe
@@ -10,7 +16,7 @@
  */
 void libereToutSommet(Graphe<InfoArete, InfoSommet>& graphe);
 
-double hh(const Sommet<InfoSommet>*);
+double hh(const Sommet<InfoSommet>* sommet);
 
 Liste<std::pair<Sommet<InfoSommet>*,double>>*
 listeVoisins(const Sommet<InfoSommet>* s, const Graphe<InfoArete, InfoSommet>& graphe);

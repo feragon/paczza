@@ -14,7 +14,7 @@ class InfoSommet {
          * @brief Donne l'état du sommet
          * @return État
          */
-        inline Etat etat() const;
+        inline Etat& etat();
 
         /**
          * @brief Définit l'état du sommet
@@ -26,7 +26,7 @@ class InfoSommet {
         Etat _etat;
 };
 
-InfoSommet::Etat InfoSommet::etat() const {
+InfoSommet::Etat& InfoSommet::etat() {
     return _etat;
 }
 

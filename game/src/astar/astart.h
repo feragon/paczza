@@ -3,5 +3,10 @@
 template <typename Graphe, typename Sommet>
 class AStarT {
     public:
-        static Sommet* aStar(Graphe& graphe, Sommet* depart, double(*hh)(const Sommet* s));
+        inline static Sommet* aStar(Graphe& graphe, Sommet* depart, double(*hh)(const Sommet* s));
 };
+
+template<typename Graphe, typename Sommet>
+Sommet* AStarT<Graphe, Sommet>::aStar(Graphe& graphe, Sommet* depart, double (*hh)(const Sommet*)) {
+    return nullptr;
+}
