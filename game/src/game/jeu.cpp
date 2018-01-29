@@ -64,22 +64,27 @@ void Jeu::updatePlayers(double timeElapsed) {
     }
 
     _timeSinceMove += timeElapsed;
-
+    double movement = _timeSinceMove / MOVEMENT_TIME;
 
     if(_timeSinceMove >= MOVEMENT_TIME) {
         _timeSinceMove = 0;
-
-        for(Liste<Monster>* monsters = _monstres; monsters; monsters = monsters->next) {
-            Position<int> newPosition = _monsterManager->newPosition(monsters->value);
-            monsters->value->setPosition(_plateau->sommet(newPosition));
-            monsters->value->setAvancement(0);
-
-            _oldPositions[monsters->value] = _plateau->sommet(newPosition);
-        }
-        _monsterManager->moveMonsters(_newPlayerPosition->contenu().position());
+        movement = 0;
 
         _joueur->setPosition(_newPlayerPosition);
         _joueur->setAvancement(0);
+
+        for(Liste<Monster>* monsters = _monstres; monsters; monsters = monsters->next) {
+            Sommet<Case>* newPosition = _plateau->sommet(_monsterManager->newPosition(monsters->value));
+            monsters->value->setPosition(newPosition);
+            monsters->value->setAvancement(0);
+
+            _oldPositions[monsters->value] = newPosition;
+
+            if(newPosition == _joueur->position()) {
+                _stopped = true;
+            }
+        }
+        _monsterManager->moveMonsters(_newPlayerPosition->contenu().position());
 
         Direction oldDirection = _joueur->direction();
         _joueur->setDirection(_newDirection);
@@ -99,7 +104,6 @@ void Jeu::updatePlayers(double timeElapsed) {
         _newPlayerPosition = nextPlayerPosition;
     }
     else {
-        double movement = _timeSinceMove / MOVEMENT_TIME;
         for(Liste<Monster>* monsters = _monstres; monsters; monsters = monsters->next) {
             Position<double> vect = _monsterManager->newPosition(monsters->value) - _oldPositions[monsters->value]->contenu().position();
 
@@ -144,12 +148,16 @@ void Jeu::updatePlayers(double timeElapsed) {
         }
     }
 
-    /*for(Liste<Monster>* monsters = _monstres; monsters; monsters = monsters->next) {
-        if(std::abs(_joueur->position().x - monsters->value->position().x) < 0.25 &&
-           std::abs(_joueur->position().y - monsters->value->position().y) < 0.25) {
-            _stopped = true; TODO: update this
+    for(Liste<Monster>* monsters = _monstres; monsters; monsters = monsters->next) {
+        if(_plateau->getAreteParSommets(_joueur->position(), monsters->value->position()) &&
+           movement >= 0.5) {
+            if(abs(_joueur->direction() - monsters->value->direction()) == NB_DIRECTIONS/2 ||
+                   _joueur->position() == _newPlayerPosition ||
+                   monsters->value->position()->contenu().position() == _monsterManager->newPosition(monsters->value)) {
+                _stopped = true;
+            }
         }
-    }*/
+    }
 }
 
 const Sommet<Case>* Jeu::getNextPlayerPosition() {

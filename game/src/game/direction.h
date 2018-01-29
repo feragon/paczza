@@ -1,4 +1,5 @@
 #pragma once
+#define NB_DIRECTIONS 8
 
 enum Direction {
     LEFT,
