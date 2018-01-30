@@ -7,7 +7,7 @@ class Chemin {
         double _chaleur;
 
     public:
-        Chemin(double chaleur);
+        Chemin(double chaleur = 0);
         virtual ~Chemin();
 
         /**

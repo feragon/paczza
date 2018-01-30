@@ -1,21 +1,37 @@
 #pragma once
 #include <graph/liste.h>
+#include "etat.h"
 
-enum Etat {
-    LIBRE,
-    OUVERT,
-    FERME
-};
+//TODO: forward declaration ?
+
 
 template <typename Graphe, typename Sommet>
 class AStarT {
     public:
-        inline static Sommet* aStar(Graphe& graphe, Sommet* depart, double(*hh)(const Sommet* s));
+        static Sommet* aStar(Graphe& graphe, Sommet* depart, double(*hh)(const Sommet* s));
+
+    private:
+        static bool estPlusPetitOuEgal(const Sommet* sommet1, const Sommet* sommet2);
+        static void miseAJourVoisin(Sommet* v, Sommet* s, const double& nouveauCout, Liste<Sommet>*& ouverts);
 };
 
 template<typename Graphe, typename Sommet>
+bool AStarT<Graphe, Sommet>::estPlusPetitOuEgal(const Sommet* v1, const Sommet* v2) {
+    return g(v1) <= g(v2);
+}
+
+
+template<typename Graphe, typename Sommet>
+void AStarT<Graphe, Sommet>::miseAJourVoisin(Sommet* v, Sommet* s, const double& nouveauCout, Liste<Sommet>*& ouverts) {
+    pere(v) = s;
+    c(v) = nouveauCout;
+    g(v) = c(v) + h(v);
+    Liste<Sommet>::insertionOrdonnee(v, ouverts, estPlusPetitOuEgal); etat(v) = OUVERT;
+}
+
+template<typename Graphe, typename Sommet>
 Sommet* AStarT<Graphe, Sommet>::aStar(Graphe& graphe, Sommet* depart, double (*hh)(const Sommet*)) {
-    libereTousSommet(graphe);
+    libereToutSommet(graphe);
     Liste<Sommet>* ouverts;
 
     c(depart) = 0;
@@ -35,7 +51,7 @@ Sommet* AStarT<Graphe, Sommet>::aStar(Graphe& graphe, Sommet* depart, double (*h
         Liste<std::pair<Sommet*, double>>* tmp = listeVoisins(s, graphe);
         Liste<std::pair<Sommet*, double>>* l;
 
-        for(l = tmp; l; l = l->s) {
+        for(l = tmp; l; l = l->next) {
             Sommet* v = l->value->first;
             double nouveauCout = c(s) + l->value->second;
 

@@ -1,4 +1,3 @@
-#include <board/case.h>
 #include <cmath>
 #include "astarfunctions.h"
 
@@ -16,8 +15,8 @@ bool AStarFunctions::estFinal(const Sommet<Case>* sommet) {
 
 void libereToutSommet(Graphe<Chemin, Case>& graphe) {
     for(Liste<Sommet<Case>>* sommets = graphe.sommets(); sommets; sommets = sommets->next) {
-        sommets->value->contenu().etat() = LIBRE;
-        sommets->value->contenu().parent() = nullptr;
+        sommets->value->contenu().etat = LIBRE;
+        sommets->value->contenu().parent = nullptr;
     }
 }
 
@@ -39,25 +38,45 @@ listeVoisins(const Sommet<Case>* s, const Graphe<Chemin, Case>& graphe) {
 }
 
 Sommet<Case>*& pere(Sommet<Case>* sommet) {
-    return sommet->contenu().parent();
+    return sommet->contenu().parent;
 }
 
 int& etat(Sommet<Case>* sommet) {
-    return sommet->contenu().etat();
+    return sommet->contenu().etat;
 }
 
 double& c(Sommet<Case>* sommet) {
-    return sommet->contenu().c();
+    return sommet->contenu().c;
 }
 
 double& h(Sommet<Case>* sommet) {
-    return sommet->contenu().h();
+    return sommet->contenu().h;
 }
 
 double& g(Sommet<Case>* sommet) {
-    return sommet->contenu().g();
+    return sommet->contenu().g;
 }
 
 bool estFinal(const Sommet<Case>* sommet) {
     return AStarFunctions::estFinal(sommet);
+}
+
+Sommet<Case>* pere(const Sommet<Case>* sommet) {
+    return sommet->contenu().parent;
+}
+
+int etat(const Sommet<Case>* sommet) {
+    return sommet->contenu().etat;
+}
+
+double c(const Sommet<Case>* sommet) {
+    return sommet->contenu().c;
+}
+
+double h(const Sommet<Case>* sommet) {
+    return sommet->contenu().h;
+}
+
+double g(const Sommet<Case>* sommet) {
+    return sommet->contenu().g;
 }
