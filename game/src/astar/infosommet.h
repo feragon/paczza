@@ -1,16 +1,13 @@
 #pragma once
 
+#include <astar/astart.h>
+
+template <typename T>
 class InfoSommet {
     public:
         InfoSommet();
 
-        enum Etat {
-            LIBRE,
-            OUVERT,
-            FERME
-        };
-
-        /**
+        /**Sommet<InfoSommet>
          * @brief Donne l'état du sommet
          * @return État
          */
@@ -20,43 +17,49 @@ class InfoSommet {
          * @brief Donne le père du sommet
          * @return Père
          */
-        Sommet<InfoSommet>*& parent();
+        T*& parent();
 
-        double& c() const;
+        double& c();
 
-        double& h() const;
+        double& h();
 
-        double& g() const;
+        double& g();
 
     private:
         int _etat;
-        Sommet<InfoSommet>* _parent;
+        T* _parent;
         double _c;
         double _h;
         double _g;
 };
 
-InfoSommet::InfoSommet() {
+template <typename T>
+InfoSommet<T>::InfoSommet() {
     _etat = LIBRE;
     _parent = nullptr;
 }
 
-int& InfoSommet::etat() {
+template <typename T>
+int& InfoSommet<T>::etat() {
     return _etat;
 }
 
-Sommet<InfoSommet>*& InfoSommet::parent() {
+template <typename T>
+T*& InfoSommet<T>::parent() {
     return _parent;
 }
 
-double& InfoSommet::c() const {
+template <typename T>
+double& InfoSommet<T>::c() {
     return _c;
 }
 
-double& InfoSommet::h() const {
+template <typename T>
+double& InfoSommet<T>::h() {
     return _h;
 }
 
-double& InfoSommet::g() const {
+template <typename T>
+double& InfoSommet<T>::g() {
     return _g;
 }

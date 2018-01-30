@@ -2,9 +2,10 @@
 
 #include <ostream>
 #include <board/position.h>
+#include <astar/infosommet.h>
 #include "element.h"
 
-class Case {
+class Case : public InfoSommet<Sommet<Case>> {
     private:
         Position<> _position;
         Element* _element;

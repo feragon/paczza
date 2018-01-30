@@ -1,7 +1,7 @@
 #pragma once
 
 #include <graph/graphe.h>
-#include "astar/infoarete.h"
+#include <board/chemin.h>
 #include "astar/infosommet.h"
 
 class AStarFunctions {
@@ -15,21 +15,21 @@ class AStarFunctions {
  * @brief Libère tous les sommets du graphe
  * @param graphe Graphe
  */
-void libereToutSommet(Graphe<InfoArete, InfoSommet>& graphe);
+void libereToutSommet(Graphe<Chemin, Case>& graphe);
 
 double hh(const Sommet<Case>* sommet);
 
-Liste<std::pair<Sommet<InfoSommet>*,double>>*
-listeVoisins(const Sommet<InfoSommet>* s, const Graphe<InfoArete, InfoSommet>& graphe);
+Liste<std::pair<Sommet<Case>*,double>>*
+listeVoisins(const Sommet<Case>* s, const Graphe<Chemin, Case>& graphe);
 
-Sommet<InfoSommet>*& pere(Sommet<InfoSommet>* sommet);
+Sommet<Case>*& pere(Sommet<Case>* sommet);
 
-int& etat(Sommet<InfoSommet>* sommet);
+int& etat(Sommet<Case>* sommet);
 
-double& c(Sommet<InfoSommet>* sommet);
+double& c(Sommet<Case>* sommet);
 
-double& h(Sommet<InfoSommet>* sommet);
+double& h(Sommet<Case>* sommet);
 
-double& g(Sommet<InfoSommet>* sommet);
+double& g(Sommet<Case>* sommet);
 
-bool estFinal(const Sommet<InfoSommet>* sommet);
+bool estFinal(const Sommet<Case>* sommet);

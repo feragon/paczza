@@ -14,9 +14,10 @@ bool AStarFunctions::estFinal(const Sommet<Case>* sommet) {
     return sommet == AStarFunctions::destination;
 }
 
-void libereToutSommet(Graphe<InfoArete, InfoSommet>& graphe) {
-    for(Liste<Sommet<InfoSommet>>* sommets = graphe.sommets(); sommets; sommets = sommets->next) {
-        sommets->value->contenu().etat() =InfoSommet::LIBRE;
+void libereToutSommet(Graphe<Chemin, Case>& graphe) {
+    for(Liste<Sommet<Case>>* sommets = graphe.sommets(); sommets; sommets = sommets->next) {
+        sommets->value->contenu().etat() = LIBRE;
+        sommets->value->contenu().parent() = nullptr;
     }
 }
 
@@ -24,36 +25,36 @@ double hh(const Sommet<Case>* sommet) {
     return AStarFunctions::hh(sommet);
 }
 
-Liste<std::pair<Sommet<InfoSommet>*, double>>*
-listeVoisins(const Sommet<InfoSommet>* s, const Graphe<InfoArete, InfoSommet>& graphe) {
-    Liste<Sommet<InfoSommet>>* tmp = graphe.voisins(s);
-    Liste<std::pair<Sommet<InfoSommet>*, double>>* res = nullptr;
+Liste<std::pair<Sommet<Case>*, double>>*
+listeVoisins(const Sommet<Case>* s, const Graphe<Chemin, Case>& graphe) {
+    Liste<Sommet<Case>>* tmp = graphe.voisins(s);
+    Liste<std::pair<Sommet<Case>*, double>>* res = nullptr;
 
-    for(Liste<Sommet<InfoSommet>>* neighbors = tmp; neighbors; neighbors = neighbors->next) {
-        res = new Liste<std::pair<Sommet<InfoSommet>*, double>>(new std::pair<Sommet<InfoSommet>*, double>(neighbors->value, 1), res);
+    for(Liste<Sommet<Case>>* neighbors = tmp; neighbors; neighbors = neighbors->next) {
+        res = new Liste<std::pair<Sommet<Case>*, double>>(new std::pair<Sommet<Case>*, double>(neighbors->value, 1), res);
     }
 
-    Liste<Sommet<InfoSommet>>::efface1(tmp);
+    Liste<Sommet<Case>>::efface1(tmp);
     return res;
 }
 
-Sommet<InfoSommet>*& pere(Sommet<InfoSommet>* sommet) {
+Sommet<Case>*& pere(Sommet<Case>* sommet) {
     return sommet->contenu().parent();
 }
 
-int& etat(Sommet<InfoSommet>* sommet) {
+int& etat(Sommet<Case>* sommet) {
     return sommet->contenu().etat();
 }
 
-double& c(Sommet<InfoSommet>* sommet) {
+double& c(Sommet<Case>* sommet) {
     return sommet->contenu().c();
 }
 
-double& h(Sommet<InfoSommet>* sommet) {
+double& h(Sommet<Case>* sommet) {
     return sommet->contenu().h();
 }
 
-double& g(Sommet<InfoSommet>* sommet) {
+double& g(Sommet<Case>* sommet) {
     return sommet->contenu().g();
 }
 
