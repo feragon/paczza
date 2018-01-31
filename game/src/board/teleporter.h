@@ -4,7 +4,7 @@
 
 class Teleporter : public Element {
     public:
-        Teleporter(Sprite sprite, Sommet<Case>* target);
+        Teleporter(Sprite sprite, Sound sound, Sommet<Case>* target);
 
         virtual bool traversePar(Pacman& joueur) const override;
 

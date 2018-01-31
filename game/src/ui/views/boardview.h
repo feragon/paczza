@@ -8,6 +8,7 @@
 #include <ui/drawables/animatedsprite.h>
 #include "view.h"
 #include <game/onplayerpositionchanged.h>
+#include <SFML/Audio/Sound.hpp>
 
 class BoardView : public View, public OnPlayerPositionChanged {
     public:

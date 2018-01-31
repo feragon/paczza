@@ -7,6 +7,7 @@ ResourceLoader ResourceLoader::_instance;
 ResourceLoader::ResourceLoader() {
     loadSprites();
     loadFonts();
+    loadSounds();
 }
 
 void ResourceLoader::loadSprites() {
@@ -49,10 +50,29 @@ void ResourceLoader::loadFonts() {
     }
 }
 
+void ResourceLoader::loadSounds() {
+    if(soundPath.size() != SOUND_FIN) {
+        throw std::runtime_error("Nombre de chemins de sons incorrect.");
+    }
+
+    for(int i = 0; i < SOUND_FIN; i++) {
+        Sound sound = static_cast<Sound>(i);
+        sf::SoundBuffer sfSoundB;
+
+        sfSoundB.loadFromFile(std::string("res/sounds/") + soundPath.at(sound)); //TODO: get path
+
+        _sounds[sound] = sfSoundB;
+    }
+}
+
 const sf::Texture& ResourceLoader::getSprite(Sprite s) {
     return _instance._sprites.at(s);
 }
 
 const sf::Font& ResourceLoader::getFont(Font f) {
     return _instance._fonts.at(f);
+}
+
+const sf::SoundBuffer& ResourceLoader::getSound(Sound s) {
+    return _instance._sounds.at(s);
 }

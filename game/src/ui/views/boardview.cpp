@@ -4,6 +4,7 @@
 #include <game/onplayerpositionchanged.h>
 #include <cmath>
 #include "boardview.h"
+#include <SFML/Audio.hpp>
 
 BoardView::BoardView(sf::RenderWindow* window, FenetreJeu* f) :
         View(window, f),
@@ -161,8 +162,23 @@ void BoardView::render(double timeElapsed) {
         s.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
         Position<> monsterPos = monstres->value->position()->contenu().position();
         double avancement = monstres->value->avancement();
-        s.setPosition((monsterPos.x - avancement * cos(monstres->value->direction() * 45 * M_PI / 180)) * SPRITE_SIZE,
-                      (monsterPos.y - avancement * sin(monstres->value->direction() * 45 * M_PI / 180)) * SPRITE_SIZE); //TODO: optimiser
+        double x = 0;
+        double y = 0;
+        Direction d = monstres->value->direction();
+        if(d == LEFT || d == LEFT_UP || d == LEFT_DOWN) {
+            x = -1;
+        }
+        else if(d == RIGHT || d == RIGHT_DOWN || d == RIGHT_UP) {
+            x = 1;
+        }
+
+        if(d == UP || d == LEFT_UP || d == RIGHT_UP) {
+            y = -1;
+        }
+        else if(d == DOWN || d == LEFT_DOWN || d == RIGHT_DOWN) {
+            y = 1;
+        }
+        s.setPosition((monsterPos.x + avancement * x) * SPRITE_SIZE, (monsterPos.y + avancement * y) * SPRITE_SIZE); //TODO: optimiser
         window()->draw(s);
     }
 
@@ -171,6 +187,8 @@ void BoardView::render(double timeElapsed) {
     window()->draw(_score);
 
     generateLifesIndicator(window()->getView().getSize());
+    _elements[Position<>(6,1)].rotate(1);
+    _elements[Position<>(6,8)].rotate(1);
 
     if(_jeu->stopped()) {
         const char* title = _jeu->joueur()->nbLifes() > 0 ? "READY?!" : "GAME OVER!";

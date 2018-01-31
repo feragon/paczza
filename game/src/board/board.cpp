@@ -76,10 +76,10 @@ void Board::genererGraphe(Liste<Position<>>* positionsReservees) {
 
     //Placement des points
     try {
-        placerElementHasard(Point(TOMATO, 50), positionsReservees);
-        placerElementHasard(Point(CHEESE, 50), positionsReservees);
-        placerElementHasard(Point(HAM, 50), positionsReservees);
-        placerElementHasard(Point(MUSHROOM, 50), positionsReservees);
+        placerElementHasard(Point(TOMATO, BONUS, 50), positionsReservees);
+        placerElementHasard(Point(CHEESE, BONUS, 50), positionsReservees);
+        placerElementHasard(Point(HAM, BONUS, 50), positionsReservees);
+        placerElementHasard(Point(MUSHROOM, BONUS, 50), positionsReservees);
     }
     catch (std::exception e) {
         std::cerr << e.what() << std::endl;
@@ -90,7 +90,7 @@ void Board::genererGraphe(Liste<Position<>>* positionsReservees) {
            !l->value->contenu().element() &&
            !Liste<Position<>>::appartient(positionsReservees, PositionsEgales<>(l->value->contenu().position()))) {
 
-            Point element(TOMATO_SMUDGE, 10);
+            Point element(TOMATO_SMUDGE, EAT, 10);
             l->value->contenu().setElement(&element);
         }
     }
@@ -205,17 +205,17 @@ void Board::genererGraphe1(Liste<Position<>>* positionsReservees) {
     creeArete(Chemin(0), _cases[Position<>(11,3)], _cases[Position<>(12,3)]);
     creeArete(Chemin(0), _cases[Position<>(11,6)], _cases[Position<>(12,6)]);
 
-    Teleporter t1(Sprite::TELEPORTER, _cases[Position<>(6,2)]);
-    Teleporter t2(Sprite::TELEPORTER, _cases[Position<>(6,7)]);
+    Teleporter t1(TELEPORTER, TELEPORT, _cases[Position<>(6,2)]);
+    Teleporter t2(TELEPORTER, TELEPORT, _cases[Position<>(6,7)]);
     _cases[Position<>(6,8)]->contenu().setElement(&t1);
     _cases[Position<>(6,1)]->contenu().setElement(&t2);
 
     //Placement des points
     try {
-        placerElementHasard(Point(TOMATO, 50), positionsReservees);
-        placerElementHasard(Point(CHEESE, 50), positionsReservees);
-        placerElementHasard(Point(HAM, 50), positionsReservees);
-        placerElementHasard(Point(MUSHROOM, 50), positionsReservees);
+        placerElementHasard(Point(TOMATO, BONUS, 50), positionsReservees);
+        placerElementHasard(Point(CHEESE, BONUS, 50), positionsReservees);
+        placerElementHasard(Point(HAM, BONUS, 50), positionsReservees);
+        placerElementHasard(Point(MUSHROOM, BONUS, 50), positionsReservees);
     }
     catch (std::exception e) {
         std::cerr << e.what() << std::endl;
@@ -226,7 +226,7 @@ void Board::genererGraphe1(Liste<Position<>>* positionsReservees) {
            !l->value->contenu().element() &&
            !Liste<Position<>>::appartient(positionsReservees, PositionsEgales<>(l->value->contenu().position()))) {
 
-            Point element(TOMATO_SMUDGE, 10);
+            Point element(TOMATO_SMUDGE, EAT, 10);
             l->value->contenu().setElement(&element);
         }
     }

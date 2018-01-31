@@ -1,3 +1,4 @@
+#include <ui/resourceloader.h>
 #include "case.h"
 
 Case::Case(const Position<>& position, const Element* element) {
@@ -47,6 +48,9 @@ void Case::clear() {
 
 void Case::heberge(Pacman& joueur) {
     if(_element) {
+        _sound.setBuffer(ResourceLoader::getSound(_element->sound()));
+        _sound.play();
+
         if(!_element->traversePar(joueur)) {
             delete _element;
             _element = nullptr;

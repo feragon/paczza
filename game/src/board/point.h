@@ -7,7 +7,7 @@ class Point : public Element {
         int _points;
 
     public:
-        Point(Sprite sprite, int points);
+        Point(Sprite sprite, Sound sound, int points);
 
         bool traversePar(Pacman& joueur) const override;
 

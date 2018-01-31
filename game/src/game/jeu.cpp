@@ -72,7 +72,7 @@ void Jeu::updatePlayers(double timeElapsed) {
         movement = 0;
 
         Arete<Chemin, Case>* arete = _plateau->getAreteParSommets(_joueur->position(), _newPlayerPosition);
-        if(arete) {
+        if(arete && arete->contenu().estAccessible()) {
             arete->contenu().setChaleur(UINT8_MAX);
         }
 
@@ -223,8 +223,7 @@ Sommet<Case>* Jeu::getNextPlayerPosition() {
 
     for(Liste<std::pair<Sommet<Case>*, Arete<Chemin, Case>*>>* sommet = voisins; sommet; sommet = sommet->next) {
         try {
-            if(sommet->value->first->contenu().position() == next
-               && sommet->value->second->contenu().estAccessible()) {
+            if(sommet->value->first->contenu().position() == next && sommet->value->second->contenu().estAccessible()) {
 
                 Sommet<Case>* nextVertice = sommet->value->first;
                 Liste<std::pair<Sommet<Case>*, Arete<Chemin, Case>*>>::efface2(voisins);
@@ -264,7 +263,8 @@ void Jeu::start() {
         _monsterManager->reset();
 
         for(Liste<Arete<Chemin, Case>>* aretes = _plateau->aretes(); aretes; aretes = aretes->next) {
-            aretes->value->contenu().setChaleur(0);
+            if(aretes->value->contenu().estAccessible())
+                aretes->value->contenu().setChaleur(0);
         }
 
         _stopped = false;
