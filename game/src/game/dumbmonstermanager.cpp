@@ -1,6 +1,6 @@
 #include "dumbmonstermanager.h"
 
-DumbMonsterManager::DumbMonsterManager(const Board* board) :
+DumbMonsterManager::DumbMonsterManager(Board* board) :
         MonsterManager(board) {
     srand(time(NULL));
 }

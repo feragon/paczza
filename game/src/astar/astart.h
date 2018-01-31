@@ -26,7 +26,8 @@ void AStarT<Graphe, Sommet>::miseAJourVoisin(Sommet* v, Sommet* s, const double&
     pere(v) = s;
     c(v) = nouveauCout;
     g(v) = c(v) + h(v);
-    Liste<Sommet>::insertionOrdonnee(v, ouverts, estPlusPetitOuEgal); etat(v) = OUVERT;
+    Liste<Sommet>::insertionOrdonnee(v, ouverts, estPlusPetitOuEgal);
+    etat(v) = OUVERT;
 }
 
 template<typename Graphe, typename Sommet>

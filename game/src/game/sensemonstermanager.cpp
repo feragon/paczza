@@ -3,7 +3,7 @@
 #include "noheatededgefound.h"
 #include "dumbmonstermanager.h"
 
-SenseMonsterManager::SenseMonsterManager(const Board* board) :
+SenseMonsterManager::SenseMonsterManager(Board* board) :
         MonsterManager(board) {
     srand(time(NULL));
 }

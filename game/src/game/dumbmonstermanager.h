@@ -4,7 +4,7 @@
 
 class DumbMonsterManager : public MonsterManager {
     public:
-        DumbMonsterManager(const Board* board);
+        DumbMonsterManager(Board* board);
 
         void moveMonsters(const Position<>& playerPosition) override;
 

@@ -1,6 +1,6 @@
 #include "monstermanager.h"
 
-MonsterManager::MonsterManager(const Board* board) {
+MonsterManager::MonsterManager(Board* board) {
     _board = board;
 }
 

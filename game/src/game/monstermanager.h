@@ -7,7 +7,7 @@
 
 class MonsterManager {
     public:
-        MonsterManager(const Board* board);
+        MonsterManager(Board* board);
 
         /**
          * @brief Ajoute un monstre
@@ -40,13 +40,13 @@ class MonsterManager {
 
     protected:
         inline std::map<const Monster*, Position<double>>& monsters();
-        inline const Board* board() const;
+        inline Board* board() const;
 
     private:
         MonsterManager(const MonsterManager&);
         MonsterManager& operator = (const MonsterManager&);
 
-        const Board* _board;
+        Board* _board;
         std::map<const Monster*, Position<double>> _newPositions;
 };
 
@@ -54,6 +54,6 @@ std::map<const Monster*, Position<double>>& MonsterManager::monsters() {
     return _newPositions;
 }
 
-const Board* MonsterManager::board() const {
+Board* MonsterManager::board() const {
     return _board;
 }

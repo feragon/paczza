@@ -11,7 +11,7 @@ Case::Case(const Position<>& position, const Element* element) {
     }
 }
 
-Case::Case(const Case& c) {
+Case::Case(const Case& c) : InfoSommet(c) {
     copy(c);
 }
 
