@@ -68,25 +68,9 @@ void AnimatedSprite::reset() {
 }
 
 void AnimatedSprite::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+    states.transform *= getTransform();
+
     target.draw(_sprites[(int) _frame], states);
-}
-
-void AnimatedSprite::setOrigin(double x, double y) {
-    for(sf::Sprite& sprite : _sprites) {
-        sprite.setOrigin(x, y);
-    }
-}
-
-void AnimatedSprite::setPosition(double x, double y) {
-    for(sf::Sprite& sprite : _sprites) {
-        sprite.setPosition(x, y);
-    }
-}
-
-void AnimatedSprite::setRotation(double angle) {
-    for(sf::Sprite& sprite : _sprites) {
-        sprite.setRotation(angle);
-    }
 }
 
 sf::FloatRect AnimatedSprite::getGlobalBounds() {

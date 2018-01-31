@@ -5,7 +5,7 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <vector>
 
-class AnimatedSprite : public sf::Drawable {
+class AnimatedSprite : public sf::Drawable, public sf::Transformable {
     public:
         enum AnimationType {
             ANIMATION_LINERAR,
@@ -37,10 +37,6 @@ class AnimatedSprite : public sf::Drawable {
          */
         void reset();
 
-        //TODO: Refaire ça
-        void setOrigin(double x, double y);
-        void setPosition(double x, double y);
-        void setRotation(double angle);
         sf::FloatRect getGlobalBounds();
     protected:
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
