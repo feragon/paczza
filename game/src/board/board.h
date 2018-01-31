@@ -48,7 +48,6 @@ class Board : public Graphe<Chemin, Case> {
         unsigned int _height;
 
         std::map<Position<>, Sommet<Case>*, cmpPosition<>> _cases;
-        std::map<Position<>, Element*, cmpPosition<>> _elements;
 };
 
 unsigned int Board::width() const {

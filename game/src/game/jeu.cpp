@@ -71,7 +71,14 @@ void Jeu::updatePlayers(double timeElapsed) {
         _timeSinceMove = 0;
         movement = 0;
 
+        Arete<Chemin, Case>* arete = _plateau->getAreteParSommets(_joueur->position(), _newPlayerPosition);
+        if(arete) {
+            arete->contenu().setChaleur(UINT8_MAX);
+        }
+
         _joueur->setPosition(_newPlayerPosition);
+        _newPlayerPosition->contenu().heberge(*_joueur);
+
         _joueur->setAvancement(0);
 
         for(Liste<Monster>* monsters = _monstres; monsters; monsters = monsters->next) {
@@ -94,7 +101,7 @@ void Jeu::updatePlayers(double timeElapsed) {
 
         Direction oldDirection = _joueur->direction();
         _joueur->setDirection(_newDirection);
-        const Sommet<Case>* nextPlayerPosition = getNextPlayerPosition();
+        Sommet<Case>* nextPlayerPosition = getNextPlayerPosition();
 
         if(nextPlayerPosition == _newPlayerPosition && oldDirection != _joueur->direction()) {
             _joueur->setDirection(oldDirection);
@@ -106,7 +113,7 @@ void Jeu::updatePlayers(double timeElapsed) {
             _onPlayerPositionChanged->onPlayerPositionChanged(_oldPositions[_joueur]->contenu().position(), _newPlayerPosition->contenu().position());
         }
 
-        _oldPositions[_joueur] = _newPlayerPosition;
+        _oldPositions[_joueur] = _joueur->position();
         _newPlayerPosition = nextPlayerPosition;
     }
     else {
@@ -172,8 +179,8 @@ void Jeu::updatePlayers(double timeElapsed) {
     }
 }
 
-const Sommet<Case>* Jeu::getNextPlayerPosition() {
-    const Sommet<Case>* actuelle = _joueur->position();
+Sommet<Case>* Jeu::getNextPlayerPosition() {
+    Sommet<Case>* actuelle = _plateau->sommet(_joueur->position()->contenu().position());
 
     Position<> moveVect;
     switch (_joueur->direction()) {
@@ -219,12 +226,7 @@ const Sommet<Case>* Jeu::getNextPlayerPosition() {
             if(sommet->value->first->contenu().position() == next
                && sommet->value->second->contenu().estAccessible()) {
 
-                Arete<Chemin, Case>* arete = sommet->value->second;
-                arete->contenu().setChaleur(UINT8_MAX);
-
-                sommet->value->first->contenu().heberge(*(_joueur));
-
-                const Sommet<Case>* nextVertice = sommet->value->first;
+                Sommet<Case>* nextVertice = sommet->value->first;
                 Liste<std::pair<Sommet<Case>*, Arete<Chemin, Case>*>>::efface2(voisins);
                 return nextVertice;
             }

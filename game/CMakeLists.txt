@@ -69,7 +69,11 @@ set(SOURCE_FILES
         src/game/noremaininglife.h
         src/game/astarfunctions.cpp
         src/game/astarfunctions.h
-        src/game/astarmonstermanager.cpp src/game/astarmonstermanager.h)
+        src/game/astarmonstermanager.cpp
+        src/game/astarmonstermanager.h
+        src/board/teleporter.cpp
+        src/board/teleporter.h
+)
 
 find_package(SFML 2 COMPONENTS graphics window system REQUIRED)
 include_directories(${SFML_INCLUDE_DIR})

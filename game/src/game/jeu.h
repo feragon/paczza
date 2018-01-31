@@ -11,7 +11,7 @@
 
 class Jeu {
     private:
-        const Sommet<Case>* getNextPlayerPosition();
+        Sommet<Case>* getNextPlayerPosition();
 
         Board* _plateau;
         Pacman* _joueur;
@@ -19,7 +19,7 @@ class Jeu {
         std::map<Player*, const Sommet<Case>*> _oldPositions;
         MonsterManager* _monsterManager;
         double _timeSinceMove;
-        const Sommet<Case>* _newPlayerPosition;
+        Sommet<Case>* _newPlayerPosition;
         Direction _newDirection;
         OnPlayerPositionChanged* _onPlayerPositionChanged;
         bool _stopped;

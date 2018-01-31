@@ -1,6 +1,7 @@
 #include <map>
 #include "board.h"
 #include "point.h"
+#include "teleporter.h"
 
 template <typename T = int>
 class PositionsEgales {
@@ -110,8 +111,8 @@ void Board::genererGraphe1(Liste<Position<>>* positionsReservees) {
     creeArete(Chemin(-1), _cases[Position<>(6,4)], _cases[Position<>(6,3)]);
 
     //Diags
-    creeArete(Chemin(0), _cases[Position<>(1,2)], _cases[Position<>(2,1)]);
-    creeArete(Chemin(0), _cases[Position<>(1,7)], _cases[Position<>(2,8)]);
+    creeArete(Chemin(0), _cases[Position<>(1,1)], _cases[Position<>(2,2)]);
+    creeArete(Chemin(0), _cases[Position<>(1,8)], _cases[Position<>(2,7)]);
     creeArete(Chemin(0), _cases[Position<>(7,2)], _cases[Position<>(8,3)]);
     creeArete(Chemin(0), _cases[Position<>(7,7)], _cases[Position<>(8,6)]);
     creeArete(Chemin(0), _cases[Position<>(11,1)], _cases[Position<>(12,2)]);
@@ -175,6 +176,11 @@ void Board::genererGraphe1(Liste<Position<>>* positionsReservees) {
     creeArete(Chemin(0), _cases[Position<>(9,3)], _cases[Position<>(10,3)]);
     creeArete(Chemin(0), _cases[Position<>(9,6)], _cases[Position<>(10,6)]);
 
+    creeArete(Chemin(0), _cases[Position<>(12,8)], _cases[Position<>(13,8)]);
+    creeArete(Chemin(0), _cases[Position<>(12,1)], _cases[Position<>(13,1)]);
+    creeArete(Chemin(0), _cases[Position<>(3,1)], _cases[Position<>(4,1)]);
+    creeArete(Chemin(0), _cases[Position<>(3,8)], _cases[Position<>(4,8)]);
+
     for(int j = 1; j < 8; j++)
         creeArete(Chemin(0), _cases[Position<>(10,j)], _cases[Position<>(10,j+1)]);
 
@@ -198,6 +204,11 @@ void Board::genererGraphe1(Liste<Position<>>* positionsReservees) {
     creeArete(Chemin(0), _cases[Position<>(12,6)], _cases[Position<>(13,6)]);
     creeArete(Chemin(0), _cases[Position<>(11,3)], _cases[Position<>(12,3)]);
     creeArete(Chemin(0), _cases[Position<>(11,6)], _cases[Position<>(12,6)]);
+
+    Teleporter t1(Sprite::TELEPORTER, _cases[Position<>(6,2)]);
+    Teleporter t2(Sprite::TELEPORTER, _cases[Position<>(6,7)]);
+    _cases[Position<>(6,8)]->contenu().setElement(&t1);
+    _cases[Position<>(6,1)]->contenu().setElement(&t2);
 
     //Placement des points
     try {
