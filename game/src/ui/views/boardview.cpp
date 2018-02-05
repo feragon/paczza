@@ -6,12 +6,12 @@
 #include "boardview.h"
 #include <SFML/Audio.hpp>
 
-BoardView::BoardView(sf::RenderWindow* window, FenetreJeu* f) :
+BoardView::BoardView(sf::RenderWindow* window, FenetreJeu* f, Jeu* jeu) :
         View(window, f),
         _joueur(AnimatedSprite::ANIMATION_CIRCULAR, sf::Sprite(ResourceLoader::getSprite(Sprite::OPEN_PIZZA_1)), 16, false) {
 
 
-    _jeu = new Jeu();
+    _jeu = jeu;
     setFond(Sprite::EMPTY_CELL);
 
     _joueur.addSprite(sf::Sprite(ResourceLoader::getSprite(Sprite::OPEN_PIZZA_2)));

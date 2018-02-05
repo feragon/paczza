@@ -50,6 +50,12 @@ class Jeu {
         inline Liste<Monster>* monstres() const;
 
         /**
+         * @brief Donne le gestionnaire de monstres
+         * @return MonsterManager
+         */
+        inline const MonsterManager* monsterManager() const;
+
+        /**
          * @brief Met à jour la partie
          * @param timeElapsed Temps écoulé depuis la dernière mise à jour
          */
@@ -72,6 +78,12 @@ class Jeu {
          * @param onPlayerPositionChanged Fonction appelée
          */
         inline void setOnPlayerPositionChanged(OnPlayerPositionChanged* onPlayerPositionChanged);
+
+        /**
+         * @brief Change le gestionnaire de monstres
+         * @param monsterManager Nouveau gestionnaire
+         */
+        void setMonsterManager(MonsterManager* monsterManager);
 
         /**
          * @brief Donne l'état du jeu
@@ -107,4 +119,8 @@ void Jeu::setOnPlayerPositionChanged(OnPlayerPositionChanged* onPlayerPositionCh
 
 bool Jeu::stopped() const {
     return _stopped;
+}
+
+const MonsterManager* Jeu::monsterManager() const {
+    return _monsterManager;
 }

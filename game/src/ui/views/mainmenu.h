@@ -11,4 +11,5 @@ class MainMenu : public Menu {
         void onHighScoreSelected();
         void onCreditsSelected();
         void onExitSelected();
+        void onHelpSelected();
 };

@@ -12,7 +12,7 @@
 
 class BoardView : public View, public OnPlayerPositionChanged {
     public:
-        BoardView(sf::RenderWindow* window, FenetreJeu* f);
+        BoardView(sf::RenderWindow* window, FenetreJeu* f, Jeu* jeu);
         virtual ~BoardView();
 
         void resize(const sf::Vector2f& size) override;
@@ -22,6 +22,12 @@ class BoardView : public View, public OnPlayerPositionChanged {
         virtual void onEvent(const sf::Event& event) override;
 
         void onPlayerPositionChanged(const Position<>& oldPosition, const Position<>& newPosition) override;
+
+        /**
+         * @brief Donne le jeu associé à la vue
+         * @return Jeu
+         */
+        inline Jeu* jeu();
 
     private:
         void genererSpritesElements();
@@ -41,3 +47,7 @@ class BoardView : public View, public OnPlayerPositionChanged {
 
         std::map<Arete<Chemin, Case>*, sf::Sprite> _aretesMarquees;
 };
+
+Jeu* BoardView::jeu() {
+    return _jeu;
+}
