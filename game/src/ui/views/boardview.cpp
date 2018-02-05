@@ -21,6 +21,8 @@ BoardView::BoardView(sf::RenderWindow* window, FenetreJeu* f, Jeu* jeu) :
     _joueur.setRotation(_jeu->joueur()->direction() * 45);
 
     _jeu->setOnPlayerPositionChanged(this);
+
+    _demonstrationMode = false;
 }
 
 BoardView::~BoardView() {
@@ -190,7 +192,7 @@ void BoardView::render(double timeElapsed) {
     _elements[Position<>(6,1)].rotate(1);
     _elements[Position<>(6,8)].rotate(1);
 
-    if(_jeu->stopped()) {
+    if(_jeu->stopped() && !_demonstrationMode) {
         const char* title = _jeu->joueur()->nbLifes() > 0 ? "READY?!" : "GAME OVER!";
         sf::Text gameover = sf::Text(title, ResourceLoader::getFont(KONGTEXT), 72);
         gameover.setOrigin(gameover.getLocalBounds().width / 2, gameover.getLocalBounds().height / 2);

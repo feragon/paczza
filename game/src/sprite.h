@@ -26,5 +26,6 @@ enum Sprite {
         COCAINE,
         DOOR,
         TELEPORTER,
+        RETURN_KEY,
         SPRITE_FIN
 };

@@ -29,6 +29,12 @@ class BoardView : public View, public OnPlayerPositionChanged {
          */
         inline Jeu* jeu();
 
+        /**
+         * @brief Définit si le plateau est affiché pour la demonstration
+         * @param isDemonstrationMode Vrai en mode de présentation
+         */
+        inline void setDemonstrationMode(bool isDemonstrationMode);
+
     private:
         void genererSpritesElements();
         void genererSpriteElement(const Case& c);
@@ -46,8 +52,14 @@ class BoardView : public View, public OnPlayerPositionChanged {
         sf::Text _score;
 
         std::map<Arete<Chemin, Case>*, sf::Sprite> _aretesMarquees;
+
+        bool _demonstrationMode;
 };
 
 Jeu* BoardView::jeu() {
     return _jeu;
+}
+
+void BoardView::setDemonstrationMode(bool isDemonstrationMode) {
+    _demonstrationMode = isDemonstrationMode;
 }
