@@ -193,7 +193,18 @@ void BoardView::render(double timeElapsed) {
     _elements[Position<>(6,8)].rotate(1);
 
     if(_jeu->stopped() && !_demonstrationMode) {
-        const char* title = _jeu->joueur()->nbLifes() > 0 ? "READY?!" : "GAME OVER!";
+        const char* title;
+        if(_jeu->remainingPoints() == 0) {
+            title = "YOU WON!";
+        }
+        else {
+            if(_jeu->joueur()->nbLifes() > 0) {
+                title = "READY?!";
+            }
+            else {
+                title = "GAME OVER!";
+            }
+        }
         sf::Text gameover = sf::Text(title, ResourceLoader::getFont(KONGTEXT), 72);
         gameover.setOrigin(gameover.getLocalBounds().width / 2, gameover.getLocalBounds().height / 2);
         gameover.setPosition(window()->getView().getSize().x / 2, window()->getView().getSize().y / 2);

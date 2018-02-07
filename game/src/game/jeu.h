@@ -26,6 +26,7 @@ class Jeu {
 
         Position<> _originalPlayerPosition;
         std::vector<Position<>> _originalMonstersPositions;
+        unsigned int _remainingPoints;
 
     public:
         Jeu();
@@ -54,6 +55,12 @@ class Jeu {
          * @return MonsterManager
          */
         inline const MonsterManager* monsterManager() const;
+
+        /**
+         * @brief Donne le nombre de points restant sur le plateau
+         * @return Nombre de points
+         */
+        inline unsigned int remainingPoints() const;
 
         /**
          * @brief Met à jour la partie
@@ -123,4 +130,8 @@ bool Jeu::stopped() const {
 
 const MonsterManager* Jeu::monsterManager() const {
     return _monsterManager;
+}
+
+unsigned int Jeu::remainingPoints() const {
+    return _remainingPoints;
 }

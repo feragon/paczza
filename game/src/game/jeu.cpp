@@ -1,6 +1,7 @@
 #include <config.h>
 #include "jeu.h"
 #include <cmath>
+#include <board/point.h>
 #include "noremaininglife.h"
 #include "astarmonstermanager.h"
 
@@ -42,6 +43,14 @@ Jeu::Jeu() :
 
     _stopped = true;
     _onPlayerPositionChanged = nullptr;
+
+    _remainingPoints = 0;
+    for(Liste<Sommet<Case>>* sommets = _plateau->sommets(); sommets; sommets = sommets->next) {
+        Element* e = sommets->value->contenu().element();
+        if(e) {
+            _remainingPoints += (bool) dynamic_cast<Point*>(e);
+        }
+    }
 }
 
 Jeu::~Jeu() {
@@ -70,6 +79,14 @@ void Jeu::updatePlayers(double timeElapsed) {
         Arete<Chemin, Case>* arete = _plateau->getAreteParSommets(_joueur->position(), _newPlayerPosition);
         if(arete && arete->contenu().estAccessible()) {
             arete->contenu().setChaleur(UINT8_MAX);
+        }
+
+        Element* e = _newPlayerPosition->contenu().element();
+        if(e) {
+            _remainingPoints -= (bool) dynamic_cast<Point*>(e);
+            if(_remainingPoints == 0) {
+                _stopped = true;
+            }
         }
 
         _joueur->setPosition(_newPlayerPosition);
