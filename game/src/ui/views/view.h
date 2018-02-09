@@ -23,7 +23,6 @@ class View {
         /**
          * @brief Définit le fond de la vue
          * @param sprite Sprite utilisé pour remplir la vue
-         * @TODO: utiliser ça partout
          */
         void setFond(Sprite sprite);
 

@@ -5,8 +5,7 @@
 
 TutorialView::TutorialView(sf::RenderWindow* window, FenetreJeu* f) :
         View(window, f),
-        _boardView(window, f, new Jeu()) {
-    _boardView.setDemonstrationMode(true);
+        _gameView(window, f, new Jeu()) {
     _sendEvents = false;
     _showText = true;
 
@@ -27,7 +26,7 @@ TutorialView::~TutorialView() {
 
 void TutorialView::onEvent(const sf::Event& event) {
     if(_sendEvents) {
-        _boardView.onEvent(event);
+        _gameView.onEvent(event);
     }
     else {
         if(event.type == sf::Event::KeyPressed) {
@@ -43,7 +42,7 @@ void TutorialView::onEvent(const sf::Event& event) {
 
 void TutorialView::render(double timeElapsed) {
     View::render(timeElapsed);
-    _boardView.render(timeElapsed);
+    _gameView.render(timeElapsed);
 
     if(_fog) {
         window()->draw(*_fog);
@@ -56,7 +55,7 @@ void TutorialView::render(double timeElapsed) {
 }
 
 void TutorialView::resize(const sf::Vector2f& size) {
-    _boardView.resize(size);
+    _gameView.resize(size);
 }
 
 void TutorialView::center(sf::Text& text, sf::Sprite& sprite) {
@@ -84,7 +83,7 @@ void TutorialView::update() {
     _state = static_cast<State>(_state + 1);
     switch (_state) {
         case PACZZA_PRESENTATION: {
-            Position<> pos = (_boardView.jeu()->joueur()->position()->contenu().position() - 1) * SPRITE_SIZE;
+            Position<> pos = (_gameView.game()->joueur()->position()->contenu().position() - 1) * SPRITE_SIZE;
             _fog = new Fog(window()->getView().getSize(), sf::Vector2f(pos.x, pos.y));
 
             _indication.setString(L"Voici Paczza,\nvotre pizza préférée.");
