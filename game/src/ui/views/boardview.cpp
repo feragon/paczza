@@ -209,6 +209,11 @@ void BoardView::render(double timeElapsed) {
         gameover.setOrigin(gameover.getLocalBounds().width / 2, gameover.getLocalBounds().height / 2);
         gameover.setPosition(window()->getView().getSize().x / 2, window()->getView().getSize().y / 2);
         window()->draw(gameover);
+
+        sf::Sprite returnKey(ResourceLoader::getSprite(RETURN_KEY));
+        returnKey.setOrigin(0, returnKey.getLocalBounds().height / 3);
+        returnKey.setPosition(gameover.getGlobalBounds().left + gameover.getGlobalBounds().width, window()->getView().getSize().y / 2);
+        window()->draw(returnKey);
     }
 }
 
@@ -239,7 +244,7 @@ void BoardView::onEvent(const sf::Event& event) {
             case sf::Keyboard::Key::Numpad9:
                 _jeu->setDirection(RIGHT_UP);
                 break;
-            case sf::Keyboard::Key::BackSpace:
+            case sf::Keyboard::Key::Return:
                 if(_jeu->joueur()->nbLifes() == 0)
                     fenetreJeu()->vuePrecedente();
                 else
