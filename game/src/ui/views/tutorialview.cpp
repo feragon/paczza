@@ -1,5 +1,6 @@
 #include <ui/resourceloader.h>
 #include <SFML/Window/Event.hpp>
+#include <config.h>
 #include "tutorialview.h"
 
 TutorialView::TutorialView(sf::RenderWindow* window, FenetreJeu* f) :
@@ -11,8 +12,17 @@ TutorialView::TutorialView(sf::RenderWindow* window, FenetreJeu* f) :
 
     _state = WELCOME;
     _indication = sf::Text("Hello", ResourceLoader::getFont(KONGTEXT), 64);
+    _indication.setOutlineColor(sf::Color::Black);
+    _indication.setOutlineThickness(2);
     _returnKey = sf::Sprite(ResourceLoader::getSprite(RETURN_KEY));
+    _fog = nullptr;
     center(_indication, _returnKey);
+}
+
+TutorialView::~TutorialView() {
+    if(_fog) {
+        delete _fog;
+    }
 }
 
 void TutorialView::onEvent(const sf::Event& event) {
@@ -35,6 +45,10 @@ void TutorialView::render(double timeElapsed) {
     View::render(timeElapsed);
     _boardView.render(timeElapsed);
 
+    if(_fog) {
+        window()->draw(*_fog);
+    }
+
     if(_showText) {
         window()->draw(_indication);
         window()->draw(_returnKey);
@@ -52,22 +66,31 @@ void TutorialView::center(sf::Text& text, sf::Sprite& sprite) {
     float width = spriteSize.width + textSize.width;
     text.setPosition(
             (window()->getView().getSize().x - width) / 2,
-            (window()->getView().getSize().y - textSize.height) / 2
+            5
     );
 
     sprite.setPosition(
             (window()->getView().getSize().x - width) / 2 + textSize.width,
-            (window()->getView().getSize().y - textSize.height) / 2
+            5
     );
 }
 
 void TutorialView::update() {
+    if(_fog) {
+        delete _fog;
+        _fog = nullptr;
+    }
+
     _state = static_cast<State>(_state + 1);
     switch (_state) {
-        case PACZZA_PRESENTATION:
+        case PACZZA_PRESENTATION: {
+            Position<> pos = (_boardView.jeu()->joueur()->position()->contenu().position() - 1) * SPRITE_SIZE;
+            _fog = new Fog(window()->getView().getSize(), sf::Vector2f(pos.x, pos.y));
+
             _indication.setString(L"Voici Paczza,\nvotre pizza préférée.");
             _indication.setCharacterSize(32);
             break;
+        }
 
         case END:
             fenetreJeu()->vuePrecedente();

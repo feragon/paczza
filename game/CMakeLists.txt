@@ -73,7 +73,7 @@ set(SOURCE_FILES
         src/game/astarmonstermanager.h
         src/board/teleporter.cpp
         src/board/teleporter.h
-        src/sounds.h src/ui/views/tutorialview.cpp src/ui/views/tutorialview.h)
+        src/sounds.h src/ui/views/tutorialview.cpp src/ui/views/tutorialview.h src/ui/drawables/fog.cpp src/ui/drawables/fog.h)
 
 find_package(SFML 2 COMPONENTS graphics window system audio REQUIRED)
 include_directories(${SFML_INCLUDE_DIR})

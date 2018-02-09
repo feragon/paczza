@@ -1,11 +1,13 @@
 #pragma once
 
+#include <ui/drawables/fog.h>
 #include "view.h"
 #include "boardview.h"
 
 class TutorialView : public View {
     public:
         TutorialView(sf::RenderWindow* window, FenetreJeu* f);
+        virtual ~TutorialView();
 
         virtual void onEvent(const sf::Event& event) override;
 
@@ -39,4 +41,5 @@ class TutorialView : public View {
 
         sf::Text _indication;
         sf::Sprite _returnKey;
+        Fog* _fog;
 };
