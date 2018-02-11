@@ -7,25 +7,21 @@
 #include "player.h"
 #include "monstermanager.h"
 #include "direction.h"
-#include "onplayerpositionchanged.h"
+#include "boardlistener.h"
 
-class Jeu {
+class Jeu : public Listened<BoardListener> {
     private:
         Sommet<Case>* getNextPlayerPosition();
+        void updateOldPositions();
 
         Board* _plateau;
-        Pacman* _joueur;
-        Liste<Monster>* _monstres;
         std::map<Player*, const Sommet<Case>*> _oldPositions;
         MonsterManager* _monsterManager;
         double _timeSinceMove;
         Sommet<Case>* _newPlayerPosition;
         Direction _newDirection;
-        OnPlayerPositionChanged* _onPlayerPositionChanged;
         bool _stopped;
 
-        Position<> _originalPlayerPosition;
-        std::vector<Position<>> _originalMonstersPositions;
         unsigned int _remainingPoints;
 
     public:
@@ -81,12 +77,6 @@ class Jeu {
         inline void setDirection(Direction newDirection);
 
         /**
-         * @brief Définit la fonction appelée quand le joueur arrive sur une nouvelle case
-         * @param onPlayerPositionChanged Fonction appelée
-         */
-        inline void setOnPlayerPositionChanged(OnPlayerPositionChanged* onPlayerPositionChanged);
-
-        /**
          * @brief Change le gestionnaire de monstres
          * @param monsterManager Nouveau gestionnaire
          */
@@ -109,19 +99,15 @@ Board* Jeu::plateau() {
 };
 
 Pacman* Jeu::joueur() {
-    return _joueur;
+    return &(_plateau->player()); //TODO
 }
 
 Liste<Monster>* Jeu::monstres() const {
-    return _monstres;
+    return _plateau->monsters();
 }
 
 void Jeu::setDirection(Direction newDirection) {
     _newDirection = newDirection;
-}
-
-void Jeu::setOnPlayerPositionChanged(OnPlayerPositionChanged* onPlayerPositionChanged) {
-    _onPlayerPositionChanged = onPlayerPositionChanged;
 }
 
 bool Jeu::stopped() const {
@@ -135,3 +121,4 @@ const MonsterManager* Jeu::monsterManager() const {
 unsigned int Jeu::remainingPoints() const {
     return _remainingPoints;
 }
+

@@ -3,6 +3,7 @@
 #include <ui/drawables/fog.h>
 #include "view.h"
 #include "boardview.h"
+#include "gameview.h"
 
 class TutorialView : public View {
     public:
@@ -33,7 +34,7 @@ class TutorialView : public View {
          */
         void update();
 
-        BoardView _boardView;
+        GameView _gameView;
         State _state;
         bool _sendEvents;
         bool _showText;

@@ -6,8 +6,9 @@ DumbMonsterManager::DumbMonsterManager(Board* board) :
 }
 
 void DumbMonsterManager::moveMonsters(const Position<>& playerPosition) {
-    for(std::pair<const Monster* const, Position<double>> pair : monsters()) {
-        monsters()[pair.first] = getNextPosition(board(), board()->sommet(pair.first->position()->contenu().position()));
+    monsters().clear();
+    for(Liste<Monster>* monster = board()->monsters(); monster; monster = monster->next) {
+        monsters()[monster->value] = getNextPosition(board(), board()->sommet(monster->value->position()->contenu().position()));
     }
 }
 

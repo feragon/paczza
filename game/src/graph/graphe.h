@@ -106,14 +106,12 @@ class Graphe {
         /**
          * @brief Donne la liste des sommets du graphe
          * @return Liste des sommets du graphe
-         * @TODO: garder ? const ?
          */
         Liste<Sommet<T>>* sommets();
 
         /**
          * @brief Donne la liste des arêtes du graphe
          * @return Liste des arêtes du graphe
-         * @TODO: garder ? const ?
          */
         Liste<Arete<S, T>>* aretes();
 

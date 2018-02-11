@@ -56,7 +56,7 @@ set(SOURCE_FILES
         src/game/monstermanager.cpp
         src/game/dumbmonstermanager.cpp
         src/game/dumbmonstermanager.h
-        src/game/onplayerpositionchanged.h
+        src/game/boardlistener.h
         src/ui/drawables/multiplefonttext.cpp
         src/ui/drawables/multiplefonttext.h
         src/game/playernotinsight.h
@@ -73,7 +73,7 @@ set(SOURCE_FILES
         src/game/astarmonstermanager.h
         src/board/teleporter.cpp
         src/board/teleporter.h
-        src/sounds.h src/ui/views/tutorialview.cpp src/ui/views/tutorialview.h src/ui/drawables/fog.cpp src/ui/drawables/fog.h)
+        src/sounds.h src/ui/views/tutorialview.cpp src/ui/views/tutorialview.h src/ui/drawables/fog.cpp src/ui/drawables/fog.h src/ui/views/gameview.cpp src/ui/views/gameview.h)
 
 find_package(SFML 2 COMPONENTS graphics window system audio REQUIRED)
 include_directories(${SFML_INCLUDE_DIR})
@@ -83,5 +83,5 @@ include_directories(src)
 add_executable(paczza ${SOURCE_FILES})
 target_link_libraries(paczza ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
 
-add_library(game ${SOURCE_FILES} src/astar/infosommet.h src/astar/etat.h)
+add_library(game ${SOURCE_FILES} src/astar/infosommet.h src/astar/etat.h src/util/listened.h)
 target_link_libraries(game ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})

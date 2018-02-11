@@ -2,9 +2,6 @@
 #include <graph/liste.h>
 #include "etat.h"
 
-//TODO: forward declaration ?
-
-
 template <typename Graphe, typename Sommet>
 class AStarT {
     public:

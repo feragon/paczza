@@ -9,17 +9,18 @@ SenseMonsterManager::SenseMonsterManager(Board* board) :
 }
 
 void SenseMonsterManager::moveMonsters(const Position<>& playerPosition) {
-    for(std::pair<const Monster* const, Position<double>> pair : monsters()) {
-        Sommet<Case>* monsterVertice = board()->sommet(pair.first->position()->contenu().position());
+    monsters().clear();
+    for(Liste<Monster>* monster = board()->monsters(); monster; monster = monster->next) {
+        Sommet<Case>* monsterVertice = board()->sommet(monster->value->position()->contenu().position());
         try {
-            monsters()[pair.first] = nextPositionBySight(monsterVertice, playerPosition);
+            monsters()[monster->value] = nextPositionBySight(monsterVertice, playerPosition);
         }
-        catch (PlayerNotInSight e) {
+        catch (PlayerNotInSight& e) {
             try {
-                monsters()[pair.first] = nextPositionByHeat(monsterVertice);
+                monsters()[monster->value] = nextPositionByHeat(monsterVertice);
             }
-            catch (NoHeatedEdgeFound f) {
-                monsters()[pair.first] = DumbMonsterManager::getNextPosition(board(), monsterVertice);
+            catch (NoHeatedEdgeFound& f) {
+                monsters()[monster->value] = DumbMonsterManager::getNextPosition(board(), monsterVertice);
             }
         }
     }

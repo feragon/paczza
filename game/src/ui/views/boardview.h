@@ -7,38 +7,30 @@
 #include <game/player.h>
 #include <ui/drawables/animatedsprite.h>
 #include "view.h"
-#include <game/onplayerpositionchanged.h>
+#include <game/boardlistener.h>
 #include <SFML/Audio/Sound.hpp>
 
-class BoardView : public View, public OnPlayerPositionChanged {
+class BoardView : public View, public BoardListener {
     public:
-        BoardView(sf::RenderWindow* window, FenetreJeu* f, Jeu* jeu);
-        virtual ~BoardView();
+        BoardView(sf::RenderWindow* window, FenetreJeu* f, Board* board);
 
         void resize(const sf::Vector2f& size) override;
 
         void render(double timeElapsed) override;
 
-        virtual void onEvent(const sf::Event& event) override;
-
-        void onPlayerPositionChanged(const Position<>& oldPosition, const Position<>& newPosition) override;
-
-        /**
-         * @brief Donne le jeu associé à la vue
-         * @return Jeu
-         */
-        inline Jeu* jeu();
+        void playerMovementBegin(Pacman* player) override;
+        void updateEdge(Arete<Chemin, Case>* edge) override;
+        void updateVertice(Sommet<Case>* vertice) override;
 
         /**
-         * @brief Définit si le plateau est affiché pour la demonstration
-         * @param isDemonstrationMode Vrai en mode de présentation
+         * @brief Donne le plateau associé à la vue
+         * @return Board
          */
-        inline void setDemonstrationMode(bool isDemonstrationMode);
+        inline Board* board();
 
     private:
         void genererSpritesElements();
         void genererSpriteElement(const Case& c);
-        void generateLifesIndicator(const sf::Vector2f& windowSize);
 
         BoardView(const BoardView&);
         BoardView& operator = (const BoardView&);
@@ -46,20 +38,13 @@ class BoardView : public View, public OnPlayerPositionChanged {
         std::map<Position<>, sf::Sprite, cmpPosition<>> _elements;
 
         std::vector<sf::Sprite> _backgroundSprites;
-        Jeu* _jeu;
+        Board* _board;
 
         AnimatedSprite _joueur;
-        sf::Text _score;
 
         std::map<Arete<Chemin, Case>*, sf::Sprite> _aretesMarquees;
-
-        bool _demonstrationMode;
 };
 
-Jeu* BoardView::jeu() {
-    return _jeu;
-}
-
-void BoardView::setDemonstrationMode(bool isDemonstrationMode) {
-    _demonstrationMode = isDemonstrationMode;
+Board* BoardView::board() {
+    return _board;
 }

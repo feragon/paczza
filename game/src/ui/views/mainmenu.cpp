@@ -3,9 +3,9 @@
 #include <ui/menu/menubutton.h>
 #include <game/astarmonstermanager.h>
 #include "mainmenu.h"
-#include "boardview.h"
 #include "credits.h"
 #include "tutorialview.h"
+#include "gameview.h"
 
 MainMenu::MainMenu(sf::RenderWindow* window, FenetreJeu* f) :
     Menu(window, f) {
@@ -20,7 +20,7 @@ MainMenu::MainMenu(sf::RenderWindow* window, FenetreJeu* f) :
 void MainMenu::onNewGameSelected() {
     Jeu* jeu = new Jeu(); //TODO: manage life
     jeu->setMonsterManager(new AStarMonsterManager(jeu->plateau()));
-    fenetreJeu()->changerVue(new BoardView(window(), fenetreJeu(), jeu));
+    fenetreJeu()->changerVue(new GameView(window(), fenetreJeu(), jeu));
 }
 
 void MainMenu::onHighScoreSelected() {
