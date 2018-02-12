@@ -179,12 +179,19 @@ void Board::placerElementHasard(const Element& element, unsigned int limit) {
 }
 
 void Board::placePlayers() {
-    _player.setPosition(_cases[Position<>(3,5)]);
+    Sommet<Case>* playerPos = _cases[Position<>(3,5)];
+    playerPos->contenu().setElement(nullptr);
+    _player.setPosition(playerPos);
     _player.setDirection(UP);
 
     Liste<Monster>::efface2(_monsters);
-    _monsters = new Liste<Monster>(new Monster(_cases[Position<>(6,4)], UP), _monsters);
-    _monsters = new Liste<Monster>(new Monster(_cases[Position<>(6,5)], UP), _monsters);
-    _monsters = new Liste<Monster>(new Monster(_cases[Position<>(7,4)], UP), _monsters);
-    _monsters = new Liste<Monster>(new Monster(_cases[Position<>(7,5)], UP), _monsters);
+    addMonster(_cases[Position<>(6,4)]);
+    addMonster(_cases[Position<>(6,5)]);
+    addMonster(_cases[Position<>(7,4)]);
+    addMonster(_cases[Position<>(7,5)]);
+}
+
+void Board::addMonster(Sommet<Case>* position) {
+    position->contenu().setElement(nullptr);
+    _monsters = new Liste<Monster>(new Monster(position, UP), _monsters);
 }

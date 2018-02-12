@@ -47,6 +47,7 @@ class Board : public Graphe<Chemin, Case> {
 
     private:
         void genererGraphe();
+        void addMonster(Sommet<Case>* position);
 
         /**
          * @brief Place un élément au hasard sur le graphe
