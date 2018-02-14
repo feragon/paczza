@@ -24,4 +24,9 @@ class BoardListener {
          * @param vertice Sommet concerné
          */
         virtual void updateVertice(Sommet<Case>* vertice) = 0;
+
+        /**
+         * @brief Fonction appelée avant un nouveau tour
+         */
+        virtual void onNewTurn() = 0;
 };

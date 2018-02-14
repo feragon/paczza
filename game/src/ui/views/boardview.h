@@ -28,9 +28,12 @@ class BoardView : public View, public BoardListener {
          */
         inline Board* board();
 
+        virtual void onNewTurn() override;
+
     private:
         void genererSpritesElements();
         void genererSpriteElement(const Case& c);
+        void updateMonsters();
 
         BoardView(const BoardView&);
         BoardView& operator = (const BoardView&);
@@ -43,6 +46,8 @@ class BoardView : public View, public BoardListener {
         AnimatedSprite _joueur;
 
         std::map<Arete<Chemin, Case>*, sf::Sprite> _aretesMarquees;
+
+        std::map<const Monster*, sf::Sprite> _monsters;
 };
 
 Board* BoardView::board() {

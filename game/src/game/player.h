@@ -37,7 +37,7 @@ class Player {
          * @brief Donne la direction du joueur
          * @return Direction
          */
-        inline Direction direction();
+        inline Direction direction() const;
 
         /**
          * @brief Définit la direction du joueur
@@ -66,7 +66,7 @@ void Player::setPosition(const Sommet<Case>* p) {
     _position = p;
 }
 
-Direction Player::direction() {
+Direction Player::direction() const {
     return _direction;
 }
 

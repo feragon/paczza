@@ -12,6 +12,7 @@ BoardView::BoardView(sf::RenderWindow* window, FenetreJeu* f, Board* board) :
 
 
     _board = board;
+    updateMonsters();
     setFond(Sprite::EMPTY_CELL);
 
     _joueur.addSprite(sf::Sprite(ResourceLoader::getSprite(Sprite::OPEN_PIZZA_2)));
@@ -142,22 +143,12 @@ void BoardView::render(double timeElapsed) {
         }
     }
 
-    for(Liste<Monster>* monstres = board()->monsters(); monstres; monstres = monstres->next) {
-        sf::Sprite s(ResourceLoader::getSprite(RIGHT_PINEAPPLE));
-
-        if(monstres->value->direction() == UP)
-            s.setTexture(ResourceLoader::getSprite(UP_PINEAPPLE));
-        if(monstres->value->direction() == LEFT)
-            s.setTexture(ResourceLoader::getSprite(LEFT_PINEAPPLE));
-        if(monstres->value->direction() == DOWN)
-            s.setTexture(ResourceLoader::getSprite(DOWN_PINEAPPLE));
-
-        s.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
-        Position<> monsterPos = monstres->value->position()->contenu().position();
-        double avancement = monstres->value->avancement();
+    for(std::pair<const Monster* const, sf::Sprite>& pair : _monsters) {
+        Position<> monsterPos = pair.first->position()->contenu().position();
+        double avancement = pair.first->avancement();
         double x = 0;
         double y = 0;
-        Direction d = monstres->value->direction();
+        Direction d = pair.first->direction();
         if(d == LEFT || d == LEFT_UP || d == LEFT_DOWN) {
             x = -1;
         }
@@ -171,8 +162,9 @@ void BoardView::render(double timeElapsed) {
         else if(d == DOWN || d == LEFT_DOWN || d == RIGHT_DOWN) {
             y = 1;
         }
-        s.setPosition((monsterPos.x + avancement * x) * SPRITE_SIZE, (monsterPos.y + avancement * y) * SPRITE_SIZE); //TODO: optimiser
-        window()->draw(s);
+
+        pair.second.setPosition((monsterPos.x + avancement * x) * SPRITE_SIZE, (monsterPos.y + avancement * y) * SPRITE_SIZE);
+        window()->draw(pair.second);
     }
 
     _elements[Position<>(6,1)].rotate(1);
@@ -205,3 +197,52 @@ void BoardView::updateVertice(Sommet<Case>* vertice) {
 void BoardView::playerMovementBegin(Pacman* player) {
     _joueur.reset();
 }
+
+void BoardView::updateMonsters() {
+    _monsters.clear();
+
+    for(Liste<Monster>* monsters = board()->monsters(); monsters; monsters = monsters->next) {
+        sf::Sprite s;
+
+        switch(monsters->value->direction()) {
+            case LEFT:
+                s.setTexture(ResourceLoader::getSprite(LEFT_PINEAPPLE));
+                break;
+            case LEFT_UP:
+                s.setTexture(ResourceLoader::getSprite(LEFT_PINEAPPLE));
+                break;
+
+            case UP:
+                s.setTexture(ResourceLoader::getSprite(UP_PINEAPPLE));
+                break;
+
+            case RIGHT_UP:
+                s.setTexture(ResourceLoader::getSprite(RIGHT_PINEAPPLE));
+                break;
+
+            case RIGHT:
+                s.setTexture(ResourceLoader::getSprite(RIGHT_PINEAPPLE));
+                break;
+
+            case RIGHT_DOWN:
+                s.setTexture(ResourceLoader::getSprite(RIGHT_PINEAPPLE));
+                break;
+
+            case DOWN:
+                s.setTexture(ResourceLoader::getSprite(DOWN_PINEAPPLE));
+                break;
+
+            case LEFT_DOWN:
+                s.setTexture(ResourceLoader::getSprite(LEFT_PINEAPPLE));
+                break;
+        }
+        s.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
+
+        _monsters[monsters->value] = s;
+    }
+}
+
+void BoardView::onNewTurn() {
+    updateMonsters();
+}
+

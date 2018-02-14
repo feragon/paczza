@@ -98,6 +98,8 @@ void Jeu::updatePlayers(double timeElapsed) {
         if(joueur()->position() != _newPlayerPosition) {
             Listened<BoardListener>::callListeners(&BoardListener::playerMovementBegin, joueur());
         }
+
+        Listened<BoardListener>::callListeners(&BoardListener::onNewTurn);
     }
     else {
         if (_monsterManager) {
@@ -244,6 +246,7 @@ void Jeu::start() {
                 aretes->value->contenu().setChaleur(0);
         }
 
+        Listened<BoardListener>::callListeners(&BoardListener::onNewTurn);
         _stopped = false;
     }
     catch(NoRemainingLife& e) {

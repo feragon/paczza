@@ -102,3 +102,4 @@ void GameView::generateLifesIndicator(const sf::Vector2f& windowSize) {
         window()->draw(s);
     }
 }
+
