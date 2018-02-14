@@ -20,6 +20,7 @@ class PositionsEgales {
 
 Board::Board() :
     _player(nullptr, UP, 3) { //TODO: devrait être dans jeu
+    _monsters = nullptr;
     genererGraphe();
     placePlayers();
 }
