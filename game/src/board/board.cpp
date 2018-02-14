@@ -25,6 +25,10 @@ Board::Board() :
     placePlayers();
 }
 
+Board::~Board() {
+    Liste<Monster>::efface2(_monsters);
+}
+
 void Board::genererGraphe() {
     _width = 13;
     _height = 8;

@@ -8,6 +8,8 @@ class FenetreJeu;
 
 class View {
     public:
+        virtual ~View();
+
         /**
          * @brief Donne la fenre SFML
          * @return Fenêtre SFML

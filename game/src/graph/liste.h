@@ -135,7 +135,7 @@ void Liste<T>::efface2(Liste<T>*& l) {
         return;
     }
 
-    Liste<T>::efface1(l->next);
+    Liste<T>::efface2(l->next);
     delete l->value;
     delete l;
     l = nullptr;

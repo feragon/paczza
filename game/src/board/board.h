@@ -19,6 +19,7 @@ struct cmpPosition {
 class Board : public Graphe<Chemin, Case> {
     public:
         Board();
+        virtual ~Board();
 
         inline Sommet<Case>* sommet(const Position<>& position) const;
 
