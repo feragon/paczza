@@ -18,7 +18,7 @@ class SharedPtr {
 
         SharedPtr<T>& operator = (const SharedPtr<T>& other);
 
-        inline T& operator ->() const;
+        inline T* operator ->() const;
         inline T& operator *() const;
         inline T* get() const;
         inline unsigned int count() const;
@@ -66,8 +66,8 @@ SharedPtr<T>& SharedPtr<T>::operator=(const SharedPtr<T>& other) {
 }
 
 template<typename T>
-T& SharedPtr<T>::operator->() const {
-    return *_ptr;
+T* SharedPtr<T>::operator->() const {
+    return _ptr;
 }
 
 template<typename T>

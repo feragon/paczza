@@ -3,7 +3,7 @@
 #include <SFML/Window/Event.hpp>
 #include "gameview.h"
 
-GameView::GameView(sf::RenderWindow* window, FenetreJeu* f, Jeu* game) :
+GameView::GameView(sf::RenderWindow* window, FenetreJeu* f, SharedPtr<Jeu> game) :
         BoardView(window, f, game->plateau()) {
     _game = game;
     game->addListener(this); //TODO: trouver un meilleur endroit

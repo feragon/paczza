@@ -1,16 +1,17 @@
 #pragma once
 
+#include <util/shared_ptr.h>
 #include "boardview.h"
 
 class GameView : public BoardView {
     private:
         void generateLifesIndicator(const sf::Vector2f& windowSize);
 
-        Jeu* _game;
+        SharedPtr<Jeu> _game;
         sf::Text _score;
 
     public:
-        GameView(sf::RenderWindow* window, FenetreJeu* f, Jeu* game);
+        GameView(sf::RenderWindow* window, FenetreJeu* f, SharedPtr<Jeu> game);
         virtual ~GameView();
 
         virtual void render(double timeElapsed) override;
@@ -21,9 +22,9 @@ class GameView : public BoardView {
          * @brief Donne le jeu actuellement affiché
          * @return Jeu
          */
-        inline Jeu* game();
+        inline SharedPtr<Jeu> game();
 };
 
-Jeu* GameView::game() {
+SharedPtr<Jeu> GameView::game() {
     return _game;
 }

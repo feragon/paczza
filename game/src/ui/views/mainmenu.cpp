@@ -2,6 +2,7 @@
 #include <game/jeu.h>
 #include <ui/menu/menubutton.h>
 #include <game/astarmonstermanager.h>
+#include <util/shared_ptr.h>
 #include "mainmenu.h"
 #include "credits.h"
 #include "tutorialview.h"
@@ -18,7 +19,7 @@ MainMenu::MainMenu(sf::RenderWindow* window, FenetreJeu* f) :
 }
 
 void MainMenu::onNewGameSelected() {
-    Jeu* jeu = new Jeu(); //TODO: manage life
+    SharedPtr<Jeu> jeu;
     jeu->setMonsterManager(new AStarMonsterManager(jeu->plateau()));
     fenetreJeu()->changerVue(new GameView(window(), fenetreJeu(), jeu));
 }

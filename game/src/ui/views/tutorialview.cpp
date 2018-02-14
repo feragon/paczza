@@ -5,7 +5,7 @@
 
 TutorialView::TutorialView(sf::RenderWindow* window, FenetreJeu* f) :
         View(window, f),
-        _gameView(window, f, new Jeu()) {
+        _gameView(window, f, SharedPtr<Jeu>()) {
     _sendEvents = false;
     _showText = true;
 
