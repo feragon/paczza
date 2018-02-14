@@ -241,6 +241,8 @@ void Jeu::start() {
         _newDirection = UP;
         _newPlayerPosition = getNextPlayerPosition();
 
+        _monsterManager->moveMonsters(joueur()->position()->contenu().position());
+
         for(Liste<Arete<Chemin, Case>>* aretes = _plateau->aretes(); aretes; aretes = aretes->next) {
             if(aretes->value->contenu().estAccessible())
                 aretes->value->contenu().setChaleur(0);
