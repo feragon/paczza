@@ -46,6 +46,11 @@ class Board : public Graphe<Chemin, Case> {
          */
         void placePlayers();
 
+        /**
+         * @brief Place les éléments sur le plateau
+         */
+        void placeElements();
+
     private:
         void genererGraphe();
         void addMonster(Sommet<Case>* position);

@@ -28,7 +28,9 @@ class Pacman : public Player {
         /**
          * @brief Retire une vie au joueur
          */
-         void takeLife();
+        void takeLife();
+
+        inline void addLife(unsigned short nbLifes);
 
     private:
         int _points;
@@ -45,4 +47,8 @@ void Pacman::addPoints(int pts) {
 
 unsigned short Pacman::nbLifes() const {
     return _nbLifes;
+}
+
+void Pacman::addLife(unsigned short nbLifes) {
+    _nbLifes += nbLifes;
 }

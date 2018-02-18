@@ -22,6 +22,7 @@ Board::Board() :
     _player(nullptr, UP, 3) { //TODO: devrait être dans jeu
     _monsters = nullptr;
     genererGraphe();
+    placeElements();
     placePlayers();
 }
 
@@ -144,26 +145,6 @@ void Board::genererGraphe() {
     Teleporter t2(TELEPORTER, TELEPORT, _cases[Position<>(6,7)]);
     _cases[Position<>(6,8)]->contenu().setElement(&t1);
     _cases[Position<>(6,1)]->contenu().setElement(&t2);
-
-    //Placement des points
-    try {
-        placerElementHasard(Point(TOMATO, BONUS, 50));
-        placerElementHasard(Point(CHEESE, BONUS, 50));
-        placerElementHasard(Point(HAM, BONUS, 50));
-        placerElementHasard(Point(MUSHROOM, BONUS, 50));
-    }
-    catch (std::exception e) {
-        std::cerr << e.what() << std::endl;
-    }
-
-    for(Liste<Sommet<Case>>* l = sommets(); l; l = l->next) {
-        if(l->value->degre() > 0 &&
-           !l->value->contenu().element()) {
-
-            Point element(TOMATO_SMUDGE, EAT, 10);
-            l->value->contenu().setElement(&element);
-        }
-    }
 }
 
 void Board::placerElementHasard(const Element& element, unsigned int limit) {
@@ -181,6 +162,28 @@ void Board::placerElementHasard(const Element& element, unsigned int limit) {
     }
 
     sommet(p)->contenu().setElement(&element);
+}
+
+void Board::placeElements() {
+    //Placement des points
+    try {
+        placerElementHasard(Point(TOMATO, BONUS, 50));
+        placerElementHasard(Point(CHEESE, BONUS, 50));
+        placerElementHasard(Point(HAM, BONUS, 50));
+        placerElementHasard(Point(MUSHROOM, BONUS, 50));
+    }
+    catch (std::exception& e) {
+        std::cerr << e.what() << std::endl;
+    }
+
+    Point element(TOMATO_SMUDGE, EAT, 10);
+    for(Liste<Sommet<Case>>* l = sommets(); l; l = l->next) {
+        if(l->value->degre() > 0 &&
+           !l->value->contenu().element()) {
+
+            l->value->contenu().setElement(&element);
+        }
+    }
 }
 
 void Board::placePlayers() {

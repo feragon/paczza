@@ -30,8 +30,10 @@ class BoardView : public View, public BoardListener {
 
         virtual void onNewTurn() override;
 
-    private:
+    protected:
         void genererSpritesElements();
+
+    private:
         void genererSpriteElement(const Case& c);
         void updateMonsters();
 

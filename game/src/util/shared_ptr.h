@@ -4,6 +4,9 @@
 
 template <typename T>
 class SharedPtr {
+    template<typename U>
+    friend class SharedPtr;
+
     private:
         unsigned int* _count;
         T* _ptr;
@@ -12,7 +15,8 @@ class SharedPtr {
         template <typename... Args>
         explicit SharedPtr(Args... args);
 
-        SharedPtr(const SharedPtr<T>& other);
+        template <typename U>
+        SharedPtr(const SharedPtr<U>& other);
 
         virtual ~SharedPtr();
 
@@ -34,12 +38,15 @@ SharedPtr<T>::SharedPtr(Args... args) {
 }
 
 template<typename T>
-SharedPtr<T>::SharedPtr(const SharedPtr<T>& other) {
+template <typename U>
+SharedPtr<T>::SharedPtr(const SharedPtr<U>& other) {
     _count = other._count;
     _ptr = other._ptr;
 
     (*_count)++;
 }
+
+
 
 template<typename T>
 SharedPtr<T>::~SharedPtr() {

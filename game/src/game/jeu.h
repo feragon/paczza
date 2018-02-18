@@ -29,6 +29,11 @@ class Jeu : public Listened<BoardListener> {
         virtual ~Jeu();
 
         /**
+         * @brief Remet a zéro la partie
+         */
+        void updatePoints();
+
+        /**
          * @brief Donne le plateau du jeu
          * @return Plateau du jeu
          */
@@ -91,7 +96,7 @@ class Jeu : public Listened<BoardListener> {
         /**
          * @brief Démarre la partie
          */
-        void start();
+        virtual void start();
 };
 
 Board* Jeu::plateau() {

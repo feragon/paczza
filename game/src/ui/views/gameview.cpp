@@ -77,10 +77,14 @@ void GameView::onEvent(const sf::Event& event) {
                 _game->setDirection(RIGHT_UP);
                 break;
             case sf::Keyboard::Key::Return:
-                if(_game->joueur()->nbLifes() == 0)
+                if(_game->joueur()->nbLifes() == 0) {
                     fenetreJeu()->vuePrecedente();
-                else
+                }
+                else {
                     _game->start();
+                    //TODO: on new level only
+                    genererSpritesElements();
+                }
                 break;
         }
     }

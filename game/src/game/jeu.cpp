@@ -13,13 +13,7 @@ Jeu::Jeu() {
 
     _stopped = true;
 
-    _remainingPoints = 0;
-    for(Liste<Sommet<Case>>* sommets = _plateau->sommets(); sommets; sommets = sommets->next) {
-        Element* e = sommets->value->contenu().element();
-        if(e) {
-            _remainingPoints += (bool) dynamic_cast<Point*>(e);
-        }
-    }
+    updatePoints();
 }
 
 Jeu::~Jeu() {
@@ -264,5 +258,15 @@ void Jeu::updateOldPositions() {
     _oldPositions[joueur()] = joueur()->position();
     for(Liste<Monster>* monsters = monstres(); monsters; monsters = monsters->next) {
         _oldPositions[monsters->value] = monsters->value->position();
+    }
+}
+
+void Jeu::updatePoints() {
+    _remainingPoints = 0;
+    for(Liste<Sommet<Case>>* sommets = _plateau->sommets(); sommets; sommets = sommets->next) {
+        Element* e = sommets->value->contenu().element();
+        if(e) {
+            _remainingPoints += (bool) dynamic_cast<Point*>(e);
+        }
     }
 }
