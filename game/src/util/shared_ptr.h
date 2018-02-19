@@ -8,6 +8,10 @@ class SharedPtr {
     friend class SharedPtr;
 
     private:
+        template <typename U>
+        void copy(const SharedPtr<U>& other);
+        void release();
+
         unsigned int* _count;
         T* _ptr;
 
@@ -42,60 +46,33 @@ SharedPtr<T>::SharedPtr(Args... args) {
 
 template<typename T>
 SharedPtr<T>::SharedPtr(const SharedPtr<T>& other) {
-    _count = other._count;
-    _ptr = other._ptr;
-
-    (*_count)++;
+    copy(other);
 }
 
 template<typename T>
 template <typename U>
 SharedPtr<T>::SharedPtr(const SharedPtr<U>& other) {
-    _count = other._count;
-    _ptr = static_cast<T*>(other._ptr);
-
-    (*_count)++;
+    copy(other);
 }
 
 
 
 template<typename T>
 SharedPtr<T>::~SharedPtr() {
-    (*_count)--;
-
-    if((*_count) == 0) {
-        delete _count;
-        delete _ptr;
-    }
+    release();
 }
 
 template<typename T>
 SharedPtr<T>& SharedPtr<T>::operator=(const SharedPtr<T>& other) {
-    (*_count)--;
-
-    if((*_count) == 0) {
-        delete _count;
-        delete _ptr;
-    }
-
-    _count = other._count;
-    _ptr = other._ptr;
-    (*_count)++;
+    release();
+    copy(other);
 }
 
 template<typename T>
 template<typename U>
 SharedPtr<T>& SharedPtr<T>::operator=(const SharedPtr<U>& other) {
-    (*_count)--;
-
-    if((*_count) == 0) {
-        delete _count;
-        delete _ptr;
-    }
-
-    _count = other._count;
-    _ptr = static_cast<T*>(other._ptr);
-    (*_count)++;
+    release();
+    copy(other);
 }
 
 template<typename T>
@@ -116,4 +93,23 @@ T* SharedPtr<T>::get() const {
 template<typename T>
 unsigned int SharedPtr<T>::count() const {
     return *_count;
+}
+
+template<typename T>
+template<typename U>
+void SharedPtr<T>::copy(const SharedPtr<U>& other) {
+    _count = other._count;
+    _ptr = static_cast<T*>(other._ptr);
+
+    (*_count)++;
+}
+
+template<typename T>
+void SharedPtr<T>::release() {
+    (*_count)--;
+
+    if((*_count) == 0) {
+        delete _count;
+        delete _ptr;
+    }
 }
