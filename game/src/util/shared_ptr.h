@@ -15,12 +15,15 @@ class SharedPtr {
         template <typename... Args>
         explicit SharedPtr(Args... args);
 
+        SharedPtr(const SharedPtr& other);
         template <typename U>
         SharedPtr(const SharedPtr<U>& other);
 
         virtual ~SharedPtr();
 
-        SharedPtr<T>& operator = (const SharedPtr<T>& other);
+        SharedPtr<T>& operator = (const SharedPtr& other);
+        template <typename U>
+        SharedPtr<T>& operator = (const SharedPtr<U>& other);
 
         inline T* operator ->() const;
         inline T& operator *() const;
@@ -38,10 +41,18 @@ SharedPtr<T>::SharedPtr(Args... args) {
 }
 
 template<typename T>
+SharedPtr<T>::SharedPtr(const SharedPtr<T>& other) {
+    _count = other._count;
+    _ptr = other._ptr;
+
+    (*_count)++;
+}
+
+template<typename T>
 template <typename U>
 SharedPtr<T>::SharedPtr(const SharedPtr<U>& other) {
     _count = other._count;
-    _ptr = other._ptr;
+    _ptr = static_cast<T*>(other._ptr);
 
     (*_count)++;
 }
@@ -69,6 +80,21 @@ SharedPtr<T>& SharedPtr<T>::operator=(const SharedPtr<T>& other) {
 
     _count = other._count;
     _ptr = other._ptr;
+    (*_count)++;
+}
+
+template<typename T>
+template<typename U>
+SharedPtr<T>& SharedPtr<T>::operator=(const SharedPtr<U>& other) {
+    (*_count)--;
+
+    if((*_count) == 0) {
+        delete _count;
+        delete _ptr;
+    }
+
+    _count = other._count;
+    _ptr = static_cast<T*>(other._ptr);
     (*_count)++;
 }
 

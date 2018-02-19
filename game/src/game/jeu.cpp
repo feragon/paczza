@@ -18,7 +18,7 @@ Jeu::Jeu() {
 
 Jeu::~Jeu() {
     delete _plateau;
-    delete _monsterManager;
+    //delete _monsterManager; TODO
 }
 
 void Jeu::updateGame(double timeElapsed) {
