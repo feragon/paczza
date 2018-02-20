@@ -4,6 +4,7 @@
 #include <board/point.h>
 #include "noremaininglife.h"
 #include "astarmonstermanager.h"
+#include "util.h"
 
 Jeu::Jeu() {
     _monsterManager = nullptr;
@@ -141,21 +142,20 @@ void Jeu::updatePlayers(double timeElapsed) {
             joueur()->setAvancement(movement);
         }
 
-        if(_monsterManager) {
+        if(_monsterManager && movement >= 0.5) {
             for (Liste<Monster>* monsters = monstres(); monsters; monsters = monsters->next) {
-                if (_plateau->getAreteParSommets(joueur()->position(), monsters->value->position()) &&
-                    movement >= 0.5) {
-                    try {
-                        if (abs(joueur()->direction() - monsters->value->direction()) == NB_DIRECTIONS / 2 ||
-                            joueur()->position() == _newPlayerPosition ||
-                            monsters->value->position()->contenu().position() ==
-                            _monsterManager->newPosition(monsters->value)) {
-                            _stopped = true;
-                        }
-                    }
-                    catch (std::out_of_range& e) {
+                Arete<Chemin, Case>* arete = _plateau->getAreteParSommets(joueur()->position(), monsters->value->position());
+                if(!arete) {
+                    continue;
+                }
 
-                    }
+                if(getDirection(monsters->value->position()->contenu().position(), joueur()->position()->contenu().position()) != monsters->value->direction()) {
+                    return;
+                }
+
+                if (abs(joueur()->direction() - monsters->value->direction()) == NB_DIRECTIONS / 2 ||
+                    joueur()->position() == _newPlayerPosition) {
+                    _stopped = true;
                 }
             }
         }
