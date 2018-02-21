@@ -209,7 +209,7 @@ void BoardView::updateMonsters() {
                 s.setTexture(ResourceLoader::getSprite(LEFT_PINEAPPLE));
                 break;
             case LEFT_UP:
-                s.setTexture(ResourceLoader::getSprite(LEFT_PINEAPPLE));
+                s.setTexture(ResourceLoader::getSprite(LEFT_UP_PINEAPPLE));
                 break;
 
             case UP:
@@ -217,7 +217,7 @@ void BoardView::updateMonsters() {
                 break;
 
             case RIGHT_UP:
-                s.setTexture(ResourceLoader::getSprite(RIGHT_PINEAPPLE));
+                s.setTexture(ResourceLoader::getSprite(RIGHT_UP_PINEAPPLE));
                 break;
 
             case RIGHT:
@@ -225,7 +225,7 @@ void BoardView::updateMonsters() {
                 break;
 
             case RIGHT_DOWN:
-                s.setTexture(ResourceLoader::getSprite(RIGHT_PINEAPPLE));
+                s.setTexture(ResourceLoader::getSprite(RIGHT_DOWN_PINEAPPLE));
                 break;
 
             case DOWN:
@@ -233,7 +233,7 @@ void BoardView::updateMonsters() {
                 break;
 
             case LEFT_DOWN:
-                s.setTexture(ResourceLoader::getSprite(LEFT_PINEAPPLE));
+                s.setTexture(ResourceLoader::getSprite(LEFT_DOWN_PINEAPPLE));
                 break;
         }
         s.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
