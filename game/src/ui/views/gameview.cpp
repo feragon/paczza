@@ -15,14 +15,13 @@ GameView::~GameView() {
 
 void GameView::render(double timeElapsed) {
     _game->updateGame(timeElapsed);
+    BoardView::render(timeElapsed);
 
     _score = sf::Text("Score:"+std::to_string(_game->joueur()->points()), ResourceLoader::getFont(KONGTEXT), 32);
     _score.setPosition(window()->getView().getSize().x - _score.getLocalBounds().width - 20, window()->getView().getSize().y - _score.getLocalBounds().height - 20);
     window()->draw(_score);
 
     generateLifesIndicator(window()->getView().getSize());
-
-    BoardView::render(timeElapsed);
 
     if(_game->stopped()) {
         const char* title;
