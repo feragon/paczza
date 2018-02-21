@@ -51,6 +51,16 @@ class Element {
          * @return Coie de l'Element
          */
         virtual Element* clone() const = 0;
+
+        /**
+         * @brief Donne la représentation textuelle de l'élément
+         * @return String
+         */
+        virtual std::string toString() const;
+
+        operator std::string() const;
+
+        friend std::ostream& operator << (std::ostream& o, const Element* element);
 };
 
 Sprite Element::sprite() const {

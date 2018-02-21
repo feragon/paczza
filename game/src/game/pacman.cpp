@@ -13,3 +13,11 @@ void Pacman::takeLife() {
     }
     _nbLifes--;
 }
+
+std::string Pacman::toString() const {
+    std::ostringstream oss;
+    oss << "Pacman(" << Player::toString() << "; "
+        << "_points=" << _points << "; "
+        << "_nbLifes" << _nbLifes << ")";
+    return oss.str();
+}

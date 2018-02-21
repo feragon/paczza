@@ -56,6 +56,16 @@ class Player {
          * @param avancement
          */
         inline void setAvancement(double avancement);
+
+        virtual /**
+         * @brief Donne la représentation textuelle du joueur
+         * @return String
+         */
+        std::string toString() const;
+
+        operator std::string();
+
+        friend std::ostream& operator << (std::ostream& o, const Player* player);
 };
 
 const Sommet<Case>* Player::position() const {

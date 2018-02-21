@@ -52,6 +52,8 @@ class Case : public InfoSommet<Sommet<Case>> {
         void heberge(Pacman& joueur);
 
         friend std::ostream& operator<<(std::ostream &, const Case&);
+
+        operator std::string() const;
 };
 
 Position<> Case::position() const {

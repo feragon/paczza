@@ -16,3 +16,9 @@ std::ostream & operator<<(std::ostream &os, const Chemin& a) {
     os << "Chemin(_chaleur=" << a._chaleur << ")";
     return os;
 }
+
+Chemin::operator std::string() const {
+    std::ostringstream oss;
+    oss << (*this);
+    return oss.str();
+}

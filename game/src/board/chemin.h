@@ -24,6 +24,8 @@ class Chemin {
         bool estAccessible();
 
         friend std::ostream& operator<<(std::ostream &, const Chemin&);
+
+        operator std::string() const;
 };
 
 

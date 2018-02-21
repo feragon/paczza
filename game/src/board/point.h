@@ -12,4 +12,6 @@ class Point : public Element {
         bool traversePar(Pacman& joueur) const override;
 
         Element* clone() const override;
+
+        virtual std::string toString() const override;
 };

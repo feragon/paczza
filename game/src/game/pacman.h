@@ -32,6 +32,8 @@ class Pacman : public Player {
 
         inline void addLife(unsigned short nbLifes);
 
+        virtual std::string toString() const override;
+
     private:
         int _points;
         unsigned short _nbLifes;

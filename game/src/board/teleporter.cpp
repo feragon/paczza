@@ -14,3 +14,9 @@ bool Teleporter::traversePar(Pacman& joueur) const {
 Element* Teleporter::clone() const {
     return new Teleporter(sprite(), sound(), _target);
 }
+
+std::string Teleporter::toString() const {
+    std::ostringstream oss;
+    oss << "Teleporter(" << Element::toString() << "; _target" << _target << ")";
+    return oss.str();
+}

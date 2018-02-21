@@ -62,3 +62,9 @@ std::ostream & operator<<(std::ostream &os, const Case& s) {
     os << "Case(" << s.position() << ")";
     return os;
 }
+
+Case::operator std::string() const {
+    std::ostringstream oss;
+    oss << (*this);
+    return oss.str();
+}

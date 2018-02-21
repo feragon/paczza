@@ -10,6 +10,8 @@ class Teleporter : public Element {
 
         virtual Element* clone() const override;
 
+        virtual std::string toString() const override;
+
     private:
         Sommet<Case>* _target;
 };

@@ -15,3 +15,9 @@ bool Point::traversePar(Pacman& joueur) const {
 Element* Point::clone() const {
     return new Point(sprite(), sound(), _points);
 }
+
+std::string Point::toString() const {
+    std::ostringstream oss;
+    oss << "Point(" << Element::toString() << "; _points" << _points << ")";
+    return oss.str();
+}

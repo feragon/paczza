@@ -18,6 +18,8 @@ class Monster : public Player {
          */
         inline void setWeak(bool isWeak);
 
+        virtual std::string toString() const override;
+
     private:
         bool _isWeak;
 };
