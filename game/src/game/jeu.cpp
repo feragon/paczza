@@ -68,6 +68,7 @@ void Jeu::updatePlayers(double timeElapsed) {
 
                     if (newPosition == joueur()->position()) {
                         _stopped = true;
+                        return;
                     }
                 }
                 catch (std::out_of_range& e) {
@@ -75,6 +76,16 @@ void Jeu::updatePlayers(double timeElapsed) {
                 }
             }
             _monsterManager->moveMonsters(_newPlayerPosition->contenu().position());
+
+            for (Liste<Monster>* monsters = monstres(); monsters; monsters = monsters->next) {
+                try {
+                    monsters->value->setDirection(getDirection(_oldPositions[monsters->value]->contenu().position(),
+                                                               _monsterManager->newPosition(monsters->value)));
+                }
+                catch (std::out_of_range& e) {
+
+                }
+            }
         }
 
         Direction oldDirection = joueur()->direction();
@@ -100,33 +111,6 @@ void Jeu::updatePlayers(double timeElapsed) {
         if (_monsterManager) {
             for (Liste<Monster>* monsters = monstres(); monsters; monsters = monsters->next) {
                 try {
-                    Position<double> vect = _monsterManager->newPosition(monsters->value) -
-                                            _oldPositions[monsters->value]->contenu().position();
-
-                    if (vect.x < 0) {
-                        if (vect.y == 0) {
-                            monsters->value->setDirection(LEFT);
-                        } else if (vect.y < 0) {
-                            monsters->value->setDirection(LEFT_UP);
-                        } else {
-                            monsters->value->setDirection(LEFT_DOWN);
-                        }
-                    } else if (vect.x == 0) {
-                        if (vect.y < 0) {
-                            monsters->value->setDirection(UP);
-                        } else {
-                            monsters->value->setDirection(DOWN);
-                        }
-                    } else {
-                        if (vect.y == 0) {
-                            monsters->value->setDirection(RIGHT);
-                        } else if (vect.y < 0) {
-                            monsters->value->setDirection(RIGHT_UP);
-                        } else {
-                            monsters->value->setDirection(RIGHT_DOWN);
-                        }
-                    }
-
                     if (_monsterManager->newPosition(monsters->value) !=
                         _oldPositions[monsters->value]->contenu().position()) {
                         monsters->value->setAvancement(movement);
@@ -150,12 +134,13 @@ void Jeu::updatePlayers(double timeElapsed) {
                 }
 
                 if(getDirection(monsters->value->position()->contenu().position(), joueur()->position()->contenu().position()) != monsters->value->direction()) {
-                    return;
+                    continue;
                 }
 
                 if (abs(joueur()->direction() - monsters->value->direction()) == NB_DIRECTIONS / 2 ||
                     joueur()->position() == _newPlayerPosition) {
                     _stopped = true;
+                    return;
                 }
             }
         }
@@ -235,11 +220,22 @@ void Jeu::start() {
         _newDirection = UP;
         _newPlayerPosition = getNextPlayerPosition();
 
+        for(Liste<Arete<Chemin, Case>>* aretes = _plateau->aretes(); aretes; aretes = aretes->next) {
+            if(aretes->value->contenu().estAccessible()) {
+                aretes->value->contenu().setChaleur(0);
+            }
+        }
+
         _monsterManager->moveMonsters(joueur()->position()->contenu().position());
 
-        for(Liste<Arete<Chemin, Case>>* aretes = _plateau->aretes(); aretes; aretes = aretes->next) {
-            if(aretes->value->contenu().estAccessible())
-                aretes->value->contenu().setChaleur(0);
+        for (Liste<Monster>* monsters = monstres(); monsters; monsters = monsters->next) {
+            try {
+                monsters->value->setDirection(getDirection(_oldPositions[monsters->value]->contenu().position(),
+                                                           _monsterManager->newPosition(monsters->value)));
+            }
+            catch (std::out_of_range& e) {
+
+            }
         }
 
         Listened<BoardListener>::callListeners(&BoardListener::onNewTurn);
