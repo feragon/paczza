@@ -1,4 +1,5 @@
 #include "chemin.h"
+#include <sstream>
 
 Chemin::Chemin(double chaleur) {
     _chaleur = chaleur;

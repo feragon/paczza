@@ -1,4 +1,5 @@
 #include "player.h"
+#include <board/case.h>
 
 Player::Player(const Sommet<Case>* p, Direction direction) {
     _position = p;
@@ -8,7 +9,7 @@ Player::Player(const Sommet<Case>* p, Direction direction) {
 
 std::string Player::toString() const {
     std::ostringstream oss;
-    oss << "Player(_position=" << _position << "; "
+    oss << "Player(_position=" << (*_position) << "; "
         << "_direction=" << _direction << "; "
         << "_avancement=" << _avancement << ")";
     return oss.str();

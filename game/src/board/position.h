@@ -29,7 +29,7 @@ class Position {
         Position operator - (T offset) const;
 
         template<typename osT>
-        friend std::ostream& operator<<(std::ostream& os, const Position<osT>& position);*
+        friend std::ostream& operator<<(std::ostream& os, const Position<osT>& position);
 
         operator std::string() const;
 };
@@ -93,5 +93,5 @@ template<typename T>
 Position<T>::operator std::string() const {
     std::ostringstream oss;
     oss << (*this);
-    return oss;
+    return oss.str();
 }

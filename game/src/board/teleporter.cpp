@@ -1,4 +1,5 @@
 #include "teleporter.h"
+#include "case.h"
 
 Teleporter::Teleporter(Sprite sprite, Sound sound, Sommet<Case>* target) :
         Element(sprite, sound),
