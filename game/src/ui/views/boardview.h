@@ -30,6 +30,11 @@ class BoardView : public View, public BoardListener {
 
         virtual void onNewTurn() override;
 
+        /**
+         * @return Sprite animé du joueur
+         */
+        inline AnimatedSprite& joueur();
+
     protected:
         void genererSpritesElements();
 
@@ -54,4 +59,8 @@ class BoardView : public View, public BoardListener {
 
 Board* BoardView::board() {
     return _board;
+}
+
+AnimatedSprite& BoardView::joueur() {
+    return _joueur;
 }

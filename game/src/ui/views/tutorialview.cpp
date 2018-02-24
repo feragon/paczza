@@ -88,6 +88,7 @@ void TutorialView::update() {
 
             _indication.setString(L"Voici Paczza,\nvotre pizza préférée.");
             _indication.setCharacterSize(32);
+            _gameView.joueur().setInfinite(true); //TODO
             break;
         }
 

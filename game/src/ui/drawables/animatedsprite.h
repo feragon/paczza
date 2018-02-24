@@ -37,6 +37,17 @@ class AnimatedSprite : public sf::Drawable, public sf::Transformable {
          */
         void reset();
 
+        /**
+         * @return Vrai si l'animation tourne en boucle
+         */
+        inline bool infinite() const;
+
+        /**
+         * @brief Définit si l'animation tourne en boucle
+         * @param infinite Vrai si l'animation doit tourner en boucle
+         */
+        inline void setInfinite(bool infinite);
+
         sf::FloatRect getGlobalBounds();
     protected:
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -49,3 +60,11 @@ class AnimatedSprite : public sf::Drawable, public sf::Transformable {
         double _frame;
         bool _infinite;
 };
+
+bool AnimatedSprite::infinite() const {
+        return _infinite;
+}
+
+void AnimatedSprite::setInfinite(bool infinite) {
+        _infinite = infinite;
+}
