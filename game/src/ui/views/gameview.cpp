@@ -22,30 +22,6 @@ void GameView::render(double timeElapsed) {
     window()->draw(_score);
 
     generateLifesIndicator(window()->getView().getSize());
-
-    if(_game->stopped()) {
-        const char* title;
-        if(_game->remainingPoints() == 0) {
-            title = "YOU WON!";
-        }
-        else {
-            if(_game->joueur()->nbLifes() > 0) {
-                title = "READY?!";
-            }
-            else {
-                title = "GAME OVER!";
-            }
-        }
-        sf::Text gameover = sf::Text(title, ResourceLoader::getFont(KONGTEXT), 72);
-        gameover.setOrigin(gameover.getLocalBounds().width / 2, gameover.getLocalBounds().height / 2);
-        gameover.setPosition(window()->getView().getSize().x / 2, window()->getView().getSize().y / 2);
-        window()->draw(gameover);
-
-        sf::Sprite returnKey(ResourceLoader::getSprite(RETURN_KEY));
-        returnKey.setOrigin(0, returnKey.getLocalBounds().height / 3);
-        returnKey.setPosition(gameover.getGlobalBounds().left + gameover.getGlobalBounds().width, window()->getView().getSize().y / 2);
-        window()->draw(returnKey);
-    }
 }
 
 void GameView::onEvent(const sf::Event& event) {
