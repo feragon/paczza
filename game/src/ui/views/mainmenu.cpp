@@ -1,13 +1,12 @@
 #include <iostream>
 #include <game/jeu.h>
 #include <ui/menu/menubutton.h>
-#include <game/astarmonstermanager.h>
 #include <util/shared_ptr.h>
 #include <game/pacmangame.h>
 #include "mainmenu.h"
 #include "credits.h"
 #include "tutorialview.h"
-#include "gameview.h"
+#include "pacmangameview.h"
 
 MainMenu::MainMenu(sf::RenderWindow* window, FenetreJeu* f) :
     Menu(window, f) {
@@ -21,7 +20,7 @@ MainMenu::MainMenu(sf::RenderWindow* window, FenetreJeu* f) :
 
 void MainMenu::onNewGameSelected() {
     SharedPtr<PacmanGame> jeu;
-    fenetreJeu()->changerVue(new GameView(window(), fenetreJeu(), jeu));
+    fenetreJeu()->changerVue(new PacmanGameView(window(), fenetreJeu(), jeu));
 }
 
 void MainMenu::onHighScoreSelected() {
