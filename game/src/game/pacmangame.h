@@ -5,7 +5,6 @@
 class PacmanGame : public Jeu {
     public:
         PacmanGame();
-        virtual ~PacmanGame();
 
         void start() override;
 
@@ -22,7 +21,7 @@ class PacmanGame : public Jeu {
         void changeLevel();
 
         unsigned short _level;
-        std::vector<MonsterManager*> _levels;
+        std::vector<SharedPtr<MonsterManager>> _levels;
 };
 
 unsigned short PacmanGame::level() const {

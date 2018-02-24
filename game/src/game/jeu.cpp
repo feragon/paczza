@@ -6,8 +6,8 @@
 #include "astarmonstermanager.h"
 #include "util.h"
 
-Jeu::Jeu() {
-    _monsterManager = nullptr;
+Jeu::Jeu() :
+    _monsterManager(nullptr) {
     _plateau = new Board();
 
     updateOldPositions();
@@ -19,7 +19,6 @@ Jeu::Jeu() {
 
 Jeu::~Jeu() {
     delete _plateau;
-    //delete _monsterManager; TODO
 }
 
 void Jeu::updateGame(double timeElapsed) {
@@ -210,44 +209,35 @@ void Jeu::start() {
         return;
     }
 
-    try {
-        joueur()->takeLife();
+    joueur()->takeLife();
 
-        _timeSinceMove = 0;
+    _timeSinceMove = 0;
 
-        _plateau->placePlayers();
-        updateOldPositions();
-        _newDirection = UP;
-        _newPlayerPosition = getNextPlayerPosition();
+    _plateau->placePlayers();
+    updateOldPositions();
+    _newDirection = UP;
+    _newPlayerPosition = getNextPlayerPosition();
 
-        for(Liste<Arete<Chemin, Case>>* aretes = _plateau->aretes(); aretes; aretes = aretes->next) {
-            if(aretes->value->contenu().estAccessible()) {
-                aretes->value->contenu().setChaleur(0);
-            }
+    for(Liste<Arete<Chemin, Case>>* aretes = _plateau->aretes(); aretes; aretes = aretes->next) {
+        if(aretes->value->contenu().estAccessible()) {
+            aretes->value->contenu().setChaleur(0);
         }
+    }
 
-        _monsterManager->moveMonsters(joueur()->position()->contenu().position());
+    _monsterManager->moveMonsters(joueur()->position()->contenu().position());
 
-        for (Liste<Monster>* monsters = monstres(); monsters; monsters = monsters->next) {
-            try {
-                monsters->value->setDirection(getDirection(_oldPositions[monsters->value]->contenu().position(),
-                                                           _monsterManager->newPosition(monsters->value)));
-            }
-            catch (std::out_of_range& e) {
-
-            }
+    for (Liste<Monster>* monsters = monstres(); monsters; monsters = monsters->next) {
+        try {
+            monsters->value->setDirection(getDirection(_oldPositions[monsters->value]->contenu().position(),
+                                                       _monsterManager->newPosition(monsters->value)));
         }
+        catch (std::out_of_range& e) {
 
-        Listened<BoardListener>::callListeners(&BoardListener::onNewTurn);
-        _stopped = false;
+        }
     }
-    catch(NoRemainingLife& e) {
 
-    }
-}
-
-void Jeu::setMonsterManager(MonsterManager* monsterManager) {
-    _monsterManager = monsterManager;
+    Listened<BoardListener>::callListeners(&BoardListener::onNewTurn);
+    _stopped = false;
 }
 
 void Jeu::updateOldPositions() {

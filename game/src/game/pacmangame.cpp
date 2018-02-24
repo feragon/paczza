@@ -5,18 +5,12 @@
 #include "nomorelevels.h"
 
 PacmanGame::PacmanGame() : Jeu() {
-    _levels.push_back(new DumbMonsterManager(plateau()));
-    _levels.push_back(new SenseMonsterManager(plateau()));
-    _levels.push_back(new AStarMonsterManager(plateau()));
+    _levels.push_back(SharedPtr<DumbMonsterManager>(plateau()));
+    _levels.push_back(SharedPtr<SenseMonsterManager>(plateau()));
+    _levels.push_back(SharedPtr<AStarMonsterManager>(plateau()));
 
     _level = 1;
     setMonsterManager(_levels[0]);
-}
-
-PacmanGame::~PacmanGame() {
-    for(MonsterManager* level : _levels) {
-        delete level;
-    }
 }
 
 void PacmanGame::start() {

@@ -1,5 +1,7 @@
 #include <ui/resourceloader.h>
 #include <SFML/Window/Event.hpp>
+#include <game/nomorelevels.h>
+#include <game/noremaininglife.h>
 #include "pacmangameview.h"
 
 PacmanGameView::PacmanGameView(sf::RenderWindow* window, FenetreJeu* f, const SharedPtr<PacmanGame>& game) :
@@ -44,7 +46,17 @@ void PacmanGameView::onEvent(const sf::Event& event) {
     GameView::onEvent(event);
 
     if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return) {
-        updateLevelText();
+        try {
+            _game->start();
+            genererSpritesElements();
+            updateLevelText();
+        }
+        catch(NoMoreLevels& e) {
+            fenetreJeu()->vuePrecedente();
+        }
+        catch(NoRemainingLife& e) {
+            fenetreJeu()->vuePrecedente();
+        }
     }
 }
 

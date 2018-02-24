@@ -19,12 +19,15 @@ class SharedPtr {
         template <typename... Args>
         explicit SharedPtr(Args... args);
 
+        explicit SharedPtr(nullptr_t);
+
         SharedPtr(const SharedPtr& other);
         template <typename U>
         SharedPtr(const SharedPtr<U>& other);
 
         virtual ~SharedPtr();
 
+        SharedPtr<T>& operator = (nullptr_t other);
         SharedPtr<T>& operator = (const SharedPtr& other);
         template <typename U>
         SharedPtr<T>& operator = (const SharedPtr<U>& other);
@@ -33,6 +36,11 @@ class SharedPtr {
         inline T& operator *() const;
         inline T* get() const;
         inline unsigned int count() const;
+
+        template <typename U>
+        bool operator == (const U* other) const;
+
+        operator bool() const;
 };
 
 template<typename T>
@@ -42,6 +50,12 @@ SharedPtr<T>::SharedPtr(Args... args) {
     *_count = 1;
 
     _ptr = new T(args...);
+}
+
+template<typename T>
+SharedPtr<T>::SharedPtr(nullptr_t) {
+    _count = new unsigned int(1);
+    _ptr = nullptr;
 }
 
 template<typename T>
@@ -112,4 +126,22 @@ void SharedPtr<T>::release() {
         delete _count;
         delete _ptr;
     }
+}
+
+template<typename T>
+template<typename U>
+bool SharedPtr<T>::operator==(const U* other) const {
+    return _ptr == other;
+}
+
+template<typename T>
+SharedPtr<T>& SharedPtr<T>::operator=(nullptr_t other) {
+    release();
+    _ptr = nullptr;
+    _count = new unsigned int(1);
+}
+
+template<typename T>
+SharedPtr<T>::operator bool() const {
+    return (bool) _ptr;
 }

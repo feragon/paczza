@@ -4,6 +4,7 @@
 #include <board/chemin.h>
 #include <sprite.h>
 #include <board/board.h>
+#include <util/shared_ptr.h>
 #include "player.h"
 #include "monstermanager.h"
 #include "direction.h"
@@ -16,7 +17,7 @@ class Jeu : public Listened<BoardListener> {
 
         Board* _plateau;
         std::map<Player*, const Sommet<Case>*> _oldPositions;
-        MonsterManager* _monsterManager;
+        SharedPtr<MonsterManager> _monsterManager;
         double _timeSinceMove;
         Sommet<Case>* _newPlayerPosition;
         Direction _newDirection;
@@ -55,7 +56,7 @@ class Jeu : public Listened<BoardListener> {
          * @brief Donne le gestionnaire de monstres
          * @return MonsterManager
          */
-        inline const MonsterManager* monsterManager() const;
+        inline SharedPtr<const MonsterManager> monsterManager() const;
 
         /**
          * @brief Donne le nombre de points restant sur le plateau
@@ -85,7 +86,7 @@ class Jeu : public Listened<BoardListener> {
          * @brief Change le gestionnaire de monstres
          * @param monsterManager Nouveau gestionnaire
          */
-        void setMonsterManager(MonsterManager* monsterManager);
+        inline void setMonsterManager(SharedPtr<MonsterManager> monsterManager);
 
         /**
          * @brief Donne l'état du jeu
@@ -119,7 +120,7 @@ bool Jeu::stopped() const {
     return _stopped;
 }
 
-const MonsterManager* Jeu::monsterManager() const {
+SharedPtr<const MonsterManager> Jeu::monsterManager() const {
     return _monsterManager;
 }
 
@@ -127,3 +128,6 @@ unsigned int Jeu::remainingPoints() const {
     return _remainingPoints;
 }
 
+void Jeu::setMonsterManager(SharedPtr<MonsterManager> monsterManager) {
+    _monsterManager = monsterManager;
+}
