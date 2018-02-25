@@ -84,7 +84,7 @@ set(SOURCE_FILES
         src/game/pacmangame.h
         src/game/util.h
         src/game/util.cpp
-        src/ui/views/pacmangameview.cpp src/ui/views/pacmangameview.h src/ui/command/command.h src/ui/command/commandreceiver.h src/ui/command/unknowncommand.h src/ui/menu/menumoveselector.cpp src/ui/menu/menumoveselector.h)
+        src/ui/views/pacmangameview.cpp src/ui/views/pacmangameview.h src/ui/command/command.h src/ui/command/commandreceiver.h src/ui/command/unknowncommand.h src/ui/menu/menumoveselector.cpp src/ui/menu/menumoveselector.h src/ui/menu/buttontrigger.cpp src/ui/menu/buttontrigger.h)
 
 find_package(SFML 2 COMPONENTS graphics window system audio REQUIRED)
 include_directories(${SFML_INCLUDE_DIR})

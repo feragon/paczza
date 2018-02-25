@@ -2,9 +2,10 @@
 
 #include <functional>
 #include <SFML/Graphics/Text.hpp>
+#include <ui/command/commandreceiver.h>
 #include "menuitem.h"
 
-class MenuButton : public MenuItem {
+class MenuButton : public MenuItem, public CommandReceiver<sf::Keyboard::Key> {
     public:
         MenuButton(const std::wstring& title, const std::function<void(void)>& callback);
 
@@ -14,6 +15,8 @@ class MenuButton : public MenuItem {
         virtual void setPosition(const sf::Vector2f& position) override;
 
         virtual void onEvent(const sf::Event& event) override;
+
+        void executeCallback() const;
 
     protected:
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
