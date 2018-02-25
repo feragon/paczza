@@ -12,6 +12,12 @@ class Credits : public View {
         virtual void resize(const sf::Vector2f& size) override;
         virtual void onEvent(const sf::Event& event) override;
 
+        /**
+         * @brief Change la vitesse de défilement
+         * @param speed Nouvelle vitesse
+         */
+        void setSpeed(int speed);
+
     private:
         /**
          * @brief Déplace le texte
