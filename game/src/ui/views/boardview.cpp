@@ -200,45 +200,49 @@ void BoardView::playerMovementBegin(Pacman* player) {
 
 void BoardView::updateMonsters() {
     _monsters.clear();
+    unsigned short i = 0;
 
     for(Liste<Monster>* monsters = board()->monsters(); monsters; monsters = monsters->next) {
         sf::Sprite s;
+        Sprite resource;
 
         switch(monsters->value->direction()) {
             case LEFT:
-                s.setTexture(ResourceLoader::getSprite(LEFT_PINEAPPLE));
+                resource = static_cast<Sprite>(LEFT_GREEN_PINEAPPLE + i*8);
                 break;
             case LEFT_UP:
-                s.setTexture(ResourceLoader::getSprite(LEFT_UP_PINEAPPLE));
+                resource = static_cast<Sprite>(LEFT_UP_GREEN_PINEAPPLE + i*8);
                 break;
 
             case UP:
-                s.setTexture(ResourceLoader::getSprite(UP_PINEAPPLE));
+                resource = static_cast<Sprite>(UP_GREEN_PINEAPPLE + i*8);
                 break;
 
             case RIGHT_UP:
-                s.setTexture(ResourceLoader::getSprite(RIGHT_UP_PINEAPPLE));
+                resource = static_cast<Sprite>(RIGHT_UP_GREEN_PINEAPPLE + i*8);
                 break;
 
             case RIGHT:
-                s.setTexture(ResourceLoader::getSprite(RIGHT_PINEAPPLE));
+                resource = static_cast<Sprite>(RIGHT_GREEN_PINEAPPLE + i*8);
                 break;
 
             case RIGHT_DOWN:
-                s.setTexture(ResourceLoader::getSprite(RIGHT_DOWN_PINEAPPLE));
+                resource = static_cast<Sprite>(RIGHT_DOWN_GREEN_PINEAPPLE + i*8);
                 break;
 
             case DOWN:
-                s.setTexture(ResourceLoader::getSprite(DOWN_PINEAPPLE));
+                resource = static_cast<Sprite>(DOWN_GREEN_PINEAPPLE + i*8);
                 break;
 
             case LEFT_DOWN:
-                s.setTexture(ResourceLoader::getSprite(LEFT_DOWN_PINEAPPLE));
+                resource = static_cast<Sprite>(LEFT_DOWN_GREEN_PINEAPPLE + i*8);
                 break;
         }
+        s.setTexture(ResourceLoader::getSprite(resource));
         s.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
 
         _monsters[monsters->value] = s;
+        i++;
     }
 }
 

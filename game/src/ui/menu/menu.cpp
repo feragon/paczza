@@ -4,7 +4,7 @@
 
 Menu::Menu(sf::RenderWindow* window, FenetreJeu *f) :
         View(window, f),
-        _selector(ResourceLoader::getSprite(Sprite::RIGHT_PINEAPPLE)) {
+        _selector(ResourceLoader::getSprite(Sprite::RIGHT_GREEN_PINEAPPLE)) {
 
     setFond(EMPTY_CELL);
     _selected = 0;
