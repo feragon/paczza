@@ -84,7 +84,17 @@ set(SOURCE_FILES
         src/game/pacmangame.h
         src/game/util.h
         src/game/util.cpp
-        src/ui/views/pacmangameview.cpp src/ui/views/pacmangameview.h src/ui/command/command.h src/ui/command/commandreceiver.h src/ui/command/unknowncommand.h src/ui/menu/menumoveselector.cpp src/ui/menu/menumoveselector.h src/ui/menu/buttontrigger.cpp src/ui/menu/buttontrigger.h)
+        src/ui/views/pacmangameview.cpp
+        src/ui/views/pacmangameview.h
+        src/ui/command/command.h
+        src/ui/command/commandreceiver.h
+        src/ui/command/commandreceiver.cpp
+        src/ui/command/unknowncommand.h
+        src/ui/menu/menumoveselector.cpp
+        src/ui/menu/menumoveselector.h
+        src/ui/menu/buttontrigger.cpp
+        src/ui/menu/buttontrigger.h
+)
 
 find_package(SFML 2 COMPONENTS graphics window system audio REQUIRED)
 include_directories(${SFML_INCLUDE_DIR})
@@ -94,5 +104,5 @@ include_directories(src)
 add_executable(paczza ${SOURCE_FILES})
 target_link_libraries(paczza ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
 
-add_library(game ${SOURCE_FILES} src/astar/infosommet.h src/astar/etat.h src/util/listened.h src/game/nomorelevels.h)
+add_library(game ${SOURCE_FILES} src/astar/infosommet.h src/astar/etat.h src/util/listened.h src/game/nomorelevels.h src/ui/command/commandreceiver.cpp)
 target_link_libraries(game ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})

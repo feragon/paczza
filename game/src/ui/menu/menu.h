@@ -9,7 +9,7 @@
 #include "menuitem.h"
 #include "menumoveselector.h"
 
-class Menu : public View, public CommandReceiver<sf::Keyboard::Key> {
+class Menu : public View {
     protected:
         Menu(sf::RenderWindow* window, FenetreJeu *f);
         virtual ~Menu();

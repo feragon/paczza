@@ -5,7 +5,7 @@
 #include <ui/command/commandreceiver.h>
 #include "menuitem.h"
 
-class MenuButton : public MenuItem, public CommandReceiver<sf::Keyboard::Key> {
+class MenuButton : public MenuItem, public CommandReceiver {
     public:
         MenuButton(const std::wstring& title, const std::function<void(void)>& callback);
 

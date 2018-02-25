@@ -3,10 +3,11 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <sprite.h>
+#include <ui/command/commandreceiver.h>
 
 class FenetreJeu;
 
-class View {
+class View : public CommandReceiver {
     public:
         virtual ~View();
 

@@ -9,8 +9,8 @@ Menu::Menu(sf::RenderWindow* window, FenetreJeu *f) :
     setFond(EMPTY_CELL);
     _selected = 0;
 
-    setCommand(sf::Keyboard::Up, SharedPtr<MenuMoveSelector>(this, -1));
-    setCommand(sf::Keyboard::Down, SharedPtr<MenuMoveSelector>(this, 1));
+    setKeyPressedCommand(sf::Keyboard::Up, SharedPtr<MenuMoveSelector>(this, -1));
+    setKeyPressedCommand(sf::Keyboard::Down, SharedPtr<MenuMoveSelector>(this, 1));
 }
 
 Menu::~Menu() {
@@ -65,13 +65,11 @@ void Menu::updateSelectorPosition() {
 }
 
 void Menu::onEvent(const sf::Event& event) {
-    if(event.type == sf::Event::EventType::KeyPressed) {
-        try {
-            trigger(event.key.code);
-        }
-        catch(UnknownCommand& e) {
-            _items[_selected]->onEvent(event);
-        }
+    try {
+        manageEvent(event);
+    }
+    catch(UnknownCommand& e) {
+        _items[_selected]->onEvent(event);
     }
 }
 

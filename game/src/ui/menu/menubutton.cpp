@@ -6,13 +6,7 @@
 MenuButton::MenuButton(const std::wstring& title, const std::function<void(void)>& callback) {
     _text = sf::Text(sf::String(title), ResourceLoader::getFont(Font::KONGTEXT), 42);
     _callback = callback;
-    setCommand(sf::Keyboard::Return, SharedPtr<ButtonTrigger>(this));
-}
-
-void MenuButton::onEvent(const sf::Event& event) {
-    if(event.type == sf::Event::EventType::KeyPressed) {
-        trigger(event.key.code);
-    }
+    setKeyPressedCommand(sf::Keyboard::Return, SharedPtr<ButtonTrigger>(this));
 }
 
 void MenuButton::draw(sf::RenderTarget& target, sf::RenderStates states) const {
@@ -35,4 +29,13 @@ void MenuButton::setPosition(const sf::Vector2f& position) {
 
 void MenuButton::executeCallback() const {
     _callback();
+}
+
+void MenuButton::onEvent(const sf::Event& event) {
+    try {
+        manageEvent(event);
+    }
+    catch (UnknownCommand& e) {
+
+    }
 }
