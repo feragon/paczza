@@ -4,10 +4,12 @@
 #include <SFML/Graphics/Text.hpp>
 #include <functional>
 #include <ui/fenetrejeu.h>
+#include <ui/command/commandreceiver.h>
 #include "ui/views/view.h"
 #include "menuitem.h"
+#include "menumoveselector.h"
 
-class Menu : public View {
+class Menu : public View, public CommandReceiver<sf::Keyboard::Key> {
     protected:
         Menu(sf::RenderWindow* window, FenetreJeu *f);
         virtual ~Menu();
@@ -24,6 +26,8 @@ class Menu : public View {
         void render(double timeElapsed) override;
 
         virtual void onEvent(const sf::Event& event) override;
+
+        void updateSelector(long offset);
     private:
         /**
          * @brief Center menu texts

@@ -1,11 +1,6 @@
 #include "menu.h"
 #include "ui/views/boardview.h"
-#include <config.h>
-#include <math.h>
 #include <ui/resourceloader.h>
-#include <iostream>
-#include <SFML/Window/Event.hpp>
-#include <game/jeu.h>
 
 Menu::Menu(sf::RenderWindow* window, FenetreJeu *f) :
         View(window, f),
@@ -13,6 +8,9 @@ Menu::Menu(sf::RenderWindow* window, FenetreJeu *f) :
 
     setFond(EMPTY_CELL);
     _selected = 0;
+
+    setCommand(sf::Keyboard::Up, SharedPtr<MenuMoveSelector>(this, -1));
+    setCommand(sf::Keyboard::Down, SharedPtr<MenuMoveSelector>(this, 1));
 }
 
 Menu::~Menu() {
@@ -59,10 +57,6 @@ void Menu::updateSelectorPosition() {
         return;
     }
 
-    if(_selected >= _items.size()) {
-        _selected = 0;
-    }
-
     sf::Vector2f position = _items[_selected]->position();
 
     float top = position.y + (_items[_selected]->bounds().height - _selector.getLocalBounds().height) / 2;
@@ -72,22 +66,27 @@ void Menu::updateSelectorPosition() {
 
 void Menu::onEvent(const sf::Event& event) {
     if(event.type == sf::Event::EventType::KeyPressed) {
-        switch(event.key.code) {
-            case sf::Keyboard::Key::Down:
-                if(_selected < _items.size() - 1) {
-                    _selected++;
-                }
-                updateSelectorPosition();
-                break;
-
-            case sf::Keyboard::Key::Up:
-                if(_selected > 0) {
-                    _selected--;
-                }
-                updateSelectorPosition();
-                break;
-            default:
-                _items[_selected]->onEvent(event);
+        try {
+            trigger(event.key.code);
+        }
+        catch(UnknownCommand& e) {
+            _items[_selected]->onEvent(event);
         }
     }
+}
+
+void Menu::updateSelector(long offset) {
+    offset = offset % (long) _items.size();
+
+    int newSelected = _selected + offset;
+
+    if(newSelected < 0) {
+        newSelected += _items.size();
+    }
+    if(newSelected >= _items.size()) {
+        newSelected -= _items.size();
+    }
+
+    _selected = (unsigned int)newSelected;
+    updateSelectorPosition();
 }
