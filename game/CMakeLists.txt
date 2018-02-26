@@ -105,6 +105,8 @@ set(SOURCE_FILES
         src/ui/views/changedirectioncommand.h
         src/ui/views/startgamecommand.cpp
         src/ui/views/startgamecommand.h
+        src/ui/views/updatetutorialcommand.cpp
+        src/ui/views/updatetutorialcommand.h
 )
 
 find_package(SFML 2 COMPONENTS graphics window system audio REQUIRED)

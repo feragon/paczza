@@ -16,6 +16,11 @@ class TutorialView : public View {
 
         virtual void resize(const sf::Vector2f& size) override;
 
+        /**
+         * @brief Met à jour le tutoriel
+         */
+        void update();
+
     private:
         enum State {
             WELCOME,
@@ -29,11 +34,6 @@ class TutorialView : public View {
          */
         void center(sf::Text& text, sf::Sprite& sprite);
 
-        /**
-         * @brief Met à jour le tutoriel
-         */
-        void update();
-
         GameView _gameView;
         State _state;
         bool _sendEvents;
@@ -43,4 +43,6 @@ class TutorialView : public View {
         sf::Text _indication;
         sf::Sprite _returnKey;
         Fog* _fog;
+
+        CommandReceiver _commandReceiver;
 };

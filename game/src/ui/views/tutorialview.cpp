@@ -2,6 +2,7 @@
 #include <SFML/Window/Event.hpp>
 #include <config.h>
 #include "tutorialview.h"
+#include "updatetutorialcommand.h"
 
 TutorialView::TutorialView(sf::RenderWindow* window, FenetreJeu* f) :
         View(window, f),
@@ -16,6 +17,8 @@ TutorialView::TutorialView(sf::RenderWindow* window, FenetreJeu* f) :
     _returnKey = sf::Sprite(ResourceLoader::getSprite(RETURN_KEY));
     _fog = nullptr;
     center(_indication, _returnKey);
+
+    _commandReceiver.setKeyPressedCommand(sf::Keyboard::Return, SharedPtr<UpdateTutorialCommand>(this));
 }
 
 TutorialView::~TutorialView() {
@@ -25,18 +28,13 @@ TutorialView::~TutorialView() {
 }
 
 void TutorialView::onEvent(const sf::Event& event) {
-    if(_sendEvents) {
-        _gameView.onEvent(event);
+    try {
+        _commandReceiver.manageEvent(event);
     }
-    else {
-        if(event.type == sf::Event::KeyPressed) {
-            switch(event.key.code) {
-                case sf::Keyboard::Key::Return:
-                    update();
-            }
+    catch (UnknownCommand& e) {
+        if(_sendEvents) {
+            _gameView.onEvent(event);
         }
-
-        center(_indication, _returnKey);
     }
 }
 
