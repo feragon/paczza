@@ -9,9 +9,12 @@ class PacmanGameView : public GameView {
 
         virtual void render(double timeElapsed) override;
 
-        virtual void onEvent(const sf::Event& event) override;
-
         virtual void resize(const sf::Vector2f& size) override;
+
+        /**
+         * @brief Démarre la partie
+         */
+        void startGame();
 
     private:
         /**

@@ -3,6 +3,7 @@
 #include <game/nomorelevels.h>
 #include <game/noremaininglife.h>
 #include "pacmangameview.h"
+#include "startgamecommand.h"
 
 PacmanGameView::PacmanGameView(sf::RenderWindow* window, FenetreJeu* f, const SharedPtr<PacmanGame>& game) :
     GameView(window, f, game),
@@ -10,6 +11,8 @@ PacmanGameView::PacmanGameView(sf::RenderWindow* window, FenetreJeu* f, const Sh
     _game(game) {
 
     updateLevelText();
+
+    setKeyPressedCommand(sf::Keyboard::Return, SharedPtr<StartGameCommand>(this));
 }
 
 void PacmanGameView::render(double timeElapsed) {
@@ -42,21 +45,17 @@ void PacmanGameView::render(double timeElapsed) {
     }
 }
 
-void PacmanGameView::onEvent(const sf::Event& event) {
-    GameView::onEvent(event);
-
-    if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return) {
-        try {
-            _game->start();
-            genererSpritesElements();
-            updateLevelText();
-        }
-        catch(NoMoreLevels& e) {
-            fenetreJeu()->vuePrecedente();
-        }
-        catch(NoRemainingLife& e) {
-            fenetreJeu()->vuePrecedente();
-        }
+void PacmanGameView::startGame() {
+    try {
+        _game->start();
+        genererSpritesElements();
+        updateLevelText();
+    }
+    catch(NoMoreLevels& e) {
+        fenetreJeu()->vuePrecedente();
+    }
+    catch(NoRemainingLife& e) {
+        fenetreJeu()->vuePrecedente();
     }
 }
 
