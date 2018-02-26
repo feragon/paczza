@@ -45,7 +45,7 @@ class View : public CommandReceiver {
          * @brief Function called when an event is received
          * @param event Event received
          */
-        virtual void onEvent(const sf::Event& event) = 0;
+        virtual void onEvent(const sf::Event& event);
 
         /**
          * @brief Supprime le fond déjà crée

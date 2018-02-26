@@ -16,8 +16,6 @@ class GameView : public BoardView {
 
         virtual void render(double timeElapsed) override;
 
-        virtual void onEvent(const sf::Event& event) override;
-
         /**
          * @brief Donne le jeu actuellement affiché
          * @return Jeu

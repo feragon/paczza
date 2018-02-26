@@ -2,11 +2,21 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Window/Event.hpp>
 #include "gameview.h"
+#include "changedirectioncommand.h"
 
 GameView::GameView(sf::RenderWindow* window, FenetreJeu* f, SharedPtr<Jeu> game) :
         BoardView(window, f, game->plateau()) {
     _game = game;
     game->addListener(this); //TODO: trouver un meilleur endroit
+    
+    setKeyPressedCommand(sf::Keyboard::Numpad1, SharedPtr<ChangeDirectionCommand>(game.get(), LEFT_DOWN));
+    setKeyPressedCommand(sf::Keyboard::Numpad2, SharedPtr<ChangeDirectionCommand>(game.get(), DOWN));
+    setKeyPressedCommand(sf::Keyboard::Numpad3, SharedPtr<ChangeDirectionCommand>(game.get(), RIGHT_DOWN));
+    setKeyPressedCommand(sf::Keyboard::Numpad4, SharedPtr<ChangeDirectionCommand>(game.get(), LEFT));
+    setKeyPressedCommand(sf::Keyboard::Numpad6, SharedPtr<ChangeDirectionCommand>(game.get(), RIGHT));
+    setKeyPressedCommand(sf::Keyboard::Numpad7, SharedPtr<ChangeDirectionCommand>(game.get(), LEFT_UP));
+    setKeyPressedCommand(sf::Keyboard::Numpad8, SharedPtr<ChangeDirectionCommand>(game.get(), UP));
+    setKeyPressedCommand(sf::Keyboard::Numpad9, SharedPtr<ChangeDirectionCommand>(game.get(), RIGHT_UP));
 }
 
 GameView::~GameView() {
@@ -22,37 +32,6 @@ void GameView::render(double timeElapsed) {
     window()->draw(_score);
 
     generateLifesIndicator(window()->getView().getSize());
-}
-
-void GameView::onEvent(const sf::Event& event) {
-    if(event.type == sf::Event::EventType::KeyPressed) {
-        switch(event.key.code) {
-            case sf::Keyboard::Key::Numpad2:
-                _game->setDirection(DOWN);
-                break;
-            case sf::Keyboard::Key::Numpad8:
-                _game->setDirection(UP);
-                break;
-            case sf::Keyboard::Key::Numpad4:
-                _game->setDirection(LEFT);
-                break;
-            case sf::Keyboard::Key::Numpad6:
-                _game->setDirection(RIGHT);
-                break;
-            case sf::Keyboard::Key::Numpad1:
-                _game->setDirection(LEFT_DOWN);
-                break;
-            case sf::Keyboard::Key::Numpad3:
-                _game->setDirection(RIGHT_DOWN);
-                break;
-            case sf::Keyboard::Key::Numpad7:
-                _game->setDirection(LEFT_UP);
-                break;
-            case sf::Keyboard::Key::Numpad9:
-                _game->setDirection(RIGHT_UP);
-                break;
-        }
-    }
 }
 
 void GameView::generateLifesIndicator(const sf::Vector2f& windowSize) {

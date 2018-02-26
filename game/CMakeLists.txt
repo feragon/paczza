@@ -101,7 +101,7 @@ set(SOURCE_FILES
         src/ui/command/commandreceiver.cpp
         src/ui/views/updatecreditspeed.cpp
         src/ui/views/updatecreditspeed.h
-)
+        src/ui/views/changedirectioncommand.cpp src/ui/views/changedirectioncommand.h)
 
 find_package(SFML 2 COMPONENTS graphics window system audio REQUIRED)
 include_directories(${SFML_INCLUDE_DIR})

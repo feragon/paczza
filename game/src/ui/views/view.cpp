@@ -41,3 +41,12 @@ void View::render(double timeElapsed) {
         _window->draw(sprite);
     }
 }
+
+void View::onEvent(const sf::Event& event) {
+    try {
+        manageEvent(event);
+    }
+    catch (UnknownCommand& e) {
+
+    }
+}
