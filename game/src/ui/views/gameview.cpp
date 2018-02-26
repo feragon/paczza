@@ -91,9 +91,17 @@ void GameView::onMonsterWeaknessUpdate(const Monster* monster) {
 }
 
 void GameView::updateMonsters() {
-    //TODO: si le premier n'est pas vulnérable ?
-    double frame = _monsters.begin()->second.frame();
-    bool forward = _monsters.begin()->second.forward();
+    double frame = 0;
+    bool forward = true;
+
+    for(auto pair : _monsters) {
+        if(pair.first->weak()) {
+            frame = pair.second.frame();
+            forward = pair.second.forward();
+            break;
+        }
+    }
+
     _monsters.clear();
     unsigned short monsterNo = 0;
 
@@ -123,7 +131,7 @@ void GameView::updateMonsters() {
             as.setFrame(frame);
         }
         catch (std::runtime_error& e) {
-            std::cerr << e.what() << std::endl;
+
         }
 
         as.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
