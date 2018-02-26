@@ -19,41 +19,8 @@ struct cmpPosition {
 class Board : public Graphe<Chemin, Case> {
     public:
         Board();
-        virtual ~Board();
 
         inline Sommet<Case>* sommet(const Position<>& position) const;
-
-        /**
-         * @brief Donne le joueur
-         * @return Pacman
-         */
-        inline Pacman& player();
-
-        /**
-         * @brief Donne le joueur
-         * @return Pacman constant
-         */
-        inline const Pacman& player() const;
-
-        /**
-         * @brief Donne la liste des monstres sur le plateau
-         * @return Liste de monstres
-         */
-        inline Liste<Monster>* monsters();
-
-        /**
-         * @brief Place le joueur et les monstres à leur position de départ
-         */
-        void placePlayers();
-
-        /**
-         * @brief Place les éléments sur le plateau
-         */
-        void placeElements();
-
-    private:
-        void genererGraphe();
-        void addMonster(Sommet<Case>* position);
 
         /**
          * @brief Place un élément au hasard sur le graphe
@@ -64,27 +31,15 @@ class Board : public Graphe<Chemin, Case> {
          */
         void placerElementHasard(const Element& element, unsigned int limit = 10);
 
+    private:
+        void genererGraphe();
+
         unsigned int _width;
         unsigned int _height;
 
         std::map<Position<>, Sommet<Case>*, cmpPosition<>> _cases;
-
-        Pacman _player;
-        Liste<Monster>* _monsters;
 };
 
 Sommet<Case>* Board::sommet(const Position<>& position) const {
     return _cases.at(position);
-}
-
-Pacman& Board::player() {
-    return _player;
-}
-
-const Pacman& Board::player() const {
-    return _player;
-}
-
-Liste<Monster>* Board::monsters() {
-    return _monsters;
 }

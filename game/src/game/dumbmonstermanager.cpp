@@ -1,14 +1,15 @@
 #include "dumbmonstermanager.h"
+#include <game/jeu.h>
 
-DumbMonsterManager::DumbMonsterManager(Board* board) :
-        MonsterManager(board) {
+DumbMonsterManager::DumbMonsterManager(Jeu* game) :
+        MonsterManager(game) {
     srand(time(NULL));
 }
 
 void DumbMonsterManager::moveMonsters(const Position<>& playerPosition) {
     monsters().clear();
-    for(Liste<Monster>* monster = board()->monsters(); monster; monster = monster->next) {
-        monsters()[monster->value] = getNextPosition(board(), board()->sommet(monster->value->position()->contenu().position()));
+    for(Liste<Monster>* monster = game()->monsters(); monster; monster = monster->next) {
+        monsters()[monster->value] = getNextPosition(game()->plateau(), game()->plateau()->sommet(monster->value->position()->contenu().position()));
     }
 }
 

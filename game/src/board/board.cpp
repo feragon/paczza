@@ -1,6 +1,5 @@
 #include <map>
 #include "board.h"
-#include "point.h"
 #include "teleporter.h"
 
 template <typename T = int>
@@ -18,16 +17,8 @@ class PositionsEgales {
         }
 };
 
-Board::Board() :
-    _player(nullptr, UP, 3) { //TODO: devrait être dans jeu
-    _monsters = nullptr;
+Board::Board() {
     genererGraphe();
-    placeElements();
-    placePlayers();
-}
-
-Board::~Board() {
-    Liste<Monster>::efface2(_monsters);
 }
 
 void Board::genererGraphe() {
@@ -162,44 +153,4 @@ void Board::placerElementHasard(const Element& element, unsigned int limit) {
     }
 
     sommet(p)->contenu().setElement(&element);
-}
-
-void Board::placeElements() {
-    //Placement des points
-    try {
-        placerElementHasard(Point(TOMATO, BONUS, 50));
-        placerElementHasard(Point(CHEESE, BONUS, 50));
-        placerElementHasard(Point(HAM, BONUS, 50));
-        placerElementHasard(Point(MUSHROOM, BONUS, 50));
-    }
-    catch (std::exception& e) {
-        std::cerr << e.what() << std::endl;
-    }
-
-    Point element(TOMATO_SMUDGE, EAT, 10);
-    for(Liste<Sommet<Case>>* l = sommets(); l; l = l->next) {
-        if(l->value->degre() > 0 &&
-           !l->value->contenu().element()) {
-
-            l->value->contenu().setElement(&element);
-        }
-    }
-}
-
-void Board::placePlayers() {
-    Sommet<Case>* playerPos = _cases[Position<>(3,5)];
-    playerPos->contenu().setElement(nullptr);
-    _player.setPosition(playerPos);
-    _player.setDirection(UP);
-
-    Liste<Monster>::efface2(_monsters);
-    addMonster(_cases[Position<>(6,4)]);
-    addMonster(_cases[Position<>(6,5)]);
-    addMonster(_cases[Position<>(7,4)]);
-    addMonster(_cases[Position<>(7,5)]);
-}
-
-void Board::addMonster(Sommet<Case>* position) {
-    position->contenu().setElement(nullptr);
-    _monsters = new Liste<Monster>(new Monster(position, UP), _monsters);
 }

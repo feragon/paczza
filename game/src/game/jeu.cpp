@@ -2,13 +2,17 @@
 #include "jeu.h"
 #include <cmath>
 #include <board/point.h>
-#include "noremaininglife.h"
-#include "astarmonstermanager.h"
+#include <board/superpoint.h>
 #include "util.h"
 
 Jeu::Jeu() :
-    _monsterManager(nullptr) {
+    _monsterManager(nullptr),
+    _player(nullptr, UP, 3),
+    _monsters(nullptr) {
+
     _plateau = new Board();
+    placeElements();
+    placePlayers();
 
     updateOldPositions();
 
@@ -18,6 +22,7 @@ Jeu::Jeu() :
 }
 
 Jeu::~Jeu() {
+    Liste<Monster>::efface2(_monsters);
     delete _plateau;
 }
 
@@ -36,7 +41,7 @@ void Jeu::updatePlayers(double timeElapsed) {
     if(_timeSinceMove >= MOVEMENT_TIME) {
         _timeSinceMove = 0;
 
-        Arete<Chemin, Case>* arete = _plateau->getAreteParSommets(joueur()->position(), _newPlayerPosition);
+        Arete<Chemin, Case>* arete = _plateau->getAreteParSommets(_player.position(), _newPlayerPosition);
         if(arete && arete->contenu().estAccessible()) {
             arete->contenu().setChaleur(UINT8_MAX);
             Listened<BoardListener>::callListeners(&BoardListener::updateEdge, arete);
@@ -50,14 +55,14 @@ void Jeu::updatePlayers(double timeElapsed) {
             }
         }
 
-        joueur()->setPosition(_newPlayerPosition);
-        _newPlayerPosition->contenu().heberge(*joueur());
+        _player.setPosition(_newPlayerPosition);
+        _newPlayerPosition->contenu().heberge(_player);
         Listened<BoardListener>::callListeners(&BoardListener::updateVertice, _newPlayerPosition);
 
-        joueur()->setAvancement(0);
+        _player.setAvancement(0);
 
         if(_monsterManager) {
-            for (Liste<Monster>* monsters = monstres(); monsters; monsters = monsters->next) {
+            for (Liste<Monster>* monsters = _monsters; monsters; monsters = monsters->next) {
                 try {
                     Sommet<Case>* newPosition = _plateau->sommet(_monsterManager->newPosition(monsters->value));
                     monsters->value->setPosition(newPosition);
@@ -65,7 +70,7 @@ void Jeu::updatePlayers(double timeElapsed) {
 
                     _oldPositions[monsters->value] = newPosition;
 
-                    if (newPosition == joueur()->position()) {
+                    if (newPosition == _player.position()) {
                         _stopped = true;
                         return;
                     }
@@ -76,7 +81,7 @@ void Jeu::updatePlayers(double timeElapsed) {
             }
             _monsterManager->moveMonsters(_newPlayerPosition->contenu().position());
 
-            for (Liste<Monster>* monsters = monstres(); monsters; monsters = monsters->next) {
+            for (Liste<Monster>* monsters = _monsters; monsters; monsters = monsters->next) {
                 try {
                     monsters->value->setDirection(getDirection(_oldPositions[monsters->value]->contenu().position(),
                                                                _monsterManager->newPosition(monsters->value)));
@@ -87,28 +92,28 @@ void Jeu::updatePlayers(double timeElapsed) {
             }
         }
 
-        Direction oldDirection = joueur()->direction();
-        joueur()->setDirection(_newDirection);
+        Direction oldDirection = _player.direction();
+        _player.setDirection(_newDirection);
         Sommet<Case>* nextPlayerPosition = getNextPlayerPosition();
 
-        if(nextPlayerPosition == _newPlayerPosition && oldDirection != joueur()->direction()) {
-            joueur()->setDirection(oldDirection);
+        if(nextPlayerPosition == _newPlayerPosition && oldDirection != _player.direction()) {
+            _player.setDirection(oldDirection);
             _newDirection = oldDirection;
             nextPlayerPosition = getNextPlayerPosition();
         }
 
-        _oldPositions[joueur()] = joueur()->position();
+        _oldPositions[&_player] = _player.position();
         _newPlayerPosition = nextPlayerPosition;
 
-        if(joueur()->position() != _newPlayerPosition) {
-            Listened<BoardListener>::callListeners(&BoardListener::playerMovementBegin, joueur());
+        if(_player.position() != _newPlayerPosition) {
+            Listened<BoardListener>::callListeners(&BoardListener::playerMovementBegin, &_player);
         }
 
         Listened<BoardListener>::callListeners(&BoardListener::onNewTurn);
     }
     else {
         if (_monsterManager) {
-            for (Liste<Monster>* monsters = monstres(); monsters; monsters = monsters->next) {
+            for (Liste<Monster>* monsters = _monsters; monsters; monsters = monsters->next) {
                 try {
                     if (_monsterManager->newPosition(monsters->value) !=
                         _oldPositions[monsters->value]->contenu().position()) {
@@ -121,23 +126,23 @@ void Jeu::updatePlayers(double timeElapsed) {
             }
         }
 
-        if (joueur()->position()->contenu().position() != _newPlayerPosition->contenu().position()) {
-            joueur()->setAvancement(movement);
+        if (_player.position()->contenu().position() != _newPlayerPosition->contenu().position()) {
+            _player.setAvancement(movement);
         }
 
         if(_monsterManager && movement >= 0.5) {
-            for (Liste<Monster>* monsters = monstres(); monsters; monsters = monsters->next) {
-                Arete<Chemin, Case>* arete = _plateau->getAreteParSommets(joueur()->position(), monsters->value->position());
+            for (Liste<Monster>* monsters = _monsters; monsters; monsters = monsters->next) {
+                Arete<Chemin, Case>* arete = _plateau->getAreteParSommets(_player.position(), monsters->value->position());
                 if(!arete) {
                     continue;
                 }
 
-                if(getDirection(monsters->value->position()->contenu().position(), joueur()->position()->contenu().position()) != monsters->value->direction()) {
+                if(getDirection(monsters->value->position()->contenu().position(), _player.position()->contenu().position()) != monsters->value->direction()) {
                     continue;
                 }
 
-                if (abs(joueur()->direction() - monsters->value->direction()) == NB_DIRECTIONS / 2 ||
-                    joueur()->position() == _newPlayerPosition) {
+                if (abs(_player.direction() - monsters->value->direction()) == NB_DIRECTIONS / 2 ||
+                    _player.position() == _newPlayerPosition) {
                     _stopped = true;
                     return;
                 }
@@ -147,10 +152,10 @@ void Jeu::updatePlayers(double timeElapsed) {
 }
 
 Sommet<Case>* Jeu::getNextPlayerPosition() {
-    Sommet<Case>* actuelle = _plateau->sommet(joueur()->position()->contenu().position());
+    Sommet<Case>* actuelle = _plateau->sommet(_player.position()->contenu().position());
 
     Position<> moveVect;
-    switch (joueur()->direction()) {
+    switch (_player.direction()) {
         case LEFT:
             moveVect = Position<>(-1, 0);
             break;
@@ -197,7 +202,9 @@ Sommet<Case>* Jeu::getNextPlayerPosition() {
                 return nextVertice;
             }
         }
-        catch(std::exception e) {}
+        catch(std::exception& e) {
+
+        }
     }
 
     Liste<std::pair<Sommet<Case>*, Arete<Chemin, Case>*>>::efface2(voisins);
@@ -209,11 +216,11 @@ void Jeu::start() {
         return;
     }
 
-    joueur()->takeLife();
+    _player.takeLife();
 
     _timeSinceMove = 0;
 
-    _plateau->placePlayers();
+    placePlayers();
     updateOldPositions();
     _newDirection = UP;
     _newPlayerPosition = getNextPlayerPosition();
@@ -224,9 +231,9 @@ void Jeu::start() {
         }
     }
 
-    _monsterManager->moveMonsters(joueur()->position()->contenu().position());
+    _monsterManager->moveMonsters(_player.position()->contenu().position());
 
-    for (Liste<Monster>* monsters = monstres(); monsters; monsters = monsters->next) {
+    for (Liste<Monster>* monsters = _monsters; monsters; monsters = monsters->next) {
         try {
             monsters->value->setDirection(getDirection(_oldPositions[monsters->value]->contenu().position(),
                                                        _monsterManager->newPosition(monsters->value)));
@@ -241,8 +248,8 @@ void Jeu::start() {
 }
 
 void Jeu::updateOldPositions() {
-    _oldPositions[joueur()] = joueur()->position();
-    for(Liste<Monster>* monsters = monstres(); monsters; monsters = monsters->next) {
+    _oldPositions[&_player] = _player.position();
+    for(Liste<Monster>* monsters = _monsters; monsters; monsters = monsters->next) {
         _oldPositions[monsters->value] = monsters->value->position();
     }
 }
@@ -255,4 +262,51 @@ void Jeu::updatePoints() {
             _remainingPoints += (bool) dynamic_cast<Point*>(e);
         }
     }
+}
+
+void Jeu::setMonstersWeak() {
+    for(Liste<Monster>* monster = _monsters; monster; monster = monster->next) {
+        monster->value->setWeak(true);
+        Listened<BoardListener>::callListeners(&BoardListener::onMonsterWeaknessUpdate, monster->value);
+    }
+}
+
+void Jeu::placeElements() {
+    //Placement des points
+    try {
+        _plateau->placerElementHasard(SuperPoint(TOMATO, BONUS, 50, this));
+        _plateau->placerElementHasard(SuperPoint(CHEESE, BONUS, 50, this));
+        _plateau->placerElementHasard(SuperPoint(HAM, BONUS, 50, this));
+        _plateau->placerElementHasard(SuperPoint(MUSHROOM, BONUS, 50, this));
+    }
+    catch (std::exception& e) {
+        std::cerr << e.what() << std::endl;
+    }
+
+    Point element(TOMATO_SMUDGE, EAT, 10);
+    for(Liste<Sommet<Case>>* l = _plateau->sommets(); l; l = l->next) {
+        if(l->value->degre() > 0 &&
+           !l->value->contenu().element()) {
+
+            l->value->contenu().setElement(&element);
+        }
+    }
+}
+
+void Jeu::placePlayers() {
+    Sommet<Case>* playerPos = _plateau->sommet(Position<>(3,5));
+    playerPos->contenu().setElement(nullptr);
+    _player.setPosition(playerPos);
+    _player.setDirection(UP);
+
+    Liste<Monster>::efface2(_monsters);
+    addMonster(_plateau->sommet(Position<>(6,4)));
+    addMonster(_plateau->sommet(Position<>(6,5)));
+    addMonster(_plateau->sommet(Position<>(7,4)));
+    addMonster(_plateau->sommet(Position<>(7,5)));
+}
+
+void Jeu::addMonster(Sommet<Case>* position) {
+    position->contenu().setElement(nullptr);
+    _monsters = new Liste<Monster>(new Monster(position, UP), _monsters);
 }

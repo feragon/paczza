@@ -4,7 +4,7 @@
 
 class AStarMonsterManager : public MonsterManager {
     public:
-        AStarMonsterManager(Board* board);
+        AStarMonsterManager(Jeu* game);
 
         void moveMonsters(const Position<>& playerPosition) override;
 };

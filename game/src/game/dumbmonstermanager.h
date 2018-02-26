@@ -1,10 +1,11 @@
 #pragma once
 
+#include <board/board.h>
 #include "monstermanager.h"
 
 class DumbMonsterManager : public MonsterManager {
     public:
-        DumbMonsterManager(Board* board);
+        DumbMonsterManager(Jeu* game);
 
         void moveMonsters(const Position<>& playerPosition) override;
 

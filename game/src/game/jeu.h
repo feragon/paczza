@@ -14,6 +14,11 @@ class Jeu : public Listened<BoardListener> {
     private:
         Sommet<Case>* getNextPlayerPosition();
         void updateOldPositions();
+        /**
+         * @brief Ajoute un monstre au jeu
+         * @param position Position du monstre
+         */
+        void addMonster(Sommet<Case>* position);
 
         Board* _plateau;
         std::map<Player*, const Sommet<Case>*> _oldPositions;
@@ -25,6 +30,8 @@ class Jeu : public Listened<BoardListener> {
 
         unsigned int _remainingPoints;
 
+        Pacman _player;
+        Liste<Monster>* _monsters;
     public:
         Jeu();
         virtual ~Jeu();
@@ -39,18 +46,6 @@ class Jeu : public Listened<BoardListener> {
          * @return Plateau du jeu
          */
         inline Board* plateau();
-
-        /**
-         * @brief Donne le joueur
-         * @return Joueur
-         */
-        inline Pacman* joueur();
-
-        /**
-         * @brief Donne la liste des monstres
-         * @return Liste de monstres
-         */
-        inline Liste<Monster>* monstres() const;
 
         /**
          * @brief Donne le gestionnaire de monstres
@@ -98,19 +93,44 @@ class Jeu : public Listened<BoardListener> {
          * @brief Démarre la partie
          */
         virtual void start();
+
+        /**
+         * @brief Rend tous les monstres vulnérables
+         */
+        void setMonstersWeak();
+
+        /**
+         * @brief Place les éléments sur le plateau
+         */
+        void placeElements();
+
+        /**
+         * @brief Place le joueur et les monstres à leur position de départ
+         */
+        void placePlayers();
+
+        /**
+         * @brief Donne le joueur
+         * @return Pacman
+         */
+        inline Pacman& player();
+
+        /**
+         * @brief Donne le joueur
+         * @return Pacman constant
+         */
+        inline const Pacman& player() const;
+
+        /**
+         * @brief Donne la liste des monstres sur le plateau
+         * @return Liste de monstres
+         */
+        inline Liste<Monster>* monsters();
 };
 
 Board* Jeu::plateau() {
     return _plateau;
 };
-
-Pacman* Jeu::joueur() {
-    return &(_plateau->player()); //TODO
-}
-
-Liste<Monster>* Jeu::monstres() const {
-    return _plateau->monsters();
-}
 
 void Jeu::setDirection(Direction newDirection) {
     _newDirection = newDirection;
@@ -130,4 +150,16 @@ unsigned int Jeu::remainingPoints() const {
 
 void Jeu::setMonsterManager(SharedPtr<MonsterManager> monsterManager) {
     _monsterManager = monsterManager;
+}
+
+Pacman& Jeu::player() {
+    return _player;
+}
+
+const Pacman& Jeu::player() const {
+    return _player;
+}
+
+Liste<Monster>* Jeu::monsters() {
+    return _monsters;
 }

@@ -4,7 +4,7 @@
 
 class SenseMonsterManager : public MonsterManager {
     public:
-        SenseMonsterManager(Board* board);
+        SenseMonsterManager(Jeu* game);
 
         void moveMonsters(const Position<>& playerPosition) override;
 

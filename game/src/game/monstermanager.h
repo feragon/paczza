@@ -2,12 +2,12 @@
 
 #include <graph/liste.h>
 #include <map>
-#include <board/board.h>
 #include "monster.h"
 
+class Jeu;
 class MonsterManager {
     public:
-        MonsterManager(Board* board);
+        MonsterManager(Jeu* game);
 
         /**
          * @brief Retourne la novuvelle position du monstre
@@ -23,14 +23,14 @@ class MonsterManager {
 
     protected:
         inline std::map<const Monster*, Position<double>>& monsters();
-        inline Board* board() const;
+        inline Jeu* game() const;
 
 
     private:
         MonsterManager(const MonsterManager&);
         MonsterManager& operator = (const MonsterManager&);
 
-        Board* _board;
+        Jeu* _game;
         std::map<const Monster*, Position<double>> _newPositions;
 };
 
@@ -38,6 +38,6 @@ std::map<const Monster*, Position<double>>& MonsterManager::monsters() {
     return _newPositions;
 }
 
-Board* MonsterManager::board() const {
-    return _board;
+Jeu* MonsterManager::game() const {
+    return _game;
 }

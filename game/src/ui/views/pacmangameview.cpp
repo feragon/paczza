@@ -26,7 +26,7 @@ void PacmanGameView::render(double timeElapsed) {
             title = "YOU WON!";
         }
         else {
-            if(_game->joueur()->nbLifes() > 0) {
+            if(_game->player().nbLifes() > 0) {
                 title = "READY?!";
             }
             else {

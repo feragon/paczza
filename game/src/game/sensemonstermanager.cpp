@@ -2,16 +2,17 @@
 #include "playernotinsight.h"
 #include "noheatededgefound.h"
 #include "dumbmonstermanager.h"
+#include <game/jeu.h>
 
-SenseMonsterManager::SenseMonsterManager(Board* board) :
-        MonsterManager(board) {
+SenseMonsterManager::SenseMonsterManager(Jeu* game) :
+        MonsterManager(game) {
     srand(time(NULL));
 }
 
 void SenseMonsterManager::moveMonsters(const Position<>& playerPosition) {
     monsters().clear();
-    for(Liste<Monster>* monster = board()->monsters(); monster; monster = monster->next) {
-        Sommet<Case>* monsterVertice = board()->sommet(monster->value->position()->contenu().position());
+    for(Liste<Monster>* monster = game()->monsters(); monster; monster = monster->next) {
+        Sommet<Case>* monsterVertice = game()->plateau()->sommet(monster->value->position()->contenu().position());
         try {
             monsters()[monster->value] = nextPositionBySight(monsterVertice, playerPosition);
         }
@@ -20,7 +21,7 @@ void SenseMonsterManager::moveMonsters(const Position<>& playerPosition) {
                 monsters()[monster->value] = nextPositionByHeat(monsterVertice);
             }
             catch (NoHeatedEdgeFound& f) {
-                monsters()[monster->value] = DumbMonsterManager::getNextPosition(board(), monsterVertice);
+                monsters()[monster->value] = DumbMonsterManager::getNextPosition(game()->plateau(), monsterVertice);
             }
         }
     }
@@ -52,7 +53,7 @@ Position<> SenseMonsterManager::nextPositionBySight(const Sommet<Case>* monsterV
     }
 
     Position<> next = monsterPosition + direction;
-    Liste<Sommet<Case>>* tmp = board()->voisins(monsterVertice);
+    Liste<Sommet<Case>>* tmp = game()->plateau()->voisins(monsterVertice);
     Liste<Sommet<Case>>* neighbors = tmp;
     while(neighbors) {
         if(neighbors->value->contenu().position() == next) {
@@ -62,7 +63,7 @@ Position<> SenseMonsterManager::nextPositionBySight(const Sommet<Case>* monsterV
             }
             else {
                 next = next + direction;
-                neighbors = board()->voisins(neighbors->value);
+                neighbors = game()->plateau()->voisins(neighbors->value);
                 Liste<Sommet<Case>>::efface1(tmp);
                 tmp = neighbors;
             }
@@ -79,7 +80,7 @@ Position<> SenseMonsterManager::nextPositionBySight(const Sommet<Case>* monsterV
 Position<> SenseMonsterManager::nextPositionByHeat(const Sommet<Case>* monsterVertice) {
     Arete<Chemin, Case>* res = nullptr;
 
-    Liste<Arete<Chemin, Case>>* tmp = board()->aretesAdjacentes(monsterVertice);
+    Liste<Arete<Chemin, Case>>* tmp = game()->plateau()->aretesAdjacentes(monsterVertice);
 
     for(Liste<Arete<Chemin, Case>>* edges = tmp; edges; edges = edges->next) {
         double chaleur = edges->value->contenu().chaleur();

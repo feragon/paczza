@@ -5,9 +5,9 @@
 #include "nomorelevels.h"
 
 PacmanGame::PacmanGame() : Jeu() {
-    _levels.push_back(SharedPtr<DumbMonsterManager>(plateau()));
-    _levels.push_back(SharedPtr<SenseMonsterManager>(plateau()));
-    _levels.push_back(SharedPtr<AStarMonsterManager>(plateau()));
+    _levels.push_back(SharedPtr<DumbMonsterManager>(this));
+    _levels.push_back(SharedPtr<SenseMonsterManager>(this));
+    _levels.push_back(SharedPtr<AStarMonsterManager>(this));
 
     _level = 1;
     setMonsterManager(_levels[0]);
@@ -27,7 +27,7 @@ void PacmanGame::changeLevel() {
     }
 
     setMonsterManager(_levels[_level - 1]);
-    plateau()->placeElements();
+    placeElements();
     updatePoints();
-    plateau()->player().addLife(2);
+    player().addLife(2);
 }

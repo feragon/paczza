@@ -7,25 +7,15 @@
 #include <SFML/Audio.hpp>
 
 BoardView::BoardView(sf::RenderWindow* window, FenetreJeu* f, Board* board) :
-        View(window, f),
-        _joueur(AnimatedSprite::ANIMATION_CIRCULAR, sf::Sprite(ResourceLoader::getSprite(Sprite::OPEN_PIZZA_1)), 16, false) {
-
+        View(window, f) {
 
     _board = board;
-    updateMonsters();
     setFond(Sprite::EMPTY_CELL);
-
-    _joueur.addSprite(sf::Sprite(ResourceLoader::getSprite(Sprite::OPEN_PIZZA_2)));
-    _joueur.addSprite(sf::Sprite(ResourceLoader::getSprite(Sprite::OPEN_PIZZA_3)));
-    _joueur.addSprite(sf::Sprite(ResourceLoader::getSprite(Sprite::PIZZA)));
-    _joueur.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
-    _joueur.setRotation(_board->player().direction() * 45);
 }
 
 void BoardView::genererSpritesElements() {
     for(Liste<Sommet<Case>>* l = _board->sommets(); l; l = l->next) {
         genererSpriteElement(l->value->contenu());
-
     }
 }
 
@@ -96,157 +86,10 @@ void BoardView::render(double timeElapsed) {
         window()->draw(sprite);
     }
 
-    Position<> pos = _board->player().position()->contenu().position();
-    double avancement = _board->player().avancement();
-    double x = 0;
-    double y = 0;
-    Direction d = _board->player().direction();
-    if(d == LEFT || d == LEFT_UP || d == LEFT_DOWN) {
-        x = -1;
-    }
-    else if(d == RIGHT || d == RIGHT_DOWN || d == RIGHT_UP) {
-        x = 1;
-    }
-
-    if(d == UP || d == LEFT_UP || d == RIGHT_UP) {
-        y = -1;
-    }
-    else if(d == DOWN || d == LEFT_DOWN || d == RIGHT_DOWN) {
-        y = 1;
-    }
-
-    _joueur.setRotation(_board->player().direction() * 45);
-    _joueur.setPosition((pos.x + avancement * x) * SPRITE_SIZE, (pos.y + avancement * y) * SPRITE_SIZE);
-    _joueur.animate(timeElapsed);
-    window()->draw(_joueur);
-
     for(const std::pair<const Position<>, sf::Sprite>& p : _elements) {
         window()->draw(p.second);
-    }
-
-    double chaleurEnlevee = (UINT8_MAX / COOLDOWN_TIME) * timeElapsed;
-    auto it = _aretesMarquees.begin();
-    while (it != _aretesMarquees.end()) {
-        Arete<Chemin, Case>* arete = it->first;
-        double chaleur = arete->contenu().chaleur();
-
-        if(chaleur <= chaleurEnlevee) {
-            it = _aretesMarquees.erase(it++);
-        }
-        else {
-            double nouvelleChaleur = chaleur - chaleurEnlevee;
-            arete->contenu().setChaleur(nouvelleChaleur);
-            it->second.setColor(sf::Color(255, 255, 255, (uint8_t) nouvelleChaleur));
-
-            window()->draw(it->second);
-            it++;
-        }
-    }
-
-    for(std::pair<const Monster* const, sf::Sprite>& pair : _monsters) {
-        Position<> monsterPos = pair.first->position()->contenu().position();
-        double avancement = pair.first->avancement();
-        double x = 0;
-        double y = 0;
-        Direction d = pair.first->direction();
-        if(d == LEFT || d == LEFT_UP || d == LEFT_DOWN) {
-            x = -1;
-        }
-        else if(d == RIGHT || d == RIGHT_DOWN || d == RIGHT_UP) {
-            x = 1;
-        }
-
-        if(d == UP || d == LEFT_UP || d == RIGHT_UP) {
-            y = -1;
-        }
-        else if(d == DOWN || d == LEFT_DOWN || d == RIGHT_DOWN) {
-            y = 1;
-        }
-
-        pair.second.setPosition((monsterPos.x + avancement * x) * SPRITE_SIZE, (monsterPos.y + avancement * y) * SPRITE_SIZE);
-        window()->draw(pair.second);
     }
 
     _elements[Position<>(6,1)].rotate(1);
     _elements[Position<>(6,8)].rotate(1);
 }
-
-void BoardView::updateEdge(Arete<Chemin, Case>* edge) {
-    Position<> p1 = edge->debut()->contenu().position();
-    Position<> p2 = edge->fin()->contenu().position();
-
-    if(p1 == p2) {
-        return;
-    }
-
-    Position<double> moveVect = p1 - p2;
-
-    sf::Sprite sprite(ResourceLoader::getSprite(Sprite::COCAINE));
-
-    sprite.setOrigin(SPRITE_SIZE / 2, SPRITE_SIZE / 2);
-    sprite.setPosition((p2.x + moveVect.x / 2) * SPRITE_SIZE,
-                       (p2.y + moveVect.y / 2) * SPRITE_SIZE);
-
-    _aretesMarquees[edge] = sprite;
-}
-
-void BoardView::updateVertice(Sommet<Case>* vertice) {
-    genererSpriteElement(vertice->contenu());
-}
-
-void BoardView::playerMovementBegin(Pacman* player) {
-    _joueur.reset();
-}
-
-void BoardView::updateMonsters() {
-    _monsters.clear();
-    unsigned short i = 0;
-
-    for(Liste<Monster>* monsters = board()->monsters(); monsters; monsters = monsters->next) {
-        sf::Sprite s;
-        Sprite resource;
-
-        switch(monsters->value->direction()) {
-            case LEFT:
-                resource = static_cast<Sprite>(LEFT_GREEN_PINEAPPLE + i*8);
-                break;
-            case LEFT_UP:
-                resource = static_cast<Sprite>(LEFT_UP_GREEN_PINEAPPLE + i*8);
-                break;
-
-            case UP:
-                resource = static_cast<Sprite>(UP_GREEN_PINEAPPLE + i*8);
-                break;
-
-            case RIGHT_UP:
-                resource = static_cast<Sprite>(RIGHT_UP_GREEN_PINEAPPLE + i*8);
-                break;
-
-            case RIGHT:
-                resource = static_cast<Sprite>(RIGHT_GREEN_PINEAPPLE + i*8);
-                break;
-
-            case RIGHT_DOWN:
-                resource = static_cast<Sprite>(RIGHT_DOWN_GREEN_PINEAPPLE + i*8);
-                break;
-
-            case DOWN:
-                resource = static_cast<Sprite>(DOWN_GREEN_PINEAPPLE + i*8);
-                break;
-
-            case LEFT_DOWN:
-                resource = static_cast<Sprite>(LEFT_DOWN_GREEN_PINEAPPLE + i*8);
-                break;
-        }
-        s.setTexture(ResourceLoader::getSprite(resource));
-        s.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
-
-        _monsters[monsters->value] = s;
-        i++;
-    }
-}
-
-void BoardView::onNewTurn() {
-    updateMonsters();
-}
-

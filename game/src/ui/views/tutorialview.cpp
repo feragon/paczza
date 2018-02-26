@@ -81,12 +81,12 @@ void TutorialView::update() {
     _state = static_cast<State>(_state + 1);
     switch (_state) {
         case PACZZA_PRESENTATION: {
-            Position<> pos = (_gameView.game()->joueur()->position()->contenu().position() - 1) * SPRITE_SIZE;
+            Position<> pos = (_gameView.game()->player().position()->contenu().position() - 1) * SPRITE_SIZE;
             _fog = new Fog(window()->getView().getSize(), sf::Vector2f(pos.x, pos.y));
 
             _indication.setString(L"Voici Paczza,\nvotre pizza préférée.");
             _indication.setCharacterSize(32);
-            _gameView.joueur().setInfinite(true); //TODO
+            _gameView.playerAnimatedSprite().setInfinite(true);
             break;
         }
 
