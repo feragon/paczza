@@ -9,22 +9,20 @@ AStarMonsterManager::AStarMonsterManager(Jeu* game) :
 
 }
 
-void AStarMonsterManager::moveMonsters(const Position<>& playerPosition) {
+void AStarMonsterManager::moveMonster(const Monster* monster, const Position<>& playerPosition) {
     AStarFunctions::destination = game()->plateau()->sommet(playerPosition);
-    monsters().clear();
-    for(Liste<Monster>* monster = game()->monsters(); monster; monster = monster->next) {
-        Sommet<Case>* position = game()->plateau()->sommet(monster->value->position()->contenu().position());
-        Sommet<Case>* destination = AStarT<Graphe<Chemin, Case>, Sommet<Case>>::aStar(*(game()->plateau()), position, &AStarFunctions::hh);
 
-        if(destination != AStarFunctions::destination) {
-            monsters()[monster->value] = DumbMonsterManager::getNextPosition(game()->plateau(), position);
-        }
-        else {
-            while(destination->contenu().parent != nullptr && destination->contenu().parent != monster->value->position()) {
-                destination = destination->contenu().parent;
-            }
+    Sommet<Case>* position = game()->plateau()->sommet(monster->position()->contenu().position());
+    Sommet<Case>* destination = AStarT<Graphe<Chemin, Case>, Sommet<Case>>::aStar(*(game()->plateau()), position, &AStarFunctions::hh);
 
-            monsters()[monster->value] = destination->contenu().position();
+    if(destination != AStarFunctions::destination) {
+        monsters()[monster] = DumbMonsterManager::getNextPosition(game()->plateau(), position);
+    }
+    else {
+        while(destination->contenu().parent != nullptr && destination->contenu().parent != monster->position()) {
+            destination = destination->contenu().parent;
         }
+
+        monsters()[monster] = destination->contenu().position();
     }
 }

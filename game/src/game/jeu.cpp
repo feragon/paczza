@@ -71,8 +71,13 @@ void Jeu::updatePlayers(double timeElapsed) {
                     _oldPositions[monsters->value] = newPosition;
 
                     if (newPosition == _player.position()) {
-                        _stopped = true;
-                        return;
+                        if(monsters->value->weak()) {
+                            monsters->value->setReturnHome(true);
+                        }
+                        else {
+                            _stopped = true;
+                            return;
+                        }
                     }
                 }
                 catch (std::out_of_range& e) {
@@ -143,7 +148,12 @@ void Jeu::updatePlayers(double timeElapsed) {
 
                 if (abs(_player.direction() - monsters->value->direction()) == NB_DIRECTIONS / 2 ||
                     _player.position() == _newPlayerPosition) {
-                    _stopped = true;
+                    if(monsters->value->weak()) {
+                        monsters->value->setReturnHome(true);
+                    }
+                    else {
+                        _stopped = true;
+                    }
                     return;
                 }
             }
@@ -308,5 +318,5 @@ void Jeu::placePlayers() {
 
 void Jeu::addMonster(Sommet<Case>* position) {
     position->contenu().setElement(nullptr);
-    _monsters = new Liste<Monster>(new Monster(position, UP), _monsters);
+    _monsters = new Liste<Monster>(new Monster(position, UP, position), _monsters);
 }

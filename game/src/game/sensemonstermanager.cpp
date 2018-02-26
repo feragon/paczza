@@ -9,20 +9,17 @@ SenseMonsterManager::SenseMonsterManager(Jeu* game) :
     srand(time(NULL));
 }
 
-void SenseMonsterManager::moveMonsters(const Position<>& playerPosition) {
-    monsters().clear();
-    for(Liste<Monster>* monster = game()->monsters(); monster; monster = monster->next) {
-        Sommet<Case>* monsterVertice = game()->plateau()->sommet(monster->value->position()->contenu().position());
+void SenseMonsterManager::moveMonster(const Monster* monster, const Position<>& playerPosition) {
+    Sommet<Case>* monsterVertice = game()->plateau()->sommet(monster->position()->contenu().position());
+    try {
+        monsters()[monster] = nextPositionBySight(monsterVertice, playerPosition);
+    }
+    catch (PlayerNotInSight& e) {
         try {
-            monsters()[monster->value] = nextPositionBySight(monsterVertice, playerPosition);
+            monsters()[monster] = nextPositionByHeat(monsterVertice);
         }
-        catch (PlayerNotInSight& e) {
-            try {
-                monsters()[monster->value] = nextPositionByHeat(monsterVertice);
-            }
-            catch (NoHeatedEdgeFound& f) {
-                monsters()[monster->value] = DumbMonsterManager::getNextPosition(game()->plateau(), monsterVertice);
-            }
+        catch (NoHeatedEdgeFound& f) {
+            monsters()[monster] = DumbMonsterManager::getNextPosition(game()->plateau(), monsterVertice);
         }
     }
 }

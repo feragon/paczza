@@ -7,7 +7,7 @@ class DumbMonsterManager : public MonsterManager {
     public:
         DumbMonsterManager(Jeu* game);
 
-        void moveMonsters(const Position<>& playerPosition) override;
+        void moveMonster(const Monster* monster, const Position<>& playerPosition) override;
 
         /**
          * @brief Donne une position aléatoire à côté du sommet actuel

@@ -6,7 +6,7 @@ class SenseMonsterManager : public MonsterManager {
     public:
         SenseMonsterManager(Jeu* game);
 
-        void moveMonsters(const Position<>& playerPosition) override;
+        void moveMonster(const Monster* monster, const Position<>& playerPosition) override;
 
     private:
         /**

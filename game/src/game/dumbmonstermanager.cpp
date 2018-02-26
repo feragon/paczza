@@ -6,11 +6,8 @@ DumbMonsterManager::DumbMonsterManager(Jeu* game) :
     srand(time(NULL));
 }
 
-void DumbMonsterManager::moveMonsters(const Position<>& playerPosition) {
-    monsters().clear();
-    for(Liste<Monster>* monster = game()->monsters(); monster; monster = monster->next) {
-        monsters()[monster->value] = getNextPosition(game()->plateau(), game()->plateau()->sommet(monster->value->position()->contenu().position()));
-    }
+void DumbMonsterManager::moveMonster(const Monster* monster, const Position<>& playerPosition) {
+    monsters()[monster] = getNextPosition(game()->plateau(), game()->plateau()->sommet(monster->position()->contenu().position()));
 }
 
 Position<> DumbMonsterManager::getNextPosition(const Board* board, Sommet<Case>* monsterVertice) {

@@ -19,7 +19,14 @@ class MonsterManager {
         /**
          * @brief Déplace les monstres gérés
          */
-        virtual void moveMonsters(const Position<>& playerPosition) = 0;
+        void moveMonsters(const Position<>& playerPosition);
+
+        /**
+         * @brief Déplace le monstre donné
+         * @param monster Monstre
+         * @param playerPosition Position du joueur
+         */
+        virtual void moveMonster(const Monster* monster, const Position<>& playerPosition) = 0;
 
     protected:
         inline std::map<const Monster*, Position<double>>& monsters();
@@ -27,6 +34,12 @@ class MonsterManager {
 
 
     private:
+        /**
+         * @brief Envoie un monstre à sa position d'origine
+         * @param monster Monstre
+         */
+        void sendHome(const Monster* monster);
+
         MonsterManager(const MonsterManager&);
         MonsterManager& operator = (const MonsterManager&);
 

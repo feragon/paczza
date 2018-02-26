@@ -6,5 +6,5 @@ class AStarMonsterManager : public MonsterManager {
     public:
         AStarMonsterManager(Jeu* game);
 
-        void moveMonsters(const Position<>& playerPosition) override;
+        void moveMonster(const Monster* monster, const Position<>& playerPosition) override;
 };
