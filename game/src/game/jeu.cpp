@@ -4,6 +4,7 @@
 #include <board/point.h>
 #include <board/superpoint.h>
 #include "util.h"
+#include "pacmandied.h"
 
 Jeu::Jeu() :
     _monsterManager(nullptr),
@@ -38,126 +39,121 @@ void Jeu::updatePlayers(double timeElapsed) {
     _timeSinceMove += timeElapsed;
     double movement = _timeSinceMove / MOVEMENT_TIME;
 
-    if(_timeSinceMove >= MOVEMENT_TIME) {
-        _timeSinceMove = 0;
+    try {
+        if (_timeSinceMove >= MOVEMENT_TIME) {
+            _timeSinceMove = 0;
 
-        Arete<Chemin, Case>* arete = _plateau->getAreteParSommets(_player.position(), _newPlayerPosition);
-        if(arete && arete->contenu().estAccessible()) {
-            arete->contenu().setChaleur(UINT8_MAX);
-            Listened<BoardListener>::callListeners(&BoardListener::updateEdge, arete);
-        }
-
-        Element* e = _newPlayerPosition->contenu().element();
-        if(e) {
-            _remainingPoints -= (bool) dynamic_cast<Point*>(e);
-            if(_remainingPoints == 0) {
-                _stopped = true;
+            Arete<Chemin, Case>* arete = _plateau->getAreteParSommets(_player.position(), _newPlayerPosition);
+            if (arete && arete->contenu().estAccessible()) {
+                arete->contenu().setChaleur(UINT8_MAX);
+                Listened<BoardListener>::callListeners(&BoardListener::updateEdge, arete);
             }
-        }
 
-        _player.setPosition(_newPlayerPosition);
-        _newPlayerPosition->contenu().heberge(_player);
-        Listened<BoardListener>::callListeners(&BoardListener::updateVertice, _newPlayerPosition);
+            Element* e = _newPlayerPosition->contenu().element();
+            if (e) {
+                _remainingPoints -= (bool) dynamic_cast<Point*>(e);
+                if (_remainingPoints == 0) {
+                    _stopped = true;
+                }
+            }
 
-        _player.setAvancement(0);
+            _player.setPosition(_newPlayerPosition);
+            _newPlayerPosition->contenu().heberge(_player);
+            Listened<BoardListener>::callListeners(&BoardListener::updateVertice, _newPlayerPosition);
 
-        if(_monsterManager) {
-            for (Liste<Monster>* monsters = _monsters; monsters; monsters = monsters->next) {
-                try {
-                    Sommet<Case>* newPosition = _plateau->sommet(_monsterManager->newPosition(monsters->value));
-                    monsters->value->setPosition(newPosition);
-                    monsters->value->setAvancement(0);
+            _player.setAvancement(0);
 
-                    _oldPositions[monsters->value] = newPosition;
+            if (_monsterManager) {
+                for (Liste<Monster>* monsters = _monsters; monsters; monsters = monsters->next) {
+                    try {
+                        Sommet<Case>* newPosition = _plateau->sommet(_monsterManager->newPosition(monsters->value));
+                        monsters->value->setPosition(newPosition);
+                        monsters->value->setAvancement(0);
 
-                    if (newPosition == _player.position()) {
-                        if(monsters->value->weak()) {
-                            monsters->value->setReturnHome(true);
-                        }
-                        else {
-                            _stopped = true;
-                            return;
+                        _oldPositions[monsters->value] = newPosition;
+
+                        if (newPosition == _player.position()) {
+                            monsters->value->collision(_player);
                         }
                     }
-                }
-                catch (std::out_of_range& e) {
+                    catch (std::out_of_range& e) {
 
+                    }
+                }
+                _monsterManager->moveMonsters(_newPlayerPosition->contenu().position());
+
+                for (Liste<Monster>* monsters = _monsters; monsters; monsters = monsters->next) {
+                    try {
+                        monsters->value->setDirection(getDirection(_oldPositions[monsters->value]->contenu().position(),
+                                                                   _monsterManager->newPosition(monsters->value)));
+                    }
+                    catch (std::out_of_range& e) {
+
+                    }
                 }
             }
-            _monsterManager->moveMonsters(_newPlayerPosition->contenu().position());
 
-            for (Liste<Monster>* monsters = _monsters; monsters; monsters = monsters->next) {
-                try {
-                    monsters->value->setDirection(getDirection(_oldPositions[monsters->value]->contenu().position(),
-                                                               _monsterManager->newPosition(monsters->value)));
+            Direction oldDirection = _player.direction();
+            _player.setDirection(_newDirection);
+            Sommet<Case>* nextPlayerPosition = getNextPlayerPosition();
+
+            if (nextPlayerPosition == _newPlayerPosition && oldDirection != _player.direction()) {
+                _player.setDirection(oldDirection);
+                _newDirection = oldDirection;
+                nextPlayerPosition = getNextPlayerPosition();
+            }
+
+            _oldPositions[&_player] = _player.position();
+            _newPlayerPosition = nextPlayerPosition;
+
+            if (_player.position() != _newPlayerPosition) {
+                Listened<BoardListener>::callListeners(&BoardListener::playerMovementBegin, &_player);
+            }
+
+            Listened<BoardListener>::callListeners(&BoardListener::onNewTurn);
+        }
+        else {
+            if (_monsterManager) {
+                for (Liste<Monster>* monsters = _monsters; monsters; monsters = monsters->next) {
+                    try {
+                        if (_monsterManager->newPosition(monsters->value) !=
+                            _oldPositions[monsters->value]->contenu().position()) {
+                            monsters->value->setAvancement(movement);
+                        }
+                    }
+                    catch (std::out_of_range& e) {
+
+                    }
                 }
-                catch (std::out_of_range& e) {
+            }
 
+            if (_player.position()->contenu().position() != _newPlayerPosition->contenu().position()) {
+                _player.setAvancement(movement);
+            }
+
+            if (_monsterManager && movement >= 0.5) {
+                for (Liste<Monster>* monsters = _monsters; monsters; monsters = monsters->next) {
+                    Arete<Chemin, Case>* arete = _plateau->getAreteParSommets(_player.position(),
+                                                                              monsters->value->position());
+                    if (!arete) {
+                        continue;
+                    }
+
+                    if (getDirection(monsters->value->position()->contenu().position(),
+                                     _player.position()->contenu().position()) != monsters->value->direction()) {
+                        continue;
+                    }
+
+                    if (abs(_player.direction() - monsters->value->direction()) == NB_DIRECTIONS / 2 ||
+                        _player.position() == _newPlayerPosition) {
+                        monsters->value->collision(_player);
+                    }
                 }
             }
         }
-
-        Direction oldDirection = _player.direction();
-        _player.setDirection(_newDirection);
-        Sommet<Case>* nextPlayerPosition = getNextPlayerPosition();
-
-        if(nextPlayerPosition == _newPlayerPosition && oldDirection != _player.direction()) {
-            _player.setDirection(oldDirection);
-            _newDirection = oldDirection;
-            nextPlayerPosition = getNextPlayerPosition();
-        }
-
-        _oldPositions[&_player] = _player.position();
-        _newPlayerPosition = nextPlayerPosition;
-
-        if(_player.position() != _newPlayerPosition) {
-            Listened<BoardListener>::callListeners(&BoardListener::playerMovementBegin, &_player);
-        }
-
-        Listened<BoardListener>::callListeners(&BoardListener::onNewTurn);
     }
-    else {
-        if (_monsterManager) {
-            for (Liste<Monster>* monsters = _monsters; monsters; monsters = monsters->next) {
-                try {
-                    if (_monsterManager->newPosition(monsters->value) !=
-                        _oldPositions[monsters->value]->contenu().position()) {
-                        monsters->value->setAvancement(movement);
-                    }
-                }
-                catch (std::out_of_range& e) {
-
-                }
-            }
-        }
-
-        if (_player.position()->contenu().position() != _newPlayerPosition->contenu().position()) {
-            _player.setAvancement(movement);
-        }
-
-        if(_monsterManager && movement >= 0.5) {
-            for (Liste<Monster>* monsters = _monsters; monsters; monsters = monsters->next) {
-                Arete<Chemin, Case>* arete = _plateau->getAreteParSommets(_player.position(), monsters->value->position());
-                if(!arete) {
-                    continue;
-                }
-
-                if(getDirection(monsters->value->position()->contenu().position(), _player.position()->contenu().position()) != monsters->value->direction()) {
-                    continue;
-                }
-
-                if (abs(_player.direction() - monsters->value->direction()) == NB_DIRECTIONS / 2 ||
-                    _player.position() == _newPlayerPosition) {
-                    if(monsters->value->weak()) {
-                        monsters->value->setReturnHome(true);
-                    }
-                    else {
-                        _stopped = true;
-                    }
-                    return;
-                }
-            }
-        }
+    catch (PacmanDied& e) {
+        _stopped = true;
     }
 }
 

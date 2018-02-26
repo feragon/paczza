@@ -107,7 +107,7 @@ set(SOURCE_FILES
         src/ui/views/startgamecommand.h
         src/ui/views/updatetutorialcommand.cpp
         src/ui/views/updatetutorialcommand.h
-        src/board/superpoint.cpp src/board/superpoint.h)
+        src/board/superpoint.cpp src/board/superpoint.h src/game/pacmandied.h)
 
 find_package(SFML 2 COMPONENTS graphics window system audio REQUIRED)
 include_directories(${SFML_INCLUDE_DIR})

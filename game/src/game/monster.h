@@ -2,6 +2,7 @@
 
 #include "player.h"
 #include "direction.h"
+#include "pacman.h"
 
 class Monster : public Player {
     public:
@@ -36,6 +37,13 @@ class Monster : public Player {
          * @return Position originale du monstre
          */
         inline Sommet<Case>* home() const;
+
+        /**
+         * @brief Fonction appelée lors de la collision avec le joueur
+         * @param pacman Joueur
+         * @throw PacmanDied si la collision fait perdre le joueur
+         */
+        void collision(Pacman& pacman);
 
     private:
         bool _isWeak;

@@ -1,4 +1,5 @@
 #include "monster.h"
+#include "pacmandied.h"
 #include <board/case.h>
 
 Monster::Monster(const Sommet<Case>* p, Direction direction, Sommet<Case>* home) :
@@ -6,6 +7,18 @@ Monster::Monster(const Sommet<Case>* p, Direction direction, Sommet<Case>* home)
         _home(home) {
     _isWeak = false;
     _returnHome = false;
+}
+
+void Monster::collision(Pacman& pacman) {
+    if(_isWeak) {
+        if(!_returnHome) {
+            pacman.addPoints(200);
+            _returnHome = true;
+        }
+    }
+    else {
+        throw PacmanDied("Le joueur est mort");
+    }
 }
 
 std::string Monster::toString() const {
