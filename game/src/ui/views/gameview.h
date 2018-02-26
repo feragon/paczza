@@ -28,7 +28,7 @@ class GameView : public BoardView, public BoardListener {
         sf::Text _score;
 
         AnimatedSprite _playerAnimatedSprite;
-        std::map<const Monster*, sf::Sprite> _monsters;
+        std::map<const Monster*, AnimatedSprite> _monsters;
 
         std::map<Arete<Chemin, Case>*, sf::Sprite> _aretesMarquees;
 

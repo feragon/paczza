@@ -48,6 +48,29 @@ class AnimatedSprite : public sf::Drawable, public sf::Transformable {
          */
         inline void setInfinite(bool infinite);
 
+        /**
+         * @brief Donne l'image actuelle de l'animation
+         * @return Indice de l'image
+         */
+        inline double frame() const;
+
+        /**
+         * @brief Définit l'image de l'animation
+         * @param frame Nouvel indice
+         */
+        void setFrame(double frame);
+
+        /**
+         * @return Direction de l'animation
+         */
+        inline bool forward() const;
+
+        /**
+         * @brief Change la direction de l'animation
+         * @param forward Nouvelle direction
+         */
+        inline void setForward(bool forward);
+
         sf::FloatRect getGlobalBounds();
     protected:
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -67,4 +90,16 @@ bool AnimatedSprite::infinite() const {
 
 void AnimatedSprite::setInfinite(bool infinite) {
         _infinite = infinite;
+}
+
+double AnimatedSprite::frame() const {
+        return _frame;
+}
+
+bool AnimatedSprite::forward() const {
+    return _forward;
+}
+
+void AnimatedSprite::setForward(bool forward) {
+    _forward = forward;
 }

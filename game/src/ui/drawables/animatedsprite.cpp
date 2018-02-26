@@ -76,3 +76,10 @@ void AnimatedSprite::draw(sf::RenderTarget& target, sf::RenderStates states) con
 sf::FloatRect AnimatedSprite::getGlobalBounds() {
     return _sprites.front().getGlobalBounds();
 }
+
+void AnimatedSprite::setFrame(double frame) {
+    if(frame < 0 || frame >= _sprites.size()) {
+        throw std::runtime_error("Indice d'image invalide");
+    }
+    _frame = frame;
+}

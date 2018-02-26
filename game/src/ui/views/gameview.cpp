@@ -91,56 +91,44 @@ void GameView::onMonsterWeaknessUpdate(const Monster* monster) {
 }
 
 void GameView::updateMonsters() {
+    //TODO: si le premier n'est pas vulnérable ?
+    double frame = _monsters.begin()->second.frame();
+    bool forward = _monsters.begin()->second.forward();
     _monsters.clear();
     unsigned short monsterNo = 0;
 
     for(Liste<Monster>* monsters = _game->monsters(); monsters; monsters = monsters->next) {
         unsigned short spriteOffset;
+        unsigned short nbFrames;
         if(monsters->value->weak()) {
-            spriteOffset = LEFT_WEAK_PINEAPPLE - LEFT_GREEN_PINEAPPLE;
+            spriteOffset = LEFT_WEAK_PINEAPPLE_1 - LEFT_GREEN_PINEAPPLE;
+            nbFrames = WEAK_MONSTER_FRAMES;
         }
         else {
-            spriteOffset = monsterNo * 8;
+            spriteOffset = monsterNo * NB_DIRECTIONS * MONSTER_FRAMES;
+            nbFrames = MONSTER_FRAMES;
         }
-        sf::Sprite s;
-        Sprite resource;
 
-        switch(monsters->value->direction()) {
-            case LEFT:
-                resource = static_cast<Sprite>(LEFT_GREEN_PINEAPPLE + spriteOffset);
-                break;
-            case LEFT_UP:
-                resource = static_cast<Sprite>(LEFT_UP_GREEN_PINEAPPLE + spriteOffset);
-                break;
+        Sprite resource = static_cast<Sprite>(LEFT_GREEN_PINEAPPLE + monsters->value->direction() + spriteOffset);
+        sf::Sprite s(ResourceLoader::getSprite(resource));
+        AnimatedSprite as(AnimatedSprite::ANIMATION_CIRCULAR, s, 2, true);
 
-            case UP:
-                resource = static_cast<Sprite>(UP_GREEN_PINEAPPLE + spriteOffset);
-                break;
-
-            case RIGHT_UP:
-                resource = static_cast<Sprite>(RIGHT_UP_GREEN_PINEAPPLE + spriteOffset);
-                break;
-
-            case RIGHT:
-                resource = static_cast<Sprite>(RIGHT_GREEN_PINEAPPLE + spriteOffset);
-                break;
-
-            case RIGHT_DOWN:
-                resource = static_cast<Sprite>(RIGHT_DOWN_GREEN_PINEAPPLE + spriteOffset);
-                break;
-
-            case DOWN:
-                resource = static_cast<Sprite>(DOWN_GREEN_PINEAPPLE + spriteOffset);
-                break;
-
-            case LEFT_DOWN:
-                resource = static_cast<Sprite>(LEFT_DOWN_GREEN_PINEAPPLE + spriteOffset);
-                break;
+        for(unsigned short i = 1; i < nbFrames; i++) {
+            s.setTexture(ResourceLoader::getSprite(static_cast<Sprite>(resource + i * NB_DIRECTIONS)));
+            as.addSprite(s);
         }
-        s.setTexture(ResourceLoader::getSprite(resource));
-        s.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
 
-        _monsters[monsters->value] = s;
+        as.setForward(forward);
+        try {
+            as.setFrame(frame);
+        }
+        catch (std::runtime_error& e) {
+            std::cerr << e.what() << std::endl;
+        }
+
+        as.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
+
+        _monsters.insert(std::pair<Monster*, AnimatedSprite>(monsters->value, as));
         monsterNo++;
     }
 }
@@ -180,7 +168,7 @@ void GameView::drawPlayer(double timeElapsed) {
 }
 
 void GameView::drawMonsters(double timeElapsed) {
-    for(std::pair<const Monster* const, sf::Sprite>& pair : _monsters) {
+    for(std::pair<const Monster* const, AnimatedSprite>& pair : _monsters) {
         Position<> monsterPos = pair.first->position()->contenu().position();
         double avancement = pair.first->avancement();
         double x = 0;
@@ -201,6 +189,7 @@ void GameView::drawMonsters(double timeElapsed) {
         }
 
         pair.second.setPosition((monsterPos.x + avancement * x) * SPRITE_SIZE, (monsterPos.y + avancement * y) * SPRITE_SIZE);
+        pair.second.animate(timeElapsed);
         window()->draw(pair.second);
     }
 }
