@@ -109,8 +109,14 @@ void GameView::updateMonsters() {
         unsigned short spriteOffset;
         unsigned short nbFrames;
         if(monsters->value->weak()) {
-            spriteOffset = LEFT_WEAK_PINEAPPLE_1 - LEFT_GREEN_PINEAPPLE;
-            nbFrames = WEAK_MONSTER_FRAMES;
+            if(monsters->value->returnHome()) {
+                spriteOffset = LEFT_EYES_PINEAPPLE - LEFT_GREEN_PINEAPPLE;
+                nbFrames = EYES_MONSTER_FRAMES;
+            }
+            else {
+                spriteOffset = LEFT_WEAK_PINEAPPLE_1 - LEFT_GREEN_PINEAPPLE;
+                nbFrames = WEAK_MONSTER_FRAMES;
+            }
         }
         else {
             spriteOffset = monsterNo * NB_DIRECTIONS * MONSTER_FRAMES;

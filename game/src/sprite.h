@@ -7,6 +7,7 @@
  */
 
 //Nombre d'image d'animation par type de joueur
+#define EYES_MONSTER_FRAMES 1
 #define WEAK_MONSTER_FRAMES 2
 #define MONSTER_FRAMES 1
 #define PLAYER_FRAMES 4
@@ -68,6 +69,14 @@ enum Sprite {
         RIGHT_DOWN_WEAK_PINEAPPLE_2,
         DOWN_WEAK_PINEAPPLE_2,
         LEFT_DOWN_WEAK_PINEAPPLE_2,
+        LEFT_EYES_PINEAPPLE,
+        LEFT_UP_EYES_PINEAPPLE,
+        UP_EYES_PINEAPPLE,
+        RIGHT_UP_EYES_PINEAPPLE,
+        RIGHT_EYES_PINEAPPLE,
+        RIGHT_DOWN_EYES_PINEAPPLE,
+        DOWN_EYES_PINEAPPLE,
+        LEFT_DOWN_EYES_PINEAPPLE,
         OPEN_PIZZA_1,
         OPEN_PIZZA_2,
         OPEN_PIZZA_3,

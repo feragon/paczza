@@ -74,6 +74,7 @@ void Jeu::updatePlayers(double timeElapsed) {
 
                         if (newPosition == _player.position()) {
                             monsters->value->collision(_player);
+                            Listened<BoardListener>::callListeners(&BoardListener::onMonsterWeaknessUpdate, monsters->value);
                         }
                     }
                     catch (std::out_of_range& e) {
@@ -147,6 +148,7 @@ void Jeu::updatePlayers(double timeElapsed) {
                     if (abs(_player.direction() - monsters->value->direction()) == NB_DIRECTIONS / 2 ||
                         _player.position() == _newPlayerPosition) {
                         monsters->value->collision(_player);
+                        Listened<BoardListener>::callListeners(&BoardListener::onMonsterWeaknessUpdate, monsters->value);
                     }
                 }
             }
