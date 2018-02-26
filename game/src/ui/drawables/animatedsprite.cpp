@@ -56,7 +56,7 @@ void AnimatedSprite::animate(double timeElapsed) {
             }
             if(_frame >= _sprites.size()) {
                 _forward = false;
-                _frame = (_sprites.size() - 1)  - fmod(_frame, _sprites.size());
+                _frame = _sprites.size() - fmod(_frame, _sprites.size());
             }
             break;
     }
