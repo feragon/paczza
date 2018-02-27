@@ -11,6 +11,11 @@ class GameView : public BoardView, public BoardListener {
         void updateMonsters();
 
         /**
+         * @brief Met à jour le sprite du joueur
+         */
+        void updatePlayer();
+
+        /**
          * @brief Affiche le joueur sur la fenêtre
          * @param timeElapsed Temps écoulé depuis le dernier dessin
          */

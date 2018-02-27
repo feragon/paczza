@@ -7,16 +7,11 @@
 
 GameView::GameView(sf::RenderWindow* window, FenetreJeu* f, SharedPtr<Jeu> game) :
         BoardView(window, f, game->plateau()),
-        _playerAnimatedSprite(AnimatedSprite::ANIMATION_CIRCULAR, sf::Sprite(ResourceLoader::getSprite(Sprite::OPEN_PIZZA_1)), 16, false) {
+        _playerAnimatedSprite(AnimatedSprite::ANIMATION_CIRCULAR, sf::Sprite(ResourceLoader::getSprite(Sprite::LEFT_PIZZA_1)), 16, false) {
     _game = game;
     game->addListener(this);
     updateMonsters();
-
-    _playerAnimatedSprite.addSprite(sf::Sprite(ResourceLoader::getSprite(Sprite::OPEN_PIZZA_2)));
-    _playerAnimatedSprite.addSprite(sf::Sprite(ResourceLoader::getSprite(Sprite::OPEN_PIZZA_3)));
-    _playerAnimatedSprite.addSprite(sf::Sprite(ResourceLoader::getSprite(Sprite::PIZZA)));
-    _playerAnimatedSprite.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
-    _playerAnimatedSprite.setRotation(_game->player().direction() * 45);
+    updatePlayer();
 
     setKeyPressedCommand(sf::Keyboard::Numpad1, SharedPtr<ChangeDirectionCommand>(game.get(), LEFT_DOWN));
     setKeyPressedCommand(sf::Keyboard::Numpad2, SharedPtr<ChangeDirectionCommand>(game.get(), DOWN));
@@ -66,7 +61,7 @@ void GameView::render(double timeElapsed) {
 }
 
 void GameView::generateLifesIndicator(const sf::Vector2f& windowSize) {
-    const sf::Texture& texture = ResourceLoader::getSprite(OPEN_PIZZA_1);
+    const sf::Texture& texture = ResourceLoader::getSprite(LEFT_PIZZA_1);
     double space, x;
     x = space = texture.getSize().x / 2;
     double y = windowSize.y - texture.getSize().y - 10;
@@ -151,6 +146,7 @@ void GameView::updateVertice(Sommet<Case>* vertice) {
 
 void GameView::playerMovementBegin(Pacman* player) {
     _playerAnimatedSprite.reset();
+    updatePlayer(); //TODO: seulement en cas de changement de direction
 }
 
 void GameView::drawPlayer(double timeElapsed) {
@@ -173,7 +169,6 @@ void GameView::drawPlayer(double timeElapsed) {
         y = 1;
     }
 
-    _playerAnimatedSprite.setRotation(_game->player().direction() * 45);
     _playerAnimatedSprite.setPosition((pos.x + avancement * x) * SPRITE_SIZE, (pos.y + avancement * y) * SPRITE_SIZE);
     _playerAnimatedSprite.animate(timeElapsed);
     window()->draw(_playerAnimatedSprite);
@@ -226,4 +221,18 @@ void GameView::updateEdge(Arete<Chemin, Case>* edge) {
                        (p2.y + moveVect.y / 2) * SPRITE_SIZE);
 
     _aretesMarquees[edge] = sprite;
+}
+
+void GameView::updatePlayer() {
+    Sprite resource = static_cast<Sprite>(LEFT_PIZZA_1 + _game->player().direction());
+    sf::Sprite sprite = sf::Sprite(ResourceLoader::getSprite(resource));
+
+    _playerAnimatedSprite = AnimatedSprite(AnimatedSprite::ANIMATION_CIRCULAR, sprite, PLAYER_FRAMES/MOVEMENT_TIME, false);
+    _playerAnimatedSprite.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
+
+    for(int i = 1; i < PLAYER_FRAMES; i++) {
+        resource = static_cast<Sprite>(resource + NB_DIRECTIONS);
+        sprite = sf::Sprite(ResourceLoader::getSprite(resource));
+        _playerAnimatedSprite.addSprite(sprite);
+    }
 }
