@@ -95,11 +95,9 @@ void GameView::updateMonsters() {
     bool forward = true;
 
     for(auto pair : _monsters) {
-        if(pair.first->weak()) {
-            frame = pair.second.frame();
-            forward = pair.second.forward();
-            break;
-        }
+        frame = pair.second.frame();
+        forward = pair.second.forward();
+        break;
     }
 
     _monsters.clear();
@@ -110,11 +108,11 @@ void GameView::updateMonsters() {
         unsigned short nbFrames;
         if(monsters->value->weak()) {
             if(monsters->value->returnHome()) {
-                spriteOffset = LEFT_EYES_PINEAPPLE - LEFT_GREEN_PINEAPPLE;
+                spriteOffset = LEFT_EYES_PINEAPPLE - LEFT_RED_PINEAPPLE_1;
                 nbFrames = EYES_MONSTER_FRAMES;
             }
             else {
-                spriteOffset = LEFT_WEAK_PINEAPPLE_1 - LEFT_GREEN_PINEAPPLE;
+                spriteOffset = LEFT_WEAK_PINEAPPLE_1 - LEFT_RED_PINEAPPLE_1;
                 nbFrames = WEAK_MONSTER_FRAMES;
             }
         }
@@ -123,9 +121,9 @@ void GameView::updateMonsters() {
             nbFrames = MONSTER_FRAMES;
         }
 
-        Sprite resource = static_cast<Sprite>(LEFT_GREEN_PINEAPPLE + monsters->value->direction() + spriteOffset);
+        Sprite resource = static_cast<Sprite>(LEFT_RED_PINEAPPLE_1 + monsters->value->direction() + spriteOffset);
         sf::Sprite s(ResourceLoader::getSprite(resource));
-        AnimatedSprite as(AnimatedSprite::ANIMATION_CIRCULAR, s, 2, true);
+        AnimatedSprite as(AnimatedSprite::ANIMATION_CIRCULAR, s, 4, true);
 
         for(unsigned short i = 1; i < nbFrames; i++) {
             s.setTexture(ResourceLoader::getSprite(static_cast<Sprite>(resource + i * NB_DIRECTIONS)));
