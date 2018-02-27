@@ -9,3 +9,5 @@
 
 #define COOLDOWN_TIME 4
 #define MOVEMENT_TIME 0.5
+
+#define WEAK_TIME 10

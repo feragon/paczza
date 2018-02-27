@@ -39,6 +39,10 @@ void Jeu::updatePlayers(double timeElapsed) {
     _timeSinceMove += timeElapsed;
     double movement = _timeSinceMove / MOVEMENT_TIME;
 
+    for (Liste<Monster>* monsters = _monsters; monsters; monsters = monsters->next) {
+        monsters->value->update(timeElapsed);
+    }
+
     try {
         if (_timeSinceMove >= MOVEMENT_TIME) {
             _timeSinceMove = 0;
