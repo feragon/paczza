@@ -183,6 +183,9 @@ void GameView::drawPlayer(double timeElapsed) {
 
 void GameView::drawMonsters(double timeElapsed) {
     for(std::pair<const Monster* const, AnimatedSprite>& pair : _monsters) {
+        if(pair.first->weakTime() > 0) {
+            pair.second.setFps((WEAK_TIME - pair.first->weakTime()) * 2);
+        }
         Position<> monsterPos = pair.first->position()->contenu().position();
         double avancement = pair.first->avancement();
         double x = 0;

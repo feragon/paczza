@@ -72,6 +72,19 @@ class AnimatedSprite : public sf::Drawable, public sf::Transformable {
         inline void setForward(bool forward);
 
         sf::FloatRect getGlobalBounds();
+
+        /**
+         * @brief Donne le nombre d'images par seconde de l'animation
+         * @return Nombre d'images par seconde
+         */
+        inline double fps() const;
+
+        /**
+         * @brief Définit le nombre d'images par seconde
+         * @param fps Nombre d'images par seconde
+         */
+        inline void setFps(double fps);
+
     protected:
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
@@ -102,4 +115,12 @@ bool AnimatedSprite::forward() const {
 
 void AnimatedSprite::setForward(bool forward) {
     _forward = forward;
+}
+
+double AnimatedSprite::fps() const {
+        return _fps;
+}
+
+void AnimatedSprite::setFps(double fps) {
+        _fps = fps;
 }
