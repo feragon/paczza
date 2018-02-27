@@ -33,6 +33,7 @@ class BoardView : public View {
         BoardView& operator = (const BoardView&);
 
         std::map<Position<>, sf::Sprite, cmpPosition<>> _elements;
+        std::map<Position<>, AnimatedSprite, cmpPosition<>> _animatedElements;
 
         std::vector<sf::Sprite> _backgroundSprites;
         Board* _board;

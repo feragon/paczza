@@ -216,7 +216,9 @@ enum Sprite {
         SPACE,
         COCAINE,
         DOOR,
-        TELEPORTER,
+        TELEPORTER_1,
+        TELEPORTER_2,
+        TELEPORTER_3,
         RETURN_KEY,
         SPRITE_FIN
 };

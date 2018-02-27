@@ -5,6 +5,7 @@
 #include <cmath>
 #include "boardview.h"
 #include <SFML/Audio.hpp>
+#include <board/teleporter.h>
 
 BoardView::BoardView(sf::RenderWindow* window, FenetreJeu* f, Board* board) :
         View(window, f) {
@@ -21,13 +22,24 @@ void BoardView::genererSpritesElements() {
 
 void BoardView::genererSpriteElement(const Case& c) {
     if(c.element()) {
-        sf::Sprite sprite(ResourceLoader::getSprite(c.element()->sprite()));
-
-        sprite.setOrigin(SPRITE_SIZE / 2, SPRITE_SIZE / 2);
-        sprite.setPosition(c.position().x * SPRITE_SIZE,
+        if(dynamic_cast<Teleporter*>(c.element())) { //TODO
+            AnimatedSprite as(AnimatedSprite::ANIMATION_LINERAR, sf::Sprite(ResourceLoader::getSprite(TELEPORTER_1)), 4, true);
+            as.addSprite(sf::Sprite(ResourceLoader::getSprite(TELEPORTER_2)));
+            as.addSprite(sf::Sprite(ResourceLoader::getSprite(TELEPORTER_3)));
+            as.setOrigin(SPRITE_SIZE / 2, SPRITE_SIZE / 2);
+            as.setPosition(c.position().x * SPRITE_SIZE,
                            c.position().y * SPRITE_SIZE);
 
-        _elements[c.position()] = sprite;
+            _animatedElements.insert(std::pair<Position<>, AnimatedSprite>(c.position(), as));
+        }
+        else {
+            sf::Sprite sprite(ResourceLoader::getSprite(c.element()->sprite()));
+            sprite.setOrigin(SPRITE_SIZE / 2, SPRITE_SIZE / 2);
+            sprite.setPosition(c.position().x * SPRITE_SIZE,
+                               c.position().y * SPRITE_SIZE);
+
+            _elements[c.position()] = sprite;
+        }
     }
     else {
         _elements.erase(c.position());
@@ -90,6 +102,8 @@ void BoardView::render(double timeElapsed) {
         window()->draw(p.second);
     }
 
-    _elements[Position<>(6,1)].rotate(1);
-    _elements[Position<>(6,8)].rotate(1);
+    for(std::pair<const Position<>, AnimatedSprite>& p : _animatedElements) {
+        p.second.animate(timeElapsed);
+        window()->draw(p.second);
+    }
 }
