@@ -63,7 +63,6 @@ void Jeu::updatePlayers(double timeElapsed) {
 
             _player.setPosition(_newPlayerPosition);
             _newPlayerPosition->contenu().heberge(_player);
-            Listened<BoardListener>::callListeners(&BoardListener::updateVertice, _newPlayerPosition);
 
             _player.setAvancement(0);
 
@@ -108,14 +107,15 @@ void Jeu::updatePlayers(double timeElapsed) {
                 nextPlayerPosition = getNextPlayerPosition();
             }
 
+            Listened<BoardListener>::callListeners(&BoardListener::onNewTurn);
+            Listened<BoardListener>::callListeners(&BoardListener::updateVertice, _newPlayerPosition);
+
             _oldPositions[&_player] = _player.position();
             _newPlayerPosition = nextPlayerPosition;
 
             if (_player.position() != _newPlayerPosition) {
                 Listened<BoardListener>::callListeners(&BoardListener::playerMovementBegin, &_player);
             }
-
-            Listened<BoardListener>::callListeners(&BoardListener::onNewTurn);
         }
         else {
             if (_monsterManager) {

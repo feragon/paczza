@@ -42,7 +42,7 @@ class Case : public InfoSommet<Sommet<Case>> {
          * @brief Définit l'élément de la case
          * @param element Nouvel élément, ou nullptr
          */
-        inline void setElement(const Element* element);
+        void setElement(const Element* element);
 
         /**
          * @brief Fonction appelée quand un joueur physique passe sur la case

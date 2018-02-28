@@ -27,6 +27,7 @@ void BoardView::genererSpritesElements() {
 void BoardView::genererSpriteElement(const Case& c) {
     _elements.erase(c.position());
     _animatedElements.erase(c.position());
+    _sounds.erase(c.position());
 
     if(c.element()) {
         c.element()->accept(*this);
