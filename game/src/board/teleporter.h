@@ -4,11 +4,13 @@
 
 class Teleporter : public Element {
     public:
-        Teleporter(Sprite sprite, Sound sound, Sommet<Case>* target);
+        Teleporter(Sommet<Case>* target);
 
         virtual bool traversePar(Pacman& joueur) const override;
 
         virtual Element* clone() const override;
+
+        virtual void accept(ElementVisitor& visitor) override;
 
         virtual std::string toString() const override;
 

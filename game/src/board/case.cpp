@@ -3,13 +3,9 @@
 
 Case::Case(const Position<>& position, const Element* element) {
     _position = position;
+    _element = nullptr;
 
-    if(element) {
-        _element = element->clone();
-    }
-    else {
-        _element = nullptr;
-    }
+    setElement(element);
 }
 
 Case::Case(const Case& c) : InfoSommet(c) {
@@ -48,9 +44,6 @@ void Case::clear() {
 
 void Case::heberge(Pacman& joueur) {
     if(_element) {
-        _sound.setBuffer(ResourceLoader::getSound(_element->sound()));
-        _sound.play();
-
         if(!_element->traversePar(joueur)) {
             delete _element;
             _element = nullptr;
@@ -67,4 +60,18 @@ Case::operator std::string() const {
     std::ostringstream oss;
     oss << (*this);
     return oss.str();
+}
+
+void Case::setElement(const Element* element) {
+    if(_element) {
+        delete _element;
+    }
+
+    if(element) {
+        _element = element->clone();
+        _element->setPosition(this);
+    }
+    else {
+        _element = nullptr;
+    }
 }

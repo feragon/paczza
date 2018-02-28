@@ -9,7 +9,6 @@ class Case : public InfoSommet<Sommet<Case>> {
     private:
         Position<> _position;
         Element* _element;
-        sf::Sound _sound;
 
         void copy(const Case& c);
         void clear();
@@ -66,17 +65,4 @@ void Case::setPosition(const Position<>& position) {
 
 Element* Case::element() const {
     return _element;
-}
-
-void Case::setElement(const Element* element) {
-    if(_element) {
-        delete _element;
-    }
-
-    if(element) {
-        _element = element->clone();
-    }
-    else {
-        _element = nullptr;
-    }
 }

@@ -79,6 +79,15 @@ void GameView::generateLifesIndicator(const sf::Vector2f& windowSize) {
 
 void GameView::onNewTurn() {
     updateMonsters();
+    _sound.stop();
+
+    try {
+        _sound.setBuffer(ResourceLoader::getSound(_sounds.at(_game->player().position()->contenu().position())));
+        _sound.play();
+    }
+    catch (std::out_of_range& e) {
+
+    }
 }
 
 void GameView::onMonsterWeaknessUpdate(const Monster* monster) {

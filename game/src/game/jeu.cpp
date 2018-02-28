@@ -286,16 +286,16 @@ void Jeu::setMonstersWeak() {
 void Jeu::placeElements() {
     //Placement des points
     try {
-        _plateau->placerElementHasard(SuperPoint(TOMATO, BONUS, 50, this));
-        _plateau->placerElementHasard(SuperPoint(CHEESE, BONUS, 50, this));
-        _plateau->placerElementHasard(SuperPoint(HAM, BONUS, 50, this));
-        _plateau->placerElementHasard(SuperPoint(MUSHROOM, BONUS, 50, this));
+        _plateau->placerElementHasard(SuperPoint(50, this));
+        _plateau->placerElementHasard(SuperPoint(50, this));
+        _plateau->placerElementHasard(SuperPoint(50, this));
+        _plateau->placerElementHasard(SuperPoint(50, this));
     }
     catch (std::exception& e) {
         std::cerr << e.what() << std::endl;
     }
 
-    Point element(TOMATO_SMUDGE, EAT, 10);
+    Point element(10);
     for(Liste<Sommet<Case>>* l = _plateau->sommets(); l; l = l->next) {
         if(l->value->degre() > 0 &&
            !l->value->contenu().element()) {

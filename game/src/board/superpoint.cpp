@@ -1,8 +1,8 @@
 #include <game/jeu.h>
 #include "superpoint.h"
 
-SuperPoint::SuperPoint(Sprite sprite, Sound sound, int points, Jeu* jeu) :
-        Point(sprite, sound, points) {
+SuperPoint::SuperPoint(int points, Jeu* jeu) :
+        Point(points) {
     _jeu = jeu;
 }
 
@@ -12,5 +12,9 @@ bool SuperPoint::traversePar(Pacman& joueur) const {
 }
 
 Element* SuperPoint::clone() const {
-    return new SuperPoint(sprite(), sound(), points(), _jeu);
+    return new SuperPoint(points(), _jeu);
+}
+
+void SuperPoint::accept(ElementVisitor& visitor) {
+    visitor.visite(*this);
 }

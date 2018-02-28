@@ -32,6 +32,8 @@ class GameView : public BoardView, public BoardListener {
         SharedPtr<Jeu> _game;
         sf::Text _score;
 
+        sf::Sound _sound;
+
         AnimatedSprite _playerAnimatedSprite;
         std::map<const Monster*, AnimatedSprite> _monsters;
 

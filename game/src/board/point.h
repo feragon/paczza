@@ -7,7 +7,7 @@ class Point : public Element {
         int _points;
 
     public:
-        Point(Sprite sprite, Sound sound, int points);
+        Point(int points);
 
         /**
          * @return Nombre de points donnés au joueur
@@ -17,6 +17,8 @@ class Point : public Element {
         bool traversePar(Pacman& joueur) const override;
 
         Element* clone() const override;
+
+        virtual void accept(ElementVisitor& visitor) override;
 
         virtual std::string toString() const override;
 };

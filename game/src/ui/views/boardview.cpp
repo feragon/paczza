@@ -6,12 +6,16 @@
 #include "boardview.h"
 #include <SFML/Audio.hpp>
 #include <board/teleporter.h>
+#include <board/point.h>
+#include <board/teleporter.h>
+#include <board/superpoint.h>
 
 BoardView::BoardView(sf::RenderWindow* window, FenetreJeu* f, Board* board) :
         View(window, f) {
 
     _board = board;
     setFond(Sprite::EMPTY_CELL);
+    _superPointId = 0;
 }
 
 void BoardView::genererSpritesElements() {
@@ -21,28 +25,11 @@ void BoardView::genererSpritesElements() {
 }
 
 void BoardView::genererSpriteElement(const Case& c) {
+    _elements.erase(c.position());
+    _animatedElements.erase(c.position());
+
     if(c.element()) {
-        if(dynamic_cast<Teleporter*>(c.element())) { //TODO
-            AnimatedSprite as(AnimatedSprite::ANIMATION_LINERAR, sf::Sprite(ResourceLoader::getSprite(TELEPORTER_1)), 4, true);
-            as.addSprite(sf::Sprite(ResourceLoader::getSprite(TELEPORTER_2)));
-            as.addSprite(sf::Sprite(ResourceLoader::getSprite(TELEPORTER_3)));
-            as.setOrigin(SPRITE_SIZE / 2, SPRITE_SIZE / 2);
-            as.setPosition(c.position().x * SPRITE_SIZE,
-                           c.position().y * SPRITE_SIZE);
-
-            _animatedElements.insert(std::pair<Position<>, AnimatedSprite>(c.position(), as));
-        }
-        else {
-            sf::Sprite sprite(ResourceLoader::getSprite(c.element()->sprite()));
-            sprite.setOrigin(SPRITE_SIZE / 2, SPRITE_SIZE / 2);
-            sprite.setPosition(c.position().x * SPRITE_SIZE,
-                               c.position().y * SPRITE_SIZE);
-
-            _elements[c.position()] = sprite;
-        }
-    }
-    else {
-        _elements.erase(c.position());
+        c.element()->accept(*this);
     }
 }
 
@@ -106,4 +93,81 @@ void BoardView::render(double timeElapsed) {
         p.second.animate(timeElapsed);
         window()->draw(p.second);
     }
+}
+
+void BoardView::visite(const Point& point) {
+    if(!point.position()) {
+        return;
+    }
+
+    placeElement(point, sf::Sprite(ResourceLoader::getSprite(TOMATO_SMUDGE)));
+    placeSound(point, EAT);
+}
+
+void BoardView::visite(const SuperPoint& superPoint) {
+    if(!superPoint.position()) {
+        return;
+    }
+
+    Sprite resource;
+    _superPointId++;
+
+    switch (_superPointId) {
+        case 1:
+            resource = CHEESE;
+            break;
+
+        case 2:
+            resource = TOMATO;
+            break;
+
+        case 3:
+            resource = HAM;
+            break;
+
+        case 4:
+            resource = MUSHROOM;
+            _superPointId = 0;
+            break;
+
+        default:
+            resource = CHEESE;
+            _superPointId = 0;
+    }
+
+    placeElement(superPoint, sf::Sprite(ResourceLoader::getSprite(resource)));
+    placeSound(superPoint, BONUS);
+}
+
+void BoardView::visite(const Teleporter& teleporter) {
+    if(!teleporter.position()) {
+        return;
+    }
+
+    AnimatedSprite as(AnimatedSprite::ANIMATION_LINERAR, sf::Sprite(ResourceLoader::getSprite(TELEPORTER_1)), 4, true);
+    as.addSprite(sf::Sprite(ResourceLoader::getSprite(TELEPORTER_2)));
+    as.addSprite(sf::Sprite(ResourceLoader::getSprite(TELEPORTER_3)));
+
+    placeElement(teleporter, as);
+    placeSound(teleporter, TELEPORT);
+}
+
+void BoardView::placeElement(const Element& element, sf::Sprite sprite) {
+    moveElement(element, sprite);
+    _elements[element.position()->position()] = sprite;
+}
+
+void BoardView::placeElement(const Element& element, AnimatedSprite sprite) {
+    moveElement(element, sprite);
+    _animatedElements.insert(std::pair<Position<>, AnimatedSprite>(element.position()->position(), sprite));
+}
+
+void BoardView::moveElement(const Element& element, sf::Transformable& transformable) const {
+    transformable.setOrigin(SPRITE_SIZE / 2, SPRITE_SIZE / 2);
+    transformable.setPosition(element.position()->position().x * SPRITE_SIZE,
+                              element.position()->position().y * SPRITE_SIZE);
+}
+
+void BoardView::placeSound(const Element& element, Sound sound) {
+    _sounds.insert(std::pair<Position<>, Sound>(element.position()->position(), sound));
 }

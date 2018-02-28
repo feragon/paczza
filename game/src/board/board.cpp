@@ -132,8 +132,8 @@ void Board::genererGraphe() {
     creeArete(Chemin(0), _cases[Position<>(11,3)], _cases[Position<>(12,3)]);
     creeArete(Chemin(0), _cases[Position<>(11,6)], _cases[Position<>(12,6)]);
 
-    Teleporter t1(TELEPORTER_1, TELEPORT, _cases[Position<>(6,1)]);
-    Teleporter t2(TELEPORTER_1, TELEPORT, _cases[Position<>(6,8)]);
+    Teleporter t1(_cases[Position<>(6,1)]);
+    Teleporter t2(_cases[Position<>(6,8)]);
     _cases[Position<>(6,8)]->contenu().setElement(&t1);
     _cases[Position<>(6,1)]->contenu().setElement(&t2);
 }

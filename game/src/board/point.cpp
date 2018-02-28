@@ -1,8 +1,8 @@
 #include <game/pacman.h>
 #include "point.h"
 
-Point::Point(Sprite sprite, Sound sound, int points) :
-        Element(sprite, sound),
+Point::Point(int points) :
+        Element(),
         _points(points) {
 
 }
@@ -13,11 +13,15 @@ bool Point::traversePar(Pacman& joueur) const {
 }
 
 Element* Point::clone() const {
-    return new Point(sprite(), sound(), _points);
+    return new Point(_points);
 }
 
 std::string Point::toString() const {
     std::ostringstream oss;
     oss << "Point(" << Element::toString() << "; _points" << _points << ")";
     return oss.str();
+}
+
+void Point::accept(ElementVisitor& visitor) {
+    visitor.visite(*this);
 }

@@ -6,38 +6,15 @@
 #include <sounds.h>
 #include <game/pacman.h>
 #include <SFML/Audio/Sound.hpp>
+#include <util/visitable.h>
+#include "elementvisitor.h"
 
-class Element {
+class Element : public Visitable<ElementVisitor> {
     private:
-        Sprite _sprite;
-        Sound _sound;
+        Case* _position;
 
     public:
-        Element(Sprite sprite, Sound sound);
-
-        /**
-         * @brief Retourne le sprite associé à l'élément
-         * @return Sprite
-         */
-        inline Sprite sprite() const;
-
-        /**
-         * @brief Définit le sprite
-         * @param sprite Nouveau sprite
-         */
-        inline void setSprite(Sprite sprite);
-
-        /**
-        * @brief Retourne le son associé à l'élément
-        * @return Sound
-        */
-        inline Sound sound() const;
-
-        /**
-        * @brief Définit le son
-        * @param sound Nouveau son
-        */
-        inline void setSound(Sound sound);
+        Element();
 
         /**
          * @brief Fonction appelée lorsqu'un joueur passe sur la case
@@ -48,9 +25,21 @@ class Element {
 
         /**
          * @brief Retourne une copie de l'élément
-         * @return Coie de l'Element
+         * @return Copie de l'Element
          */
         virtual Element* clone() const = 0;
+
+        /**
+         * @brief Donne la position de l'élément
+         * @return Position
+         */
+        inline Case* position() const;
+
+        /**
+         * @brief Définit la position de l'élément
+         * @param position Nouvelle position
+         */
+        inline void setPosition(Case* position);
 
         /**
          * @brief Donne la représentation textuelle de l'élément
@@ -63,18 +52,10 @@ class Element {
         friend std::ostream& operator << (std::ostream& o, const Element* element);
 };
 
-Sprite Element::sprite() const {
-        return _sprite;
+Case* Element::position() const {
+        return _position;
 }
 
-void Element::setSprite(Sprite sprite) {
-        _sprite = sprite;
-}
-
-Sound Element::sound() const {
-        return _sound;
-}
-
-void Element::setSound(Sound sound) {
-        _sound = sound;
+void Element::setPosition(Case* position) {
+        _position = position;
 }
