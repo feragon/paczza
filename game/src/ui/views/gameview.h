@@ -76,6 +76,7 @@ class GameView : public BoardView<Element>, public BoardListener, public Element
         std::map<Position<>, sf::Sprite, cmpPosition<>> _elements;
         std::map<Position<>, AnimatedSprite, cmpPosition<>> _animatedElements;
         std::unordered_map<Position<>, Sound> _sounds;
+        std::vector<sf::Sprite> _lifes;
 
     protected:
         /**
@@ -116,6 +117,13 @@ class GameView : public BoardView<Element>, public BoardListener, public Element
         virtual void visite(const Point& point) override;
         virtual void visite(const SuperPoint& superPoint) override;
         virtual void visite(const Teleporter& teleporter) override;
+
+        virtual void resize(const sf::Vector2f& size) override;
+
+        /**
+         * @brief Démarre la partie
+         */
+        virtual void startGame();
 };
 
 SharedPtr<Jeu> GameView::game() {

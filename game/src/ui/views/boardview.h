@@ -49,6 +49,8 @@ BoardView<ElementType>::BoardView(sf::RenderWindow* window, FenetreJeu* f, Board
 
 template <typename ElementType>
 void BoardView<ElementType>::resize(const sf::Vector2f& size) {
+    _backgroundSprites.clear();
+    
     View::resize(size);
 
     for(Liste<Sommet<Case<Element>>>* sommet = _board->sommets(); sommet; sommet = sommet->next) {

@@ -47,14 +47,10 @@ void PacmanGameView::render(double timeElapsed) {
 
 void PacmanGameView::startGame() {
     try {
-        _game->start();
-        genererSpritesElements();
+        GameView::startGame();
         updateLevelText();
     }
     catch(NoMoreLevels& e) {
-        fenetreJeu()->vuePrecedente();
-    }
-    catch(NoRemainingLife& e) {
         fenetreJeu()->vuePrecedente();
     }
 }
@@ -64,7 +60,7 @@ void PacmanGameView::updateLevelText() {
 }
 
 void PacmanGameView::resize(const sf::Vector2f& size) {
-    BoardView::resize(size);
+    GameView::resize(size);
 
     updateLevelPosition();
 }

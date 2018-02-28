@@ -14,7 +14,7 @@ class PacmanGameView : public GameView {
         /**
          * @brief Démarre la partie
          */
-        void startGame();
+        void startGame() override;
 
     private:
         /**

@@ -7,6 +7,7 @@
 #include <game/teleporter.h>
 #include <game/point.h>
 #include <game/superpoint.h>
+#include <game/noremaininglife.h>
 
 GameView::GameView(sf::RenderWindow* window, FenetreJeu* f, SharedPtr<Jeu> game) :
         BoardView(window, f, game->plateau()),
@@ -72,10 +73,13 @@ void GameView::render(double timeElapsed) {
     _score.setPosition(window()->getView().getSize().x - _score.getLocalBounds().width - 20, window()->getView().getSize().y - _score.getLocalBounds().height - 20);
     window()->draw(_score);
 
-    generateLifesIndicator(window()->getView().getSize());
+    for(const sf::Sprite& s : _lifes) {
+        window()->draw(s);
+    }
 }
 
 void GameView::generateLifesIndicator(const sf::Vector2f& windowSize) {
+    _lifes.clear();
     const sf::Texture& texture = ResourceLoader::getSprite(LEFT_PIZZA_1);
     double space, x;
     x = space = texture.getSize().x / 2;
@@ -88,7 +92,7 @@ void GameView::generateLifesIndicator(const sf::Vector2f& windowSize) {
         s.setPosition(x, y);
         x += space;
 
-        window()->draw(s);
+        _lifes.push_back(s);
     }
 }
 
@@ -353,4 +357,20 @@ void GameView::moveElement(const Element& element, sf::Transformable& transforma
 
 void GameView::placeSound(const Element& element, Sound sound) {
     _sounds.insert(std::pair<Position<>, Sound>(element.position()->position(), sound));
+}
+
+void GameView::resize(const sf::Vector2f& size) {
+    BoardView::resize(size);
+
+    generateLifesIndicator(window()->getView().getSize());
+}
+
+void GameView::startGame() {
+    try {
+        _game->start();
+        generateLifesIndicator(window()->getView().getSize());
+    }
+    catch(NoRemainingLife& e) {
+        fenetreJeu()->vuePrecedente();
+    }
 }
