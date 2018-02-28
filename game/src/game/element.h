@@ -1,17 +1,17 @@
 #pragma once
 
-#include <game/player.h>
 #include <graph/conteneur.h>
 #include <sprite.h>
 #include <sounds.h>
-#include <game/pacman.h>
 #include <SFML/Audio/Sound.hpp>
 #include <util/visitable.h>
 #include "elementvisitor.h"
+#include <board/case.h>
 
+class Pacman;
 class Element : public Visitable<ElementVisitor> {
     private:
-        Case* _position;
+        Case<Element>* _position;
 
     public:
         Element();
@@ -33,13 +33,13 @@ class Element : public Visitable<ElementVisitor> {
          * @brief Donne la position de l'élément
          * @return Position
          */
-        inline Case* position() const;
+        inline Case<Element>* position() const;
 
         /**
          * @brief Définit la position de l'élément
          * @param position Nouvelle position
          */
-        inline void setPosition(Case* position);
+        inline void setPosition(Case<Element>* position);
 
         /**
          * @brief Donne la représentation textuelle de l'élément
@@ -52,10 +52,10 @@ class Element : public Visitable<ElementVisitor> {
         friend std::ostream& operator << (std::ostream& o, const Element* element);
 };
 
-Case* Element::position() const {
+Case<Element>* Element::position() const {
         return _position;
 }
 
-void Element::setPosition(Case* position) {
+void Element::setPosition(Case<Element>* position) {
         _position = position;
 }

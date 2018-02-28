@@ -4,6 +4,9 @@
 #include <config.h>
 #include "gameview.h"
 #include "changedirectioncommand.h"
+#include <game/teleporter.h>
+#include <game/point.h>
+#include <game/superpoint.h>
 
 GameView::GameView(sf::RenderWindow* window, FenetreJeu* f, SharedPtr<Jeu> game) :
         BoardView(window, f, game->plateau()),
@@ -12,6 +15,9 @@ GameView::GameView(sf::RenderWindow* window, FenetreJeu* f, SharedPtr<Jeu> game)
     game->addListener(this);
     updateMonsters();
     updatePlayer();
+
+    _superPointId = 0;
+    genererSpritesElements();
 
     setKeyPressedCommand(sf::Keyboard::Numpad1, SharedPtr<ChangeDirectionCommand>(game.get(), LEFT_DOWN));
     setKeyPressedCommand(sf::Keyboard::Numpad2, SharedPtr<ChangeDirectionCommand>(game.get(), DOWN));
@@ -31,10 +37,19 @@ void GameView::render(double timeElapsed) {
     _game->updateGame(timeElapsed);
     BoardView::render(timeElapsed);
 
+    for(const std::pair<const Position<>, sf::Sprite>& p : _elements) {
+        window()->draw(p.second);
+    }
+
+    for(std::pair<const Position<>, AnimatedSprite>& p : _animatedElements) {
+        p.second.animate(timeElapsed);
+        window()->draw(p.second);
+    }
+
     double chaleurEnlevee = (UINT8_MAX / COOLDOWN_TIME) * timeElapsed;
     auto it = _aretesMarquees.begin();
     while (it != _aretesMarquees.end()) {
-        Arete<Chemin, Case>* arete = it->first;
+        Arete<Chemin, Case<Element>>* arete = it->first;
         double chaleur = arete->contenu().chaleur();
 
         if(chaleur <= chaleurEnlevee) {
@@ -149,7 +164,7 @@ void GameView::updateMonsters() {
     }
 }
 
-void GameView::updateVertice(Sommet<Case>* vertice) {
+void GameView::updateVertice(Sommet<Case<Element>>* vertice) {
     genererSpriteElement(vertice->contenu());
 }
 
@@ -213,7 +228,7 @@ void GameView::drawMonsters(double timeElapsed) {
     }
 }
 
-void GameView::updateEdge(Arete<Chemin, Case>* edge) {
+void GameView::updateEdge(Arete<Chemin, Case<Element>>* edge) {
     Position<> p1 = edge->debut()->contenu().position();
     Position<> p2 = edge->fin()->contenu().position();
 
@@ -244,4 +259,98 @@ void GameView::updatePlayer() {
         sprite = sf::Sprite(ResourceLoader::getSprite(resource));
         _playerAnimatedSprite.addSprite(sprite);
     }
+}
+
+void GameView::genererSpritesElements() {
+    for(Liste<Sommet<Case<Element>>>* l = _game->plateau()->sommets(); l; l = l->next) {
+        genererSpriteElement(l->value->contenu());
+    }
+}
+
+void GameView::genererSpriteElement(const Case<Element>& c) {
+    _elements.erase(c.position());
+    _animatedElements.erase(c.position());
+    _sounds.erase(c.position());
+
+    if(c.element()) {
+        c.element()->accept(*this);
+    }
+}
+
+
+void GameView::visite(const Point& point) {
+    if(!point.position()) {
+        return;
+    }
+
+    placeElement(point, sf::Sprite(ResourceLoader::getSprite(TOMATO_SMUDGE)));
+    placeSound(point, EAT);
+}
+
+void GameView::visite(const SuperPoint& superPoint) {
+    if(!superPoint.position()) {
+        return;
+    }
+
+    Sprite resource;
+    _superPointId++;
+
+    switch (_superPointId) {
+        case 1:
+            resource = CHEESE;
+            break;
+
+        case 2:
+            resource = TOMATO;
+            break;
+
+        case 3:
+            resource = HAM;
+            break;
+
+        case 4:
+            resource = MUSHROOM;
+            _superPointId = 0;
+            break;
+
+        default:
+            resource = CHEESE;
+            _superPointId = 0;
+    }
+
+    placeElement(superPoint, sf::Sprite(ResourceLoader::getSprite(resource)));
+    placeSound(superPoint, BONUS);
+}
+
+void GameView::visite(const Teleporter& teleporter) {
+    if(!teleporter.position()) {
+        return;
+    }
+
+    AnimatedSprite as(AnimatedSprite::ANIMATION_LINERAR, sf::Sprite(ResourceLoader::getSprite(TELEPORTER_1)), 4, true);
+    as.addSprite(sf::Sprite(ResourceLoader::getSprite(TELEPORTER_2)));
+    as.addSprite(sf::Sprite(ResourceLoader::getSprite(TELEPORTER_3)));
+
+    placeElement(teleporter, as);
+    placeSound(teleporter, TELEPORT);
+}
+
+void GameView::placeElement(const Element& element, sf::Sprite sprite) {
+    moveElement(element, sprite);
+    _elements[element.position()->position()] = sprite;
+}
+
+void GameView::placeElement(const Element& element, AnimatedSprite sprite) {
+    moveElement(element, sprite);
+    _animatedElements.insert(std::pair<Position<>, AnimatedSprite>(element.position()->position(), sprite));
+}
+
+void GameView::moveElement(const Element& element, sf::Transformable& transformable) const {
+    transformable.setOrigin(SPRITE_SIZE / 2, SPRITE_SIZE / 2);
+    transformable.setPosition(element.position()->position().x * SPRITE_SIZE,
+                              element.position()->position().y * SPRITE_SIZE);
+}
+
+void GameView::placeSound(const Element& element, Sound sound) {
+    _sounds.insert(std::pair<Position<>, Sound>(element.position()->position(), sound));
 }

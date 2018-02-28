@@ -12,8 +12,8 @@ AStarMonsterManager::AStarMonsterManager(Jeu* game) :
 void AStarMonsterManager::moveMonster(const Monster* monster, const Position<>& playerPosition) {
     AStarFunctions::destination = game()->plateau()->sommet(playerPosition);
 
-    Sommet<Case>* position = game()->plateau()->sommet(monster->position()->contenu().position());
-    Sommet<Case>* destination = AStarT<Graphe<Chemin, Case>, Sommet<Case>>::aStar(*(game()->plateau()), position, &AStarFunctions::hh);
+    Sommet<Case<Element>>* position = game()->plateau()->sommet(monster->position()->contenu().position());
+    Sommet<Case<Element>>* destination = AStarT<Graphe<Chemin, Case<Element>>, Sommet<Case<Element>>>::aStar(*(game()->plateau()), position, &AStarFunctions::hh);
 
     if(destination != AStarFunctions::destination) {
         monsters()[monster] = DumbMonsterManager::getNextPosition(game()->plateau(), position);

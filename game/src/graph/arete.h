@@ -61,8 +61,8 @@ Arete<S, T>::operator std::string() const {
     std::ostringstream oss;
 
     oss << "Arete(" << (std::string) ((Conteneur<S>) *this) <<
-       "; debut=" << _debut->cle() <<
-       "; fin=" << _fin->cle() <<
+       "; debut=" << *_debut <<
+       "; fin=" << *_fin <<
     ")";
 
     return oss.str();

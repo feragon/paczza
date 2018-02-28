@@ -1,7 +1,7 @@
 #include "player.h"
 #include <board/case.h>
 
-Player::Player(const Sommet<Case>* p, Direction direction) {
+Player::Player(const Sommet<Case<Element>>* p, Direction direction) {
     _position = p;
     _direction = direction;
     _avancement = 0;

@@ -5,7 +5,7 @@
 
 class Pacman : public Player {
     public:
-        Pacman(const Sommet<Case>* p, Direction direction, unsigned short nbLifes);
+        Pacman(const Sommet<Case<Element>>* p, Direction direction, unsigned short nbLifes);
 
         /**
          * @brief Donne le nombre de points

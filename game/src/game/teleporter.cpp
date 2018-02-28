@@ -1,7 +1,8 @@
 #include "teleporter.h"
-#include "case.h"
+#include "board/case.h"
+#include "pacman.h"
 
-Teleporter::Teleporter(Sommet<Case>* target) :
+Teleporter::Teleporter(Sommet<Case<Element>>* target) :
         Element(),
         _target(target) {
 

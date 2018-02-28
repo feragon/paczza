@@ -2,7 +2,7 @@
 #include "pacmandied.h"
 #include <board/case.h>
 
-Monster::Monster(const Sommet<Case>* p, Direction direction, Sommet<Case>* home) :
+Monster::Monster(const Sommet<Case<Element>>* p, Direction direction, Sommet<Case<Element>>* home) :
         Player(p, direction),
         _home(home) {
     _weakTime = 0;

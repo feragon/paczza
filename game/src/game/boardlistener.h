@@ -18,13 +18,13 @@ class BoardListener {
          * @brief Fonction appelée lorsque les données d'une arête ont été mises à jour
          * @param edge Arête concernée
          */
-        virtual void updateEdge(Arete<Chemin, Case>* edge) = 0;
+        virtual void updateEdge(Arete<Chemin, Case<Element>>* edge) = 0;
 
         /**
          * @brief Fonction appelée lorsqu'un sommet a été mis à jour
          * @param vertice Sommet concerné
          */
-        virtual void updateVertice(Sommet<Case>* vertice) = 0;
+        virtual void updateVertice(Sommet<Case<Element>>* vertice) = 0;
 
         /**
          * @brief Fonction appelée avant un nouveau tour

@@ -4,7 +4,7 @@
 
 class Teleporter : public Element {
     public:
-        Teleporter(Sommet<Case>* target);
+        Teleporter(Sommet<Case<Element>>* target);
 
         virtual bool traversePar(Pacman& joueur) const override;
 
@@ -15,5 +15,5 @@ class Teleporter : public Element {
         virtual std::string toString() const override;
 
     private:
-        Sommet<Case>* _target;
+        Sommet<Case<Element>>* _target;
 };

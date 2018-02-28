@@ -9,22 +9,23 @@
 #include "monstermanager.h"
 #include "direction.h"
 #include "boardlistener.h"
+#include "element.h"
 
 class Jeu : public Listened<BoardListener> {
     private:
-        Sommet<Case>* getNextPlayerPosition();
+        Sommet<Case<Element>>* getNextPlayerPosition();
         void updateOldPositions();
         /**
          * @brief Ajoute un monstre au jeu
          * @param position Position du monstre
          */
-        void addMonster(Sommet<Case>* position);
+        void addMonster(Sommet<Case<Element>>* position);
 
-        Board* _plateau;
-        std::map<Player*, const Sommet<Case>*> _oldPositions;
+        Board<Element>* _plateau;
+        std::map<Player*, const Sommet<Case<Element>>*> _oldPositions;
         SharedPtr<MonsterManager> _monsterManager;
         double _timeSinceMove;
-        Sommet<Case>* _newPlayerPosition;
+        Sommet<Case<Element>>* _newPlayerPosition;
         Direction _newDirection;
         bool _stopped;
 
@@ -45,7 +46,7 @@ class Jeu : public Listened<BoardListener> {
          * @brief Donne le plateau du jeu
          * @return Plateau du jeu
          */
-        inline Board* plateau();
+        inline Board<Element>* plateau();
 
         /**
          * @brief Donne le gestionnaire de monstres
@@ -128,7 +129,7 @@ class Jeu : public Listened<BoardListener> {
         inline Liste<Monster>* monsters();
 };
 
-Board* Jeu::plateau() {
+Board<Element>* Jeu::plateau() {
     return _plateau;
 };
 

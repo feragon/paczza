@@ -3,18 +3,19 @@
 #include <ostream>
 #include <board/position.h>
 #include <astar/infosommet.h>
-#include "element.h"
+#include <graph/sommet.h>
 
-class Case : public InfoSommet<Sommet<Case>> {
+template <typename ElementType>
+class Case: public InfoSommet<Sommet<Case<ElementType>>> {
     private:
         Position<> _position;
-        Element* _element;
+        ElementType* _element;
 
         void copy(const Case& c);
         void clear();
 
     public:
-        Case(const Position<>& position, const Element* element);
+        Case(const Position<>& position, const ElementType* element);
         Case(const Case& c);
         ~Case();
 
@@ -30,7 +31,7 @@ class Case : public InfoSommet<Sommet<Case>> {
          * @brief Donne l'élément de la case, ou nullptr si la case est vide
          * @return Element
          */
-        inline Element* element() const;
+        inline ElementType* element() const;
 
         /**
          * @brief Définit la nouvelle position de la case
@@ -42,27 +43,100 @@ class Case : public InfoSommet<Sommet<Case>> {
          * @brief Définit l'élément de la case
          * @param element Nouvel élément, ou nullptr
          */
-        void setElement(const Element* element);
+        void setElement(const ElementType* element);
 
-        /**
-         * @brief Fonction appelée quand un joueur physique passe sur la case
-         * @param joueur Joueur
-         */
-        void heberge(Pacman& joueur);
-
-        friend std::ostream& operator<<(std::ostream &, const Case&);
+        template <typename osElementType>
+        friend std::ostream& operator<<(std::ostream &, const Case<osElementType>&);
 
         operator std::string() const;
 };
 
-Position<> Case::position() const {
+template <typename ElementType>
+Position<> Case<ElementType>::position() const {
     return _position;
 }
 
-void Case::setPosition(const Position<>& position) {
+template <typename ElementType>
+void Case<ElementType>::setPosition(const Position<>& position) {
     _position = position;
 }
 
-Element* Case::element() const {
+template <typename ElementType>
+ElementType* Case<ElementType>::element() const {
     return _element;
+}
+
+template <typename ElementType>
+Case<ElementType>::Case(const Position<>& position, const ElementType* element) {
+    _position = position;
+    _element = nullptr;
+
+    setElement(element);
+}
+
+template <typename ElementType>
+Case<ElementType>::Case(const Case<ElementType>& c) : InfoSommet<Sommet<Case<ElementType>>>(c) {
+    copy(c);
+}
+
+template <typename ElementType>
+Case<ElementType>& Case<ElementType>::operator=(const Case& c) {
+    clear();
+    copy(c);
+
+    return *this;
+}
+
+template <typename ElementType>
+Case<ElementType>::~Case() {
+    clear();
+}
+
+template <typename ElementType>
+void Case<ElementType>::copy(const Case<ElementType>& c) {
+    _position = c._position;
+
+    if(c._element) {
+        _element = c._element->clone();
+    }
+    else {
+        _element = c._element;
+    }
+}
+
+template <typename ElementType>
+void Case<ElementType>::clear() {
+    if(_element) {
+        delete _element;
+    }
+
+    _element = nullptr;
+}
+
+template <typename ElementType>
+std::ostream & operator<<(std::ostream &os, const Case<ElementType>& s) {
+    os << "Case(" << s.position() << ")";
+    return os;
+}
+
+template <typename ElementType>
+Case<ElementType>::operator std::string() const {
+    std::ostringstream oss;
+    oss << (*this);
+    return oss.str();
+}
+
+template <typename ElementType>
+void Case<ElementType>::setElement(const ElementType* element) {
+    if(_element) {
+        delete _element;
+    }
+
+    if(element) {
+        _element = element->clone();
+        _element->setPosition(this);
+    }
+    else {
+        _element = nullptr;
+    }
 }

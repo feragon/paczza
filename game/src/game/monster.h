@@ -7,7 +7,7 @@
 
 class Monster : public Player {
     public:
-        Monster(const Sommet<Case>* p, Direction direction, Sommet<Case>* home);
+        Monster(const Sommet<Case<Element>>* p, Direction direction, Sommet<Case<Element>>* home);
 
         /**
          * @return Vrai si le monstre est vulnérable
@@ -37,7 +37,7 @@ class Monster : public Player {
          * @brief Donne la position originale du monstre
          * @return Position originale du monstre
          */
-        inline Sommet<Case>* home() const;
+        inline Sommet<Case<Element>>* home() const;
 
         /**
          * @brief Fonction appelée lors de la collision avec le joueur
@@ -62,7 +62,7 @@ class Monster : public Player {
     private:
         bool _returnHome;
         double _weakTime;
-        Sommet<Case>* _home;
+        Sommet<Case<Element>>* _home;
 };
 
 bool Monster::weak() const {
@@ -77,7 +77,7 @@ void Monster::setReturnHome(bool returnHome) {
     _returnHome = returnHome;
 }
 
-Sommet<Case>* Monster::home() const {
+Sommet<Case<Element>>* Monster::home() const {
     return _home;
 }
 

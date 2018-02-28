@@ -15,5 +15,5 @@ class DumbMonsterManager : public MonsterManager {
          * @param monsterVertice Sommet actuel
          * @return Nouvelle position
          */
-        static Position<> getNextPosition(const Board* board, Sommet<Case>* monsterVertice);
+        static Position<> getNextPosition(const Board<Element>* board, Sommet<Case<Element>>* monsterVertice);
 };

@@ -30,8 +30,8 @@ void MonsterManager::sendHome(const Monster* monster) {
     }
     AStarFunctions::destination = monster->home();
 
-    Sommet<Case>* position = game()->plateau()->sommet(monster->position()->contenu().position());
-    Sommet<Case>* destination = AStarT<Graphe<Chemin, Case>, Sommet<Case>>::aStar(*(game()->plateau()), position, &AStarFunctions::hh);
+    Sommet<Case<Element>>* position = game()->plateau()->sommet(monster->position()->contenu().position());
+    Sommet<Case<Element>>* destination = AStarT<Graphe<Chemin, Case<Element>>, Sommet<Case<Element>>>::aStar(*(game()->plateau()), position, &AStarFunctions::hh);
 
     if(destination != AStarFunctions::destination) {
         std::cerr << "Impossible de trouver un chemin jusqu'à la case d'origine" << std::endl;
