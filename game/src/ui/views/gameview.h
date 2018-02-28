@@ -108,6 +108,12 @@ class GameView : public BoardView<Element>, public BoardListener, public Element
          */
         inline AnimatedSprite& playerAnimatedSprite();
 
+        /**
+         * @brief Donne les sprites animés des monstres
+         * @return AnimatedSprites
+         */
+        inline std::map<const Monster*, AnimatedSprite>& monsterAnimatedSprites();
+
         void playerMovementBegin(Pacman* player) override;
         void updateEdge(Arete<Chemin, Case<Element>>* edge) override;
         void updateVertice(Sommet<Case<Element>>* vertice) override;
@@ -132,4 +138,8 @@ SharedPtr<Jeu> GameView::game() {
 
 AnimatedSprite& GameView::playerAnimatedSprite() {
     return _playerAnimatedSprite;
+}
+
+std::map<const Monster*, AnimatedSprite>& GameView::monsterAnimatedSprites() {
+    return _monsters;
 }

@@ -5,7 +5,7 @@
 #include "boardview.h"
 #include "gameview.h"
 
-class TutorialView : public View {
+class TutorialView : public View, public ElementVisitor {
     public:
         TutorialView(sf::RenderWindow* window, FenetreJeu* f);
         virtual ~TutorialView();
@@ -21,10 +21,22 @@ class TutorialView : public View {
          */
         void update();
 
+        virtual void visite(const Point& point) override;
+
+        virtual void visite(const SuperPoint& superPoint) override;
+
+        virtual void visite(const Teleporter& teleporter) override;
+
     private:
         enum State {
             WELCOME,
             PACZZA_PRESENTATION,
+            OBJECTIVE,
+            MONSTERS,
+            SUPER_POINTS,
+            WEAK_MONSTERS,
+            LIFES,
+            SCORE,
             END
         };
         /**
@@ -38,6 +50,7 @@ class TutorialView : public View {
         State _state;
         bool _sendEvents;
         bool _showText;
+        bool _superPointFound;
 
 
         sf::Text _indication;

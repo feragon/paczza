@@ -149,6 +149,7 @@ void GameView::updateMonsters() {
         AnimatedSprite as(AnimatedSprite::ANIMATION_CIRCULAR, s, 4, true);
 
         for(unsigned short i = 1; i < nbFrames; i++) {
+            std::cout << i << std::endl;
             s.setTexture(ResourceLoader::getSprite(static_cast<Sprite>(resource + i * NB_DIRECTIONS)));
             as.addSprite(s);
         }
