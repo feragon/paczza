@@ -9,7 +9,6 @@ class MainMenu : public Menu {
 
     private:
         void onNewGameSelected();
-        void onHighScoreSelected();
         void onCreditsSelected();
         void onExitSelected();
         void onHelpSelected();
