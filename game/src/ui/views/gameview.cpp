@@ -266,6 +266,10 @@ void GameView::updatePlayer() {
 }
 
 void GameView::genererSpritesElements() {
+    _elements.clear();
+    _animatedElements.clear();
+    _sounds.clear();
+
     for(Liste<Sommet<Case<Element>>>* l = _game->plateau()->sommets(); l; l = l->next) {
         genererSpriteElement(l->value->contenu());
     }
@@ -369,6 +373,9 @@ void GameView::startGame() {
     try {
         _game->start();
         generateLifesIndicator(window()->getView().getSize());
+        genererSpritesElements();
+        updatePlayer();
+        updateMonsters();
     }
     catch(NoRemainingLife& e) {
         fenetreJeu()->vuePrecedente();
