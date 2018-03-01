@@ -19,7 +19,7 @@ class SharedPtr {
         template <typename... Args>
         explicit SharedPtr(Args... args);
 
-        explicit SharedPtr(nullptr_t);
+        explicit SharedPtr(std::nullptr_t);
 
         SharedPtr(const SharedPtr& other);
         template <typename U>
@@ -27,7 +27,7 @@ class SharedPtr {
 
         virtual ~SharedPtr();
 
-        SharedPtr<T>& operator = (nullptr_t other);
+        SharedPtr<T>& operator = (std::nullptr_t other);
         SharedPtr<T>& operator = (const SharedPtr& other);
         template <typename U>
         SharedPtr<T>& operator = (const SharedPtr<U>& other);
@@ -53,7 +53,7 @@ SharedPtr<T>::SharedPtr(Args... args) {
 }
 
 template<typename T>
-SharedPtr<T>::SharedPtr(nullptr_t) {
+SharedPtr<T>::SharedPtr(std::nullptr_t) {
     _count = new unsigned int(1);
     _ptr = nullptr;
 }
@@ -135,7 +135,7 @@ bool SharedPtr<T>::operator==(const U* other) const {
 }
 
 template<typename T>
-SharedPtr<T>& SharedPtr<T>::operator=(nullptr_t other) {
+SharedPtr<T>& SharedPtr<T>::operator=(std::nullptr_t other) {
     release();
     _ptr = nullptr;
     _count = new unsigned int(1);
