@@ -4,9 +4,9 @@
 #include "tutorialview.h"
 #include "updatetutorialcommand.h"
 
-TutorialView::TutorialView(sf::RenderWindow* window, FenetreJeu* f) :
+TutorialView::TutorialView(sf::RenderWindow* window, FenetreJeu* f, SharedPtr<Jeu> game) :
         View(window, f),
-        _gameView(window, f, SharedPtr<Jeu>()) {
+        _gameView(window, f, game) {
     _sendEvents = false;
     _showText = true;
 

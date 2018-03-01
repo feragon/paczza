@@ -11,8 +11,8 @@
 
 GameView::GameView(sf::RenderWindow* window, FenetreJeu* f, SharedPtr<Jeu> game) :
         BoardView(window, f, game->plateau()),
-        _playerAnimatedSprite(AnimatedSprite::ANIMATION_CIRCULAR, sf::Sprite(ResourceLoader::getSprite(Sprite::LEFT_PIZZA_1)), 16, false) {
-    _game = game;
+        _playerAnimatedSprite(AnimatedSprite::ANIMATION_CIRCULAR, sf::Sprite(ResourceLoader::getSprite(Sprite::LEFT_PIZZA_1)), 16, false),
+        _game(game) {
     game->addListener(this);
     updateMonsters();
     updatePlayer();
@@ -149,7 +149,6 @@ void GameView::updateMonsters() {
         AnimatedSprite as(AnimatedSprite::ANIMATION_CIRCULAR, s, 4, true);
 
         for(unsigned short i = 1; i < nbFrames; i++) {
-            std::cout << i << std::endl;
             s.setTexture(ResourceLoader::getSprite(static_cast<Sprite>(resource + i * NB_DIRECTIONS)));
             as.addSprite(s);
         }

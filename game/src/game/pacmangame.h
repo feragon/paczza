@@ -4,7 +4,7 @@
 
 class PacmanGame : public Jeu {
     public:
-        PacmanGame();
+        PacmanGame(SharedPtr<Board<Element>> board, GameData* gameData);
 
         void start() override;
 

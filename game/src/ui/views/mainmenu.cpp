@@ -1,8 +1,8 @@
 #include <iostream>
 #include <game/jeu.h>
 #include <ui/menu/menubutton.h>
-#include <util/shared_ptr.h>
 #include <game/pacmangame.h>
+#include <data/gamedataimpl.h>
 #include "mainmenu.h"
 #include "credits.h"
 #include "tutorialview.h"
@@ -19,8 +19,7 @@ MainMenu::MainMenu(sf::RenderWindow* window, FenetreJeu* f) :
 }
 
 void MainMenu::onNewGameSelected() {
-    SharedPtr<PacmanGame> jeu;
-    fenetreJeu()->changerVue(new PacmanGameView(window(), fenetreJeu(), jeu));
+    fenetreJeu()->changerVue(new PacmanGameView(window(), fenetreJeu(), generateGame()));
 }
 
 void MainMenu::onHighScoreSelected() {
@@ -36,5 +35,13 @@ void MainMenu::onExitSelected() {
 }
 
 void MainMenu::onHelpSelected() {
-    fenetreJeu()->changerVue(new TutorialView(window(), fenetreJeu()));
+    fenetreJeu()->changerVue(new TutorialView(window(), fenetreJeu(), generateGame()));
+}
+
+SharedPtr<Jeu> MainMenu::generateGame() {
+    GameDataImpl gd;
+    SharedPtr<Board<Element>> board;
+    gd.genererPlateau(board.get());
+
+    return SharedPtr<PacmanGame>(board, &gd);
 }

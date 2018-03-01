@@ -110,7 +110,7 @@ set(SOURCE_FILES
         src/game/pacmandied.h
         src/util/visitable.h
         src/game/elementvisitor.h
-)
+        src/game/gamedata.h src/data/gamedataimpl.cpp src/data/gamedataimpl.h)
 
 find_package(SFML 2 COMPONENTS graphics window system audio REQUIRED)
 include_directories(${SFML_INCLUDE_DIR})

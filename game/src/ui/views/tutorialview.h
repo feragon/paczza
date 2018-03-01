@@ -7,7 +7,7 @@
 
 class TutorialView : public View, public ElementVisitor {
     public:
-        TutorialView(sf::RenderWindow* window, FenetreJeu* f);
+        TutorialView(sf::RenderWindow* window, FenetreJeu* f, SharedPtr<Jeu> game);
         virtual ~TutorialView();
 
         virtual void onEvent(const sf::Event& event) override;

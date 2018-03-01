@@ -10,18 +10,14 @@
 #include "direction.h"
 #include "boardlistener.h"
 #include "element.h"
+#include "gamedata.h"
 
 class Jeu : public Listened<BoardListener> {
     private:
         Sommet<Case<Element>>* getNextPlayerPosition();
         void updateOldPositions();
-        /**
-         * @brief Ajoute un monstre au jeu
-         * @param position Position du monstre
-         */
-        void addMonster(Sommet<Case<Element>>* position);
 
-        Board<Element>* _plateau;
+        SharedPtr<Board<Element>> _board;
         std::map<Player*, const Sommet<Case<Element>>*> _oldPositions;
         SharedPtr<MonsterManager> _monsterManager;
         double _timeSinceMove;
@@ -33,14 +29,31 @@ class Jeu : public Listened<BoardListener> {
 
         Pacman _player;
         Liste<Monster>* _monsters;
+
+        GameData* _gameData;
+
+    protected:
+        inline const GameData* gameData() const;
+
     public:
-        Jeu();
+        /**
+         * @brief Crée une partie
+         * @param board Plateau à utiliser
+         * @param gameData Classe utilisée pour placer les joueurs et les éléments
+         */
+        Jeu(SharedPtr<Board<Element>> board, GameData* gameData);
         virtual ~Jeu();
 
         /**
          * @brief Remet a zéro la partie
          */
         void updatePoints();
+
+        /**
+         * @brief Ajoute un monstre au jeu
+         * @param position Position du monstre
+         */
+        void addMonster(Sommet<Case<Element>>* position);
 
         /**
          * @brief Donne le plateau du jeu
@@ -101,16 +114,6 @@ class Jeu : public Listened<BoardListener> {
         void setMonstersWeak();
 
         /**
-         * @brief Place les éléments sur le plateau
-         */
-        void placeElements();
-
-        /**
-         * @brief Place le joueur et les monstres à leur position de départ
-         */
-        void placePlayers();
-
-        /**
          * @brief Donne le joueur
          * @return Pacman
          */
@@ -130,7 +133,7 @@ class Jeu : public Listened<BoardListener> {
 };
 
 Board<Element>* Jeu::plateau() {
-    return _plateau;
+    return _board.get();
 };
 
 void Jeu::setDirection(Direction newDirection) {
@@ -163,4 +166,8 @@ const Pacman& Jeu::player() const {
 
 Liste<Monster>* Jeu::monsters() {
     return _monsters;
+}
+
+const GameData* Jeu::gameData() const {
+    return _gameData;
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ui/menu/menu.h"
+#include <game/jeu.h>
 
 class MainMenu : public Menu {
     public:
@@ -12,4 +13,5 @@ class MainMenu : public Menu {
         void onCreditsSelected();
         void onExitSelected();
         void onHelpSelected();
+        SharedPtr<Jeu> generateGame();
 };
