@@ -4,6 +4,10 @@
 
 class SenseMonsterManager : public MonsterManager {
     public:
+        /**
+         * @brief Crée un gestionnaire de monstre utilisant la vue et le flair
+         * @param game Jeu associé
+         */
         SenseMonsterManager(Jeu* game);
 
         void moveMonster(const Monster* monster, const Position<>& playerPosition) override;

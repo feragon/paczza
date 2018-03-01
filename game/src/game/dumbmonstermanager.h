@@ -5,6 +5,10 @@
 
 class DumbMonsterManager : public MonsterManager {
     public:
+        /**
+         * @brief Crée un gestionnaire de monstres les déplaçant aléatoirement
+         * @param game Jeu
+         */
         DumbMonsterManager(Jeu* game);
 
         void moveMonster(const Monster* monster, const Position<>& playerPosition) override;

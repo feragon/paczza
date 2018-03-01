@@ -7,6 +7,10 @@
 class Jeu;
 class MonsterManager {
     public:
+        /**
+         * @brief Crée un gestionnaire de monstres
+         * @param game Jeu
+         */
         MonsterManager(Jeu* game);
 
         /**
@@ -18,6 +22,7 @@ class MonsterManager {
 
         /**
          * @brief Déplace les monstres gérés
+         * @param playerPosition Position du joueur
          */
         void moveMonsters(const Position<>& playerPosition);
 
@@ -29,7 +34,15 @@ class MonsterManager {
         virtual void moveMonster(const Monster* monster, const Position<>& playerPosition) = 0;
 
     protected:
+        /**
+         * @brief Donne la liste des monstres avec leur nouvelle position
+         * @return Liste des monstres
+         */
         inline std::map<const Monster*, Position<double>>& monsters();
+
+        /**
+         * @return Jeu utilisé par le gestionnaire
+         */
         inline Jeu* game() const;
 
 

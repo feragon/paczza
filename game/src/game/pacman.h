@@ -5,6 +5,12 @@
 
 class Pacman : public Player {
     public:
+        /**
+         * @brief Crée un joueur
+         * @param p Position
+         * @param direction Direction
+         * @param nbLifes Nombre de vies
+         */
         Pacman(const Sommet<Case<Element>>* p, Direction direction, unsigned short nbLifes);
 
         /**
@@ -30,6 +36,10 @@ class Pacman : public Player {
          */
         void takeLife();
 
+        /**
+         * @brief Ajoute des vies au joueur
+         * @param nbLifes Nombre de vies
+         */
         inline void addLife(unsigned short nbLifes);
 
         virtual std::string toString() const override;

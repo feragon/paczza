@@ -52,8 +52,7 @@ class CommandReceiver {
 
         /**
          * @brief Exécute la commande correspondant à l'évènement reçu
-         * @param key Identifiant de la commande
-         * @throw UnknownCommand si la commande n'existe pas
+         * @param event Evenement
          */
         void manageEvent(const sf::Event& event) const;
 

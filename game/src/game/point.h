@@ -7,6 +7,10 @@ class Point : public Element {
         int _points;
 
     public:
+        /**
+         * @brief Crée un élément rapportant des points au joueur
+         * @param points Nombre de points
+         */
         Point(int points);
 
         /**

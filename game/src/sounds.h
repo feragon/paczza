@@ -3,6 +3,9 @@
 #include <string>
 #include <map>
 
+/**
+ * @brief Nom des sons
+ */
 enum Sound {
     EAT,
     BONUS,

@@ -7,6 +7,10 @@ class Chemin {
         double _chaleur;
 
     public:
+        /**
+         * @brief Crée un chemin
+         * @param chaleur Chaleur du chemin
+         */
         Chemin(double chaleur = 0);
         virtual ~Chemin();
 
@@ -18,9 +22,13 @@ class Chemin {
 
         /**
          * @brief Définit la chaleur de chemin
-         * @param ch Chaleur
+         * @param chaleur Chaleur
          */
         inline void setChaleur(double chaleur);
+
+        /**
+         * @return Vrai si le sommet est accessible par un joueur
+         */
         bool estAccessible();
 
         friend std::ostream& operator<<(std::ostream &, const Chemin&);

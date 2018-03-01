@@ -53,6 +53,11 @@ class View : public CommandReceiver {
         void clearFond();
 
     protected:
+        /**
+         * @brief Crée une vue
+         * @param window Fenêtre SFML
+         * @param f Fenêtre du jeu
+         */
         View(sf::RenderWindow* window, FenetreJeu* f);
 
     private:

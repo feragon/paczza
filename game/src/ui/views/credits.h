@@ -6,6 +6,11 @@
 
 class Credits : public View {
     public:
+        /**
+         * @brief Vue des crédits
+         * @param window Fenêtre SFML
+         * @param f Fenêtre du jeu
+         */
         Credits(sf::RenderWindow* window, FenetreJeu* f);
 
         virtual void render(double timeElapsed) override;

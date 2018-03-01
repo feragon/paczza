@@ -14,7 +14,15 @@
 
 class Jeu : public Listened<BoardListener> {
     private:
+        /**
+         * @brief Donne la prochaine position du joueur
+         * @return Prochaine position
+         */
         Sommet<Case<Element>>* getNextPlayerPosition();
+
+        /**
+         * @brief Met à jour les positions d'origine des joueurs
+         */
         void updateOldPositions();
 
         SharedPtr<Board<Element>> _board;
@@ -33,6 +41,9 @@ class Jeu : public Listened<BoardListener> {
         GameData* _gameData;
 
     protected:
+        /**
+         * @return Données du jeu
+         */
         inline const GameData* gameData() const;
 
     public:
@@ -87,7 +98,7 @@ class Jeu : public Listened<BoardListener> {
 
         /**
          * @brief Change la nouvelle direction du joueur
-         * @param newPosition Nouvelle direction
+         * @param newDirection Nouvelle direction
          */
         inline void setDirection(Direction newDirection);
 

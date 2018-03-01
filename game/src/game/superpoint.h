@@ -5,7 +5,12 @@
 
 class SuperPoint : public Point {
     public:
-        SuperPoint(int points, Jeu* board);
+        /**
+         * @brief Crée un élément rapportant des points au joueur et rendant les monstres vulnérables
+         * @param points Nombre de points
+         * @param game Jeu utilisé
+         */
+        SuperPoint(int points, Jeu* game);
 
         virtual bool traversePar(Pacman& joueur) const override;
 

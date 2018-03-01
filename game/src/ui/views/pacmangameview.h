@@ -5,6 +5,12 @@
 
 class PacmanGameView : public GameView {
     public:
+        /**
+         * @brief Crée une vue du jeu de pacman
+         * @param window Fenêtre SFML
+         * @param f Fenêtre du jeu
+         * @param game Jeu Pacman
+         */
         PacmanGameView(sf::RenderWindow* window, FenetreJeu* f, const SharedPtr<PacmanGame>& game);
 
         virtual void render(double timeElapsed) override;

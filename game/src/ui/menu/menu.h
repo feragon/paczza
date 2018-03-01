@@ -11,6 +11,11 @@
 
 class Menu : public View {
     protected:
+        /**
+         * @brief Crée un menu
+         * @param window Fenêtre SFML
+         * @param f Fenêtre du jeu
+         */
         Menu(sf::RenderWindow* window, FenetreJeu *f);
         virtual ~Menu();
 
@@ -27,6 +32,10 @@ class Menu : public View {
 
         virtual void onEvent(const sf::Event& event) override;
 
+        /**
+         * @brief Met à jour la position du selecteur
+         * @param offset Décalage
+         */
         void updateSelector(long offset);
     private:
         /**

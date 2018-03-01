@@ -14,6 +14,12 @@
 template <typename ElementType>
 class BoardView : public View {
     public:
+        /**
+         * @brief Vue du plateau
+         * @param window Fenêtre SFML
+         * @param f Fenêtre du jeu
+         * @param board Plateau
+         */
         BoardView(sf::RenderWindow* window, FenetreJeu* f, Board<ElementType>* board);
 
         void resize(const sf::Vector2f& size) override;

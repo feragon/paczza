@@ -11,8 +11,17 @@
 template <typename ElementType>
 class Board : public Graphe<Chemin, Case<ElementType>> {
     public:
+        /**
+         * @brief Crée un plateau vide
+         */
         Board();
 
+        /**
+         * @brief Donne le sommet associé à une position
+         * @param position Position
+         * @return Sommet
+         * @throw std::out_of_range si la position n'existe pas dans le graphe
+         */
         inline Sommet<Case<ElementType>>* sommet(const Position<>& position) const;
 
         virtual Sommet<Case<ElementType>>* creeSommet(const Case<ElementType>& contenu) override;
@@ -20,7 +29,6 @@ class Board : public Graphe<Chemin, Case<ElementType>> {
         /**
          * @brief Place un élément au hasard sur le graphe
          * @param element Élément à placer
-         * @param positionsReservees Liste des positions réservées
          * @param limit Nombre de tentatives de placement maximales
          * @throws std::runtime_exception si l'élément n'a pas pu être placé
          */

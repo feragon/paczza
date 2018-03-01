@@ -7,6 +7,9 @@
 
 class AnimatedSprite : public sf::Drawable, public sf::Transformable {
     public:
+        /**
+         * @brief Type de l'animation
+         */
         enum AnimationType {
             ANIMATION_LINERAR,
             ANIMATION_CIRCULAR,
@@ -17,6 +20,7 @@ class AnimatedSprite : public sf::Drawable, public sf::Transformable {
          * @param type Type d'animation
          * @param base Sprite de base
          * @param fps Nombre d'images par secondes
+         * @param infinite Vrai si l'animation tourne en boucle
          */
         AnimatedSprite(AnimationType type, const sf::Sprite& base, double fps, bool infinite);
 
@@ -71,6 +75,10 @@ class AnimatedSprite : public sf::Drawable, public sf::Transformable {
          */
         inline void setForward(bool forward);
 
+        /**
+         * @brief Donne la taille et la position du sprite
+         * @return sf::FloatRect
+         */
         sf::FloatRect getGlobalBounds();
 
         /**

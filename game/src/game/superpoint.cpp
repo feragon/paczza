@@ -1,9 +1,9 @@
 #include <game/jeu.h>
 #include "superpoint.h"
 
-SuperPoint::SuperPoint(int points, Jeu* jeu) :
+SuperPoint::SuperPoint(int points, Jeu* game) :
         Point(points) {
-    _jeu = jeu;
+    _jeu = game;
 }
 
 bool SuperPoint::traversePar(Pacman& joueur) const {

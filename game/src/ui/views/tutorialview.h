@@ -7,6 +7,12 @@
 
 class TutorialView : public View, public ElementVisitor {
     public:
+        /**
+         * @brief Vue qui affiche le tutoriel
+         * @param window Fenêtre SFML
+         * @param f Fenêtre du jeu
+         * @param game Jeu
+         */
         TutorialView(sf::RenderWindow* window, FenetreJeu* f, SharedPtr<Jeu> game);
         virtual ~TutorialView();
 
@@ -28,6 +34,9 @@ class TutorialView : public View, public ElementVisitor {
         virtual void visite(const Teleporter& teleporter) override;
 
     private:
+        /**
+         * @brief État du tutoriel
+         */
         enum State {
             WELCOME,
             PACZZA_PRESENTATION,

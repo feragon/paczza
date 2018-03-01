@@ -7,6 +7,12 @@
 
 class Monster : public Player {
     public:
+        /**
+         * @brief Crée un monstre
+         * @param p Position du monstre
+         * @param direction Direction
+         * @param home Position d'origine
+         */
         Monster(const Sommet<Case<Element>>* p, Direction direction, Sommet<Case<Element>>* home);
 
         /**

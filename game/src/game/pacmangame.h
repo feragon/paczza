@@ -4,6 +4,11 @@
 
 class PacmanGame : public Jeu {
     public:
+        /**
+         * @brief Crée un jeu de Pacman
+         * @param board Plateau utilisé par le jeu
+         * @param gameData Données du jeu
+         */
         PacmanGame(SharedPtr<Board<Element>> board, GameData* gameData);
 
         void start() override;

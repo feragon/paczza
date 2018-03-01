@@ -4,6 +4,10 @@
 
 class Teleporter : public Element {
     public:
+        /**
+         * @brief Crée un élément téléportant le joueur
+         * @param target Destination
+         */
         Teleporter(Sommet<Case<Element>>* target);
 
         virtual bool traversePar(Pacman& joueur) const override;

@@ -9,13 +9,32 @@ class Arete : public Conteneur<S> {
         Sommet<T>* _fin;
     
     public:
+        /**
+         * @brief Crée une arête
+         * @param clef Clé de l'arête
+         * @param contenu Contenu
+         * @param debut Sommet de début
+         * @param fin Sommet de fin
+         */
         Arete(int clef, const S& contenu, Sommet<T>* debut, Sommet<T>* fin);
 
         virtual ~Arete();
 
+        /**
+         * @return sommet de début
+         */
         Sommet<T>* debut() const;
+
+        /**
+         * @return sommet de fin
+         */
         Sommet<T>* fin() const;
 
+        /**
+         * @param s1 Sommet 1
+         * @param s2 Sommet 2
+         * @return Vrai si l'arête actuelle correspond aux deux sommets donnés
+         */
         bool estEgal(const Sommet<T>* s1, const Sommet<T>* s2) const;
 
         operator std::string() const;

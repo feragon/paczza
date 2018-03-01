@@ -15,6 +15,11 @@ class Case: public InfoSommet<Sommet<Case<ElementType>>> {
         void clear();
 
     public:
+        /**
+         * @brief Crée une case
+         * @param position Position de la case
+         * @param element Element présent sur la case
+         */
         Case(const Position<>& position, const ElementType* element);
         Case(const Case& c);
         ~Case();

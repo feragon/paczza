@@ -8,17 +8,34 @@ class SharedPtr {
     friend class SharedPtr;
 
     private:
+        /**
+         * @brief Copie un pointeur
+         * @tparam U Type de l'autre pointeur
+         * @param other Autre pointeur
+         */
         template <typename U>
         void copy(const SharedPtr<U>& other);
+
+        /**
+         * @brief Libère le pointeur
+         */
         void release();
 
         unsigned int* _count;
         T* _ptr;
 
     public:
+        /**
+         * @brief Crée un pointeur
+         * @tparam Args Type d'arguments de l'objet
+         * @param args Arguments
+         */
         template <typename... Args>
         explicit SharedPtr(Args... args);
 
+        /**
+         * @brief Crée un pointeur sur un objet null
+         */
         explicit SharedPtr(nullptr_t);
 
         SharedPtr(const SharedPtr& other);
@@ -34,7 +51,15 @@ class SharedPtr {
 
         inline T* operator ->() const;
         inline T& operator *() const;
+
+        /**
+         * @return Pointeur
+         */
         inline T* get() const;
+
+        /**
+         * @return Nombre d'instances de la classe
+         */
         inline unsigned int count() const;
 
         template <typename U>

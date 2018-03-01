@@ -14,6 +14,9 @@ class Element : public Visitable<ElementVisitor> {
         Case<Element>* _position;
 
     public:
+        /**
+         * @brief Crée un élément vide
+         */
         Element();
 
         /**

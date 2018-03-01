@@ -17,12 +17,26 @@ class FenetreJeu {
         void resizeView(const sf::Vector2u& size);
 
     public:
+        /**
+         * @brief Crée la fenêtre du jeu
+         */
         FenetreJeu();
         virtual ~FenetreJeu();
 
+        /**
+         * @brief Ouvre la fenêtre
+         */
         void ouvrir();
+
+        /**
+         * @brief Ferme la fenêtre
+         */
         void fermer();
 
+        /**
+         * @brief Change la vue
+         * @param v Nouvelle vue
+         */
         void changerVue(View *v);
 
         /**

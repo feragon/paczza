@@ -91,6 +91,12 @@ class GameView : public BoardView<Element>, public BoardListener, public Element
         void genererSpriteElement(const Case<Element>& c);
 
     public:
+        /**
+         * @brief Vue du jeu
+         * @param window Fenêtre SFML
+         * @param f Fenêtre du jeu
+         * @param game Jeu à afficher
+         */
         GameView(sf::RenderWindow* window, FenetreJeu* f, SharedPtr<Jeu> game);
         virtual ~GameView();
 

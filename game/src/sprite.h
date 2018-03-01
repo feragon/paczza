@@ -12,6 +12,9 @@
 #define MONSTER_FRAMES 4
 #define PLAYER_FRAMES 4
 
+/**
+ * @brief Noms des sprites
+ */
 enum Sprite {
         EMPTY_CELL,
         CELL,
