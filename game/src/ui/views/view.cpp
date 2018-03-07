@@ -2,6 +2,7 @@
 #include <cmath>
 #include <config.h>
 #include <ui/resourceloader.h>
+#include <ui/transform.h>
 
 View::View(sf::RenderWindow* window, FenetreJeu* f) {
     _window = window;
@@ -17,10 +18,12 @@ void View::resize(const sf::Vector2f& size) {
         return;
     }
 
+    _fond.clear();
+
     for(unsigned int i = 0; i <= ceil(size.x / SPRITE_SIZE); i++) {
         for(unsigned int j = 0; j <= ceil(size.y / SPRITE_SIZE); j++) {
             sf::Sprite s(ResourceLoader::getSprite(_spriteFond));
-            s.setPosition(i * SPRITE_SIZE, j * SPRITE_SIZE);
+            s.setPosition(transform(sf::Vector2f(i, j)));
             _fond.push_back(s);
         }
     }
