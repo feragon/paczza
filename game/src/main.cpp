@@ -1,8 +1,14 @@
 #include <ui/fenetrejeu.h>
 
 int main() {
-    FenetreJeu fenetre;
-    fenetre.ouvrir();
+    try {
+        FenetreJeu fenetre;
+        fenetre.ouvrir();
 
-    return EXIT_SUCCESS;
+        return EXIT_SUCCESS;
+    }
+    catch(std::exception& e) {
+        std::cerr << e.what() << std::endl;
+        return EXIT_FAILURE;
+    }
 }

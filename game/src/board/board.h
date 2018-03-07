@@ -34,6 +34,9 @@ class Board : public Graphe<Chemin, Case<ElementType>> {
          */
         void placerElementHasard(const ElementType& element, unsigned int limit = 10);
 
+        Arete<Chemin, Case<ElementType>>*
+        creeArete(const Chemin& contenu, Sommet<Case<ElementType>>* debut, Sommet<Case<ElementType>>* fin) override;
+
     private:
         std::unordered_map<Position<>, Sommet<Case<ElementType>>*> _cases;
 };
@@ -80,4 +83,15 @@ Sommet<Case<ElementType>>* Board<ElementType>::creeSommet(const Case<ElementType
     _cases[contenu.position()] = vertex;
 
     return vertex;
+}
+
+template<typename ElementType>
+Arete<Chemin, Case<ElementType>>* Board<ElementType>::creeArete(const Chemin& contenu, Sommet<Case<ElementType>>* debut, Sommet<Case<ElementType>>* fin) {
+    Position<> diff = debut->contenu().position() - fin->contenu().position();
+
+    if(abs(diff.x) > 1 || abs(diff.y) > 1) {
+        throw std::runtime_error("La distance d'une arête ne peut excéder 1");
+    }
+
+    return Graphe<Chemin, Case<ElementType>>::creeArete(contenu, debut, fin);
 }
