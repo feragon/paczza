@@ -5,9 +5,15 @@
 #include "boardview.h"
 #include "gameview.h"
 
-class TutorialView : public View {
+class TutorialView : public View, public ElementVisitor {
     public:
-        TutorialView(sf::RenderWindow* window, FenetreJeu* f);
+        /**
+         * @brief Vue qui affiche le tutoriel
+         * @param window Fenêtre SFML
+         * @param f Fenêtre du jeu
+         * @param game Jeu
+         */
+        TutorialView(sf::RenderWindow* window, FenetreJeu* f, SharedPtr<Jeu> game);
         virtual ~TutorialView();
 
         virtual void onEvent(const sf::Event& event) override;
@@ -16,10 +22,30 @@ class TutorialView : public View {
 
         virtual void resize(const sf::Vector2f& size) override;
 
+        /**
+         * @brief Met à jour le tutoriel
+         */
+        void update();
+
+        virtual void visite(const Point& point) override;
+
+        virtual void visite(const SuperPoint& superPoint) override;
+
+        virtual void visite(const Teleporter& teleporter) override;
+
     private:
+        /**
+         * @brief État du tutoriel
+         */
         enum State {
             WELCOME,
             PACZZA_PRESENTATION,
+            OBJECTIVE,
+            MONSTERS,
+            SUPER_POINTS,
+            WEAK_MONSTERS,
+            LIFES,
+            SCORE,
             END
         };
         /**
@@ -29,18 +55,16 @@ class TutorialView : public View {
          */
         void center(sf::Text& text, sf::Sprite& sprite);
 
-        /**
-         * @brief Met à jour le tutoriel
-         */
-        void update();
-
         GameView _gameView;
         State _state;
         bool _sendEvents;
         bool _showText;
+        bool _superPointFound;
 
 
         sf::Text _indication;
         sf::Sprite _returnKey;
         Fog* _fog;
+
+        CommandReceiver _commandReceiver;
 };

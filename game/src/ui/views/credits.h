@@ -6,11 +6,22 @@
 
 class Credits : public View {
     public:
+        /**
+         * @brief Vue des crédits
+         * @param window Fenêtre SFML
+         * @param f Fenêtre du jeu
+         */
         Credits(sf::RenderWindow* window, FenetreJeu* f);
 
         virtual void render(double timeElapsed) override;
         virtual void resize(const sf::Vector2f& size) override;
         virtual void onEvent(const sf::Event& event) override;
+
+        /**
+         * @brief Change la vitesse de défilement
+         * @param speed Nouvelle vitesse
+         */
+        void setSpeed(int speed);
 
     private:
         /**

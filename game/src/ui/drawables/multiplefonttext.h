@@ -9,6 +9,12 @@
 
 class MultipleFontText : public sf::Drawable, public sf::Transformable {
     public:
+        /**
+         * @brief Crée un élément affichant du texte sur plusieurs lignes
+         * @param text Texte à afficher
+         * @param font Police à utiliser
+         * @param fontSize Taille du caractère
+         */
         MultipleFontText(const std::wstring& text, const sf::Font& font, unsigned int fontSize);
 
         /**
@@ -25,14 +31,28 @@ class MultipleFontText : public sf::Drawable, public sf::Transformable {
          */
         const sf::FloatRect& bounds() const;
 
+        /**
+         * @return Taille de la police
+         */
         inline unsigned int fontSize() const;
 
+        /**
+         * @brief Change la couleur
+         * @param color Nouvelle couleur
+         */
         void setColor(const sf::Color& color);
     protected:
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
     private:
+        /**
+         * @brief Génère le texte
+         */
         void createText() const;
+        /**
+         * @param c Caractère
+         * @return Police à utiliser pour le caractère
+         */
         sf::Font& getFont(sf::Uint32 c) const;
 
         sf::String _text;

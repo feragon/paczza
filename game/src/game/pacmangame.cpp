@@ -4,19 +4,14 @@
 #include "astarmonstermanager.h"
 #include "nomorelevels.h"
 
-PacmanGame::PacmanGame() : Jeu() {
-    _levels.push_back(new DumbMonsterManager(plateau()));
-    _levels.push_back(new SenseMonsterManager(plateau()));
-    _levels.push_back(new AStarMonsterManager(plateau()));
+PacmanGame::PacmanGame(SharedPtr<Board<Element>> board, GameData* gameData) :
+        Jeu(board, gameData) {
+    _levels.push_back(SharedPtr<DumbMonsterManager>(this));
+    _levels.push_back(SharedPtr<SenseMonsterManager>(this));
+    _levels.push_back(SharedPtr<AStarMonsterManager>(this));
 
     _level = 1;
     setMonsterManager(_levels[0]);
-}
-
-PacmanGame::~PacmanGame() {
-    for(MonsterManager* level : _levels) {
-        delete level;
-    }
 }
 
 void PacmanGame::start() {
@@ -33,7 +28,7 @@ void PacmanGame::changeLevel() {
     }
 
     setMonsterManager(_levels[_level - 1]);
-    plateau()->placeElements();
+    gameData()->placeElements(this);
     updatePoints();
-    plateau()->player().addLife(2);
+    player().addLife(2);
 }

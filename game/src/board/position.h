@@ -2,6 +2,7 @@
 
 #include <ostream>
 #include <sstream>
+#include <functional>
 
 template<typename T = int>
 class Position {
@@ -29,7 +30,7 @@ class Position {
         Position operator - (T offset) const;
 
         template<typename osT>
-        friend std::ostream& operator<<(std::ostream& os, const Position<osT>& position);*
+        friend std::ostream& operator<<(std::ostream& os, const Position<osT>& position);
 
         operator std::string() const;
 };
@@ -93,5 +94,22 @@ template<typename T>
 Position<T>::operator std::string() const {
     std::ostringstream oss;
     oss << (*this);
-    return oss;
+    return oss.str();
+}
+
+template <typename T = unsigned int>
+struct cmpPosition {
+    bool operator()(const Position<T>& a, const Position<T>& b) const {
+        return (a.x < b.x) || (a.x == b.x && a.y < b.y);
+    }
+};
+
+namespace std {
+    template <>
+    struct hash<Position<>> {
+        std::size_t operator() (const Position<>& p) const {
+            return std::hash<int>{}(p.x) ^ (std::hash<int>{}(p.y) << 1);
+        }
+    };
+
 }

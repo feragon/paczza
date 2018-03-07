@@ -4,9 +4,13 @@
 
 class SenseMonsterManager : public MonsterManager {
     public:
-        SenseMonsterManager(Board* board);
+        /**
+         * @brief Crée un gestionnaire de monstre utilisant la vue et le flair
+         * @param game Jeu associé
+         */
+        SenseMonsterManager(Jeu* game);
 
-        void moveMonsters(const Position<>& playerPosition) override;
+        void moveMonster(const Monster* monster, const Position<>& playerPosition) override;
 
     private:
         /**
@@ -16,7 +20,7 @@ class SenseMonsterManager : public MonsterManager {
          * @return Position d'une case adjacente plus proche du joueur
          * @throws PlayerNotInSight si le joueur n'est pas vu par le monstre
          */
-        Position<> nextPositionBySight(const Sommet<Case>* monsterVertice, const Position<>& playerPosition);
+        Position<> nextPositionBySight(const Sommet<Case<Element>>* monsterVertice, const Position<>& playerPosition);
 
         /**
          * @brief Donne la prochaine position en se basant sur la chaleur
@@ -24,5 +28,5 @@ class SenseMonsterManager : public MonsterManager {
          * @return Position suivant l'arête la plus chaude
          * @throws
          */
-        Position<> nextPositionByHeat(const Sommet<Case>* monsterVertice);
+        Position<> nextPositionByHeat(const Sommet<Case<Element>>* monsterVertice);
 };

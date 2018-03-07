@@ -10,10 +10,23 @@ class Sommet : public Conteneur<T> {
         int _degre;
 
     public:
+        /**
+         * @brief Crée un nouveau sommet
+         * @param identifiant Identifiant du sommet
+         * @param contenu Contenu du sommet
+         */
         Sommet(int identifiant, const T& contenu);
 
+        /**
+         * @return Degré du sommet
+         */
         inline int degre() const;
-        inline int setDegre(int i);
+
+        /**
+         * @brief Change le degré du sommet
+         * @param i Nouveau degré
+         */
+        inline void setDegre(int i);
 
 
         operator std::string() const;
@@ -35,7 +48,7 @@ int Sommet<T>::degre() const {
 }
 
 template <class T>
-int Sommet<T>::setDegre(int i) {
+void Sommet<T>::setDegre(int i) {
     _degre = i;
 }
 

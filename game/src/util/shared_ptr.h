@@ -8,16 +8,35 @@ class SharedPtr {
     friend class SharedPtr;
 
     private:
+        /**
+         * @brief Copie un pointeur
+         * @tparam U Type de l'autre pointeur
+         * @param other Autre pointeur
+         */
         template <typename U>
         void copy(const SharedPtr<U>& other);
+
+        /**
+         * @brief Libère le pointeur
+         */
         void release();
 
         unsigned int* _count;
         T* _ptr;
 
     public:
+        /**
+         * @brief Crée un pointeur
+         * @tparam Args Type d'arguments de l'objet
+         * @param args Arguments
+         */
         template <typename... Args>
         explicit SharedPtr(Args... args);
+
+        /**
+         * @brief Crée un pointeur sur un objet null
+         */
+        explicit SharedPtr(std::nullptr_t);
 
         SharedPtr(const SharedPtr& other);
         template <typename U>
@@ -25,14 +44,28 @@ class SharedPtr {
 
         virtual ~SharedPtr();
 
+        SharedPtr<T>& operator = (std::nullptr_t other);
         SharedPtr<T>& operator = (const SharedPtr& other);
         template <typename U>
         SharedPtr<T>& operator = (const SharedPtr<U>& other);
 
         inline T* operator ->() const;
         inline T& operator *() const;
+
+        /**
+         * @return Pointeur
+         */
         inline T* get() const;
+
+        /**
+         * @return Nombre d'instances de la classe
+         */
         inline unsigned int count() const;
+
+        template <typename U>
+        bool operator == (const U* other) const;
+
+        operator bool() const;
 };
 
 template<typename T>
@@ -42,6 +75,12 @@ SharedPtr<T>::SharedPtr(Args... args) {
     *_count = 1;
 
     _ptr = new T(args...);
+}
+
+template<typename T>
+SharedPtr<T>::SharedPtr(std::nullptr_t) {
+    _count = new unsigned int(1);
+    _ptr = nullptr;
 }
 
 template<typename T>
@@ -112,4 +151,22 @@ void SharedPtr<T>::release() {
         delete _count;
         delete _ptr;
     }
+}
+
+template<typename T>
+template<typename U>
+bool SharedPtr<T>::operator==(const U* other) const {
+    return _ptr == other;
+}
+
+template<typename T>
+SharedPtr<T>& SharedPtr<T>::operator=(std::nullptr_t other) {
+    release();
+    _ptr = nullptr;
+    _count = new unsigned int(1);
+}
+
+template<typename T>
+SharedPtr<T>::operator bool() const {
+    return (bool) _ptr;
 }

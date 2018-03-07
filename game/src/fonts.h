@@ -3,6 +3,9 @@
 #include <string>
 #include <map>
 
+/**
+ * @brief Nom des polices de caractère
+ */
 enum Font {
     KONGTEXT,
     DOCOMO,

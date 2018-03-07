@@ -56,7 +56,7 @@ void AnimatedSprite::animate(double timeElapsed) {
             }
             if(_frame >= _sprites.size()) {
                 _forward = false;
-                _frame = (_sprites.size() - 1)  - fmod(_frame, _sprites.size());
+                _frame = _sprites.size() - fmod(_frame, _sprites.size());
             }
             break;
     }
@@ -75,4 +75,11 @@ void AnimatedSprite::draw(sf::RenderTarget& target, sf::RenderStates states) con
 
 sf::FloatRect AnimatedSprite::getGlobalBounds() {
     return _sprites.front().getGlobalBounds();
+}
+
+void AnimatedSprite::setFrame(double frame) {
+    if(frame < 0 || frame >= _sprites.size()) {
+        throw std::runtime_error("Indice d'image invalide");
+    }
+    _frame = frame;
 }

@@ -10,8 +10,22 @@
 
 class ResourceLoader {
     public:
+        /**
+         * @param s Nom du sprite
+         * @return Sprite
+         */
         static const sf::Texture& getSprite(Sprite s);
+
+        /**
+         * @param f Nom de la police de caractère
+         * @return Police de caractère
+         */
         static const sf::Font& getFont(Font f);
+
+        /**
+         * @param s Nom du son
+         * @return Son
+         */
         static const sf::SoundBuffer& getSound(Sound s);
 
     private:
@@ -19,6 +33,9 @@ class ResourceLoader {
         std::map<Font, sf::Font> _fonts;
         std::map<Sound, sf::SoundBuffer> _sounds;
 
+        /**
+         * @brief Crée le gestionnaire de resources
+         */
         ResourceLoader();
 
         /**

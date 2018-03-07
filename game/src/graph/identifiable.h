@@ -7,9 +7,21 @@ class Identifiable {
         int _cle;
 
     public:
+        /**
+         * @brief Crée un élément identifiable
+         * @param cle Clé
+         */
         Identifiable(int cle);
 
+        /**
+         * @return Clé
+         */
         inline int cle() const;
+
+        /**
+         * @brief Change la clé
+         * @param cle Nouvelle clé
+         */
         inline void setCle(int cle);
 
         operator std::string() const;

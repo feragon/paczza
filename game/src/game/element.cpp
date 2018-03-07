@@ -1,13 +1,12 @@
 #include "element.h"
 
-Element::Element(Sprite sprite, Sound sound) :
-        _sprite(sprite), _sound(sound) {
-
+Element::Element() {
+    _position = nullptr;
 }
 
 std::string Element::toString() const {
     std::ostringstream oss;
-    oss << "Element(_sprite:" << _sprite << "; _sound=" << _sound << ")";
+    oss << "Element()";
     return oss.str();
 }
 

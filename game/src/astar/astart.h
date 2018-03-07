@@ -5,10 +5,31 @@
 template <typename Graphe, typename Sommet>
 class AStarT {
     public:
+        /**
+         * @brief Execute l'algorithme A* sur le graphe donné
+         * @param graphe Graphe
+         * @param depart Départ du chemin
+         * @param hh Fonction heuristique qui calcule la distance du sommet donné à la destination
+         * @return Dernier sommet, égal au sommet de destination si tout s'est bien passé
+         */
         static Sommet* aStar(Graphe& graphe, Sommet* depart, double(*hh)(const Sommet* s));
 
     private:
+        /**
+         * @brief Compare deux sommets
+         * @param sommet1 Sommet 1
+         * @param sommet2 Sommet 2
+         * @return Vrai si le sommet 1 est plus proche du départ que le sommet 2
+         */
         static bool estPlusPetitOuEgal(const Sommet* sommet1, const Sommet* sommet2);
+
+        /**
+         * @brief Met à jour les voisins du sommet
+         * @param v Sommet voisin
+         * @param s Sommet en cours de traitement
+         * @param nouveauCout Nouveau coût du départ au voisin
+         * @param ouverts Liste des sommets ouverts
+         */
         static void miseAJourVoisin(Sommet* v, Sommet* s, const double& nouveauCout, Liste<Sommet>*& ouverts);
 };
 

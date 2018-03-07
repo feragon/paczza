@@ -2,31 +2,29 @@
 #include "playernotinsight.h"
 #include "noheatededgefound.h"
 #include "dumbmonstermanager.h"
+#include <game/jeu.h>
 
-SenseMonsterManager::SenseMonsterManager(Board* board) :
-        MonsterManager(board) {
+SenseMonsterManager::SenseMonsterManager(Jeu* game) :
+        MonsterManager(game) {
     srand(time(NULL));
 }
 
-void SenseMonsterManager::moveMonsters(const Position<>& playerPosition) {
-    monsters().clear();
-    for(Liste<Monster>* monster = board()->monsters(); monster; monster = monster->next) {
-        Sommet<Case>* monsterVertice = board()->sommet(monster->value->position()->contenu().position());
+void SenseMonsterManager::moveMonster(const Monster* monster, const Position<>& playerPosition) {
+    Sommet<Case<Element>>* monsterVertex = game()->plateau()->sommet(monster->position()->contenu().position());
+    try {
+        monsters()[monster] = nextPositionBySight(monsterVertex, playerPosition);
+    }
+    catch (PlayerNotInSight& e) {
         try {
-            monsters()[monster->value] = nextPositionBySight(monsterVertice, playerPosition);
+            monsters()[monster] = nextPositionByHeat(monsterVertex);
         }
-        catch (PlayerNotInSight& e) {
-            try {
-                monsters()[monster->value] = nextPositionByHeat(monsterVertice);
-            }
-            catch (NoHeatedEdgeFound& f) {
-                monsters()[monster->value] = DumbMonsterManager::getNextPosition(board(), monsterVertice);
-            }
+        catch (NoHeatedEdgeFound& f) {
+            monsters()[monster] = DumbMonsterManager::getNextPosition(game()->plateau(), monsterVertex);
         }
     }
 }
 
-Position<> SenseMonsterManager::nextPositionBySight(const Sommet<Case>* monsterVertice, const Position<>& playerPosition) {
+Position<> SenseMonsterManager::nextPositionBySight(const Sommet<Case<Element>>* monsterVertice, const Position<>& playerPosition) {
     Position<> monsterPosition = monsterVertice->contenu().position();
 
     if(monsterPosition == playerPosition) {
@@ -52,18 +50,18 @@ Position<> SenseMonsterManager::nextPositionBySight(const Sommet<Case>* monsterV
     }
 
     Position<> next = monsterPosition + direction;
-    Liste<Sommet<Case>>* tmp = board()->voisins(monsterVertice);
-    Liste<Sommet<Case>>* neighbors = tmp;
+    Liste<Sommet<Case<Element>>>* tmp = game()->plateau()->voisins(monsterVertice);
+    Liste<Sommet<Case<Element>>>* neighbors = tmp;
     while(neighbors) {
         if(neighbors->value->contenu().position() == next) {
             if(next == playerPosition) {
-                Liste<Sommet<Case>>::efface1(tmp);
+                Liste<Sommet<Case<Element>>>::efface1(tmp);
                 return monsterPosition + direction;
             }
             else {
                 next = next + direction;
-                neighbors = board()->voisins(neighbors->value);
-                Liste<Sommet<Case>>::efface1(tmp);
+                neighbors = game()->plateau()->voisins(neighbors->value);
+                Liste<Sommet<Case<Element>>>::efface1(tmp);
                 tmp = neighbors;
             }
         }
@@ -72,23 +70,23 @@ Position<> SenseMonsterManager::nextPositionBySight(const Sommet<Case>* monsterV
         }
     }
 
-    Liste<Sommet<Case>>::efface1(tmp);
+    Liste<Sommet<Case<Element>>>::efface1(tmp);
     throw PlayerNotInSight("Il n'y a pas de chemin entre le monstre et le joueur");
 }
 
-Position<> SenseMonsterManager::nextPositionByHeat(const Sommet<Case>* monsterVertice) {
-    Arete<Chemin, Case>* res = nullptr;
+Position<> SenseMonsterManager::nextPositionByHeat(const Sommet<Case<Element>>* monsterVertice) {
+    Arete<Chemin, Case<Element>>* res = nullptr;
 
-    Liste<Arete<Chemin, Case>>* tmp = board()->aretesAdjacentes(monsterVertice);
+    Liste<Arete<Chemin, Case<Element>>>* tmp = game()->plateau()->aretesAdjacentes(monsterVertice);
 
-    for(Liste<Arete<Chemin, Case>>* edges = tmp; edges; edges = edges->next) {
+    for(Liste<Arete<Chemin, Case<Element>>>* edges = tmp; edges; edges = edges->next) {
         double chaleur = edges->value->contenu().chaleur();
         if(chaleur > 0 && (!res || chaleur > res->contenu().chaleur())) {
             res = edges->value;
         }
     }
 
-    Liste<Arete<Chemin, Case>>::efface1(tmp);
+    Liste<Arete<Chemin, Case<Element>>>::efface1(tmp);
 
     if(res == nullptr) {
         throw NoHeatedEdgeFound("Aucune arête chaude trouvée");

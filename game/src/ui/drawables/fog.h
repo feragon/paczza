@@ -14,6 +14,11 @@ class Fog : public sf::Drawable {
         sf::RenderTexture _rt;
 
     public:
+        /**
+         * @brief Crée un élément de brouillard
+         * @param size Taille de l'écran
+         * @param position Centre du cercle visible
+         */
         Fog(sf::Vector2f size, sf::Vector2f position);
 
     protected:

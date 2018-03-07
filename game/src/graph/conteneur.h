@@ -9,10 +9,27 @@ class Conteneur : public Identifiable {
         T _contenu;
 
     public:
+        /**
+         * @brief Crée un conteneur
+         * @param identifiant Identifiant du conteneur
+         * @param contenu Contenu
+         */
         Conteneur(int identifiant, const T& contenu);
 
+        /**
+         * @return Contenu
+         */
         inline T& contenu();
+
+        /**
+         * @return Contenu
+         */
         inline const T& contenu() const;
+
+        /**
+         * @brief Change le contenu
+         * @param contenu Nouveau contenu
+         */
         inline void setContenu(const T& contenu);
 
         operator std::string() const;

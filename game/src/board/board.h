@@ -3,88 +3,81 @@
 #include <graph/graphe.h>
 #include "case.h"
 #include "chemin.h"
-#include "element.h"
-#include "game/boardlistener.h"
 #include <map>
-#include <game/monster.h>
 #include <util/listened.h>
+#include <algorithm>
+#include <unordered_map>
 
-template <typename T = int>
-struct cmpPosition {
-    bool operator()(const Position<T>& a, const Position<T>& b) const {
-        return (a.x < b.x) || (a.x == b.x && a.y < b.y);
-    }
-};
-
-class Board : public Graphe<Chemin, Case> {
+template <typename ElementType>
+class Board : public Graphe<Chemin, Case<ElementType>> {
     public:
+        /**
+         * @brief Crée un plateau vide
+         */
         Board();
-        virtual ~Board();
-
-        inline Sommet<Case>* sommet(const Position<>& position) const;
 
         /**
-         * @brief Donne le joueur
-         * @return Pacman
+         * @brief Donne le sommet associé à une position
+         * @param position Position
+         * @return Sommet
+         * @throw std::out_of_range si la position n'existe pas dans le graphe
          */
-        inline Pacman& player();
+        inline Sommet<Case<ElementType>>* sommet(const Position<>& position) const;
 
-        /**
-         * @brief Donne le joueur
-         * @return Pacman constant
-         */
-        inline const Pacman& player() const;
-
-        /**
-         * @brief Donne la liste des monstres sur le plateau
-         * @return Liste de monstres
-         */
-        inline Liste<Monster>* monsters();
-
-        /**
-         * @brief Place le joueur et les monstres à leur position de départ
-         */
-        void placePlayers();
-
-        /**
-         * @brief Place les éléments sur le plateau
-         */
-        void placeElements();
-
-    private:
-        void genererGraphe();
-        void addMonster(Sommet<Case>* position);
+        virtual Sommet<Case<ElementType>>* creeSommet(const Case<ElementType>& contenu) override;
 
         /**
          * @brief Place un élément au hasard sur le graphe
          * @param element Élément à placer
-         * @param positionsReservees Liste des positions réservées
          * @param limit Nombre de tentatives de placement maximales
          * @throws std::runtime_exception si l'élément n'a pas pu être placé
          */
-        void placerElementHasard(const Element& element, unsigned int limit = 10);
+        void placerElementHasard(const ElementType& element, unsigned int limit = 10);
 
-        unsigned int _width;
-        unsigned int _height;
-
-        std::map<Position<>, Sommet<Case>*, cmpPosition<>> _cases;
-
-        Pacman _player;
-        Liste<Monster>* _monsters;
+    private:
+        std::unordered_map<Position<>, Sommet<Case<ElementType>>*> _cases;
 };
 
-Sommet<Case>* Board::sommet(const Position<>& position) const {
+template <typename ElementType>
+Sommet<Case<ElementType>>* Board<ElementType>::sommet(const Position<>& position) const {
     return _cases.at(position);
 }
 
-Pacman& Board::player() {
-    return _player;
+template <typename ElementType>
+Board<ElementType>::Board() {
+
 }
 
-const Pacman& Board::player() const {
-    return _player;
+template <typename ElementType>
+void Board<ElementType>::placerElementHasard(const ElementType& element, unsigned int limit) {
+    srand(time(NULL));
+    unsigned int i = 0;
+    unsigned long bucket, bucket_size;
+
+    Case<ElementType>* c = nullptr;
+
+    do {
+        if(i == limit) {
+            throw std::runtime_error("Impossible de placer les éléments");
+        }
+
+        do {
+            bucket = rand() % _cases.bucket_count();
+        }
+        while ((bucket_size = _cases.bucket_size(bucket)) == 0 );
+
+        c = &(std::next(_cases.begin(bucket), rand() % bucket_size)->second->contenu());
+
+        i++;
+    } while(c->element());
+
+    c->setElement(&element);
 }
 
-Liste<Monster>* Board::monsters() {
-    return _monsters;
+template<typename ElementType>
+Sommet<Case<ElementType>>* Board<ElementType>::creeSommet(const Case<ElementType>& contenu) {
+    Sommet<Case<ElementType>>* vertex = Graphe<Chemin, Case<ElementType>>::creeSommet(contenu);
+    _cases[contenu.position()] = vertex;
+
+    return vertex;
 }

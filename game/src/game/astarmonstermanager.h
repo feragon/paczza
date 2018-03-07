@@ -4,7 +4,11 @@
 
 class AStarMonsterManager : public MonsterManager {
     public:
-        AStarMonsterManager(Board* board);
+        /**
+         * @brief Crée un gestionnaire de monstre utilisant A*
+         * @param game Jeu
+         */
+        AStarMonsterManager(Jeu* game);
 
-        void moveMonsters(const Position<>& playerPosition) override;
+        void moveMonster(const Monster* monster, const Position<>& playerPosition) override;
 };

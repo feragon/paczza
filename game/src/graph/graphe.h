@@ -12,10 +12,19 @@ class SommetClesEgales {
         Sommet<T>* _sommet;
 
     public:
+        /**
+         * @brief Crée un foncteur de comparaison de sommets
+         * @param sommet Sommet de comparaison
+         */
         SommetClesEgales(Sommet<T>* sommet) {
             _sommet = sommet;
         }
 
+        /**
+         * @brief Compare le sommet donné au sommet d'origine
+         * @param autre Autre sommet
+         * @return Vrai s'ils sont égaux
+         */
         bool operator() (const Sommet<T>* autre) {
             return _sommet->cle() == autre->cle();
         }
@@ -48,6 +57,9 @@ class Graphe {
         int _prochaineCle;
 
     public:
+        /**
+         * @brief Crée un graphe
+         */
         Graphe();
         Graphe(const Graphe& graphe);
         virtual ~Graphe();
@@ -59,7 +71,7 @@ class Graphe {
          * @param contenu du sommet
          * @return Nouveau sommet
          */
-        Sommet<T>* creeSommet(const T& contenu);
+        virtual Sommet<T>* creeSommet(const T& contenu);
 
         /**
          * @brief Crée une arête entre 2 sommets supposés existants

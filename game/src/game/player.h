@@ -3,13 +3,13 @@
 #include <board/position.h>
 #include <graph/liste.h>
 #include <graph/sommet.h>
+#include <board/case.h>
 #include "direction.h"
-
-class Case;
+#include "element.h"
 
 class Player {
     private:
-        const Sommet<Case>* _position;
+        const Sommet<Case<Element>>* _position;
         Direction _direction;
         double _avancement;
 
@@ -19,19 +19,19 @@ class Player {
          * @param p Position
          * @param direction Direction
          */
-        Player(const Sommet<Case>* p, Direction direction);
+        Player(const Sommet<Case<Element>>* p, Direction direction);
 
         /**
          * @brief Donne la position du joueur
          * @return Position
          */
-        inline const Sommet<Case>* position() const;
+        inline const Sommet<Case<Element>>* position() const;
 
         /**
          * @brief Définit la position du joueur
          * @param p Nouvelle position
          */
-        inline void setPosition(const Sommet<Case>* p);
+        inline void setPosition(const Sommet<Case<Element>>* p);
 
         /**
          * @brief Donne la direction du joueur
@@ -68,11 +68,11 @@ class Player {
         friend std::ostream& operator << (std::ostream& o, const Player* player);
 };
 
-const Sommet<Case>* Player::position() const {
+const Sommet<Case<Element>>* Player::position() const {
     return _position;
 }
 
-void Player::setPosition(const Sommet<Case>* p) {
+void Player::setPosition(const Sommet<Case<Element>>* p) {
     _position = p;
 }
 

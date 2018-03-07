@@ -3,10 +3,11 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <sprite.h>
+#include <ui/command/commandreceiver.h>
 
 class FenetreJeu;
 
-class View {
+class View : public CommandReceiver {
     public:
         virtual ~View();
 
@@ -44,7 +45,7 @@ class View {
          * @brief Function called when an event is received
          * @param event Event received
          */
-        virtual void onEvent(const sf::Event& event) = 0;
+        virtual void onEvent(const sf::Event& event);
 
         /**
          * @brief Supprime le fond déjà crée
@@ -52,6 +53,11 @@ class View {
         void clearFond();
 
     protected:
+        /**
+         * @brief Crée une vue
+         * @param window Fenêtre SFML
+         * @param f Fenêtre du jeu
+         */
         View(sf::RenderWindow* window, FenetreJeu* f);
 
     private:

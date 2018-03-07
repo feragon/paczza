@@ -1,12 +1,17 @@
 #pragma once
 
+#include <board/board.h>
 #include "monstermanager.h"
 
 class DumbMonsterManager : public MonsterManager {
     public:
-        DumbMonsterManager(Board* board);
+        /**
+         * @brief Crée un gestionnaire de monstres les déplaçant aléatoirement
+         * @param game Jeu
+         */
+        DumbMonsterManager(Jeu* game);
 
-        void moveMonsters(const Position<>& playerPosition) override;
+        void moveMonster(const Monster* monster, const Position<>& playerPosition) override;
 
         /**
          * @brief Donne une position aléatoire à côté du sommet actuel
@@ -14,5 +19,5 @@ class DumbMonsterManager : public MonsterManager {
          * @param monsterVertice Sommet actuel
          * @return Nouvelle position
          */
-        static Position<> getNextPosition(const Board* board, Sommet<Case>* monsterVertice);
+        static Position<> getNextPosition(const Board<Element>* board, Sommet<Case<Element>>* monsterVertice);
 };

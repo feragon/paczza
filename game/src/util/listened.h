@@ -10,13 +10,32 @@ class Listened {
         Liste<Listener>* _listeners;
 
     public:
+        /**
+         * @brief Classe qui se fait écouter
+         */
         Listened();
         virtual ~Listened();
         Listened(const Listened<Listener>& listened);
 
+        /**
+         * @brief Ajoute un écouteur
+         * @param listener Nouvel écouteur
+         */
         void addListener(Listener* listener);
+
+        /**
+         * @brief Enlève un écouteur
+         * @param listener Écouteur
+         */
         void removeListener(Listener* listener);
 
+        /**
+         * @brief Appelle tous les écouteurs
+         * @tparam FunctionPointer Type de fonction à appeler
+         * @tparam Args Type des arguments
+         * @param fp Pointeur sur la fonction
+         * @param args Arguments
+         */
         template <typename FunctionPointer, typename... Args>
         void callListeners(FunctionPointer fp, Args... args);
 };

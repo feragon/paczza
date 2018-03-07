@@ -8,38 +8,110 @@ class Liste {
         Liste<T>* next;
         T* value;
 
+        /**
+         * @brief Crée une liste
+         * @param v Valeur de l'élément
+         * @param n Reste de la liste
+         */
         Liste(T* v = nullptr, Liste<T>* n = nullptr) {
             next = n;
             value = v;
         }
 
+        /**
+         * @param l Liste
+         * @return Liste
+         */
         static int taille(const Liste<T> * l);
 
+        /**
+         * @brief Donne la représentation textuelle de la liste
+         * @param l Liste
+         * @param debut Chaîne de début
+         * @param separateur Séparateur
+         * @param fin Chaîne de fin
+         * @return std::string
+         */
         static std::string toString(const Liste<T>* l,
                                     const char* debut="(",
                                     const char* separateur = ", ",
                                     const char* fin=")"
         );
 
+        /**
+         * @brief Insère un élément dans une liste en la gardant ordonnée
+         * @param a Élement à insérer
+         * @param l Liste
+         * @param estPlusPetitOuEgal Fonction de comparaison
+         */
         static void insertionOrdonnee(T* a,
                                       Liste<T>*& l,
                                       bool (*estPlusPetitOuEgal)(const T* a1, const T* a2)
         );
 
+        /**
+         * @brief Enlève le premier élément et le renvoie
+         * @param l Liste
+         * @return Premier élément
+         */
         static T* depiler(Liste<T>*& l);
 
+        /**
+         * @brief Retire l'élément donné de la liste
+         * @param a Élément
+         * @param l Liste
+         * @return Vrai si l'élément a été retiré
+         */
         static bool retire(const T * a, Liste<T> * & l);
 
+        /**
+         * @brief Libère une liste sans libérer le contenu
+         * @param l Liste
+         */
         static void efface1(Liste<T>*& l);
 
+        /**
+         * @brief Libère une liste en libérant le contenu
+         * @param l Liste
+         */
         static void efface2(Liste<T>*& l);
 
+        /**
+         * @brief Copie une liste sans copier le contenu
+         * @param l Liste
+         * @return Nouvelle liste
+         */
         static Liste<T>* copie1(Liste<T> * l);
+
+        /**
+         * @brief Copie une liste en recopiant le contenu (constructeurs de copie)
+         * @param l Liste
+         * @return Nouvelle liste
+         */
         static Liste<T>* copie2(Liste<T> * l);
+
+        /**
+         * @brief Copie une liste en recopiant le contenu (méthode copie())
+         * @param l Liste
+         * @return Nouvelle liste
+         */
         static Liste<T>* copie3(Liste<T> * l);
 
+        /**
+         * @brief Cherche un élément dans la liste
+         * @param a Élément
+         * @param l Liste
+         * @return Maillon contenant l'élément, ou nullptr si non trouvé
+         */
         static Liste<T>* appartient(const T* a,  Liste<T>* l);
 
+        /**
+         * @brief Cherche un élément dans la liste en utilisant un foncteur pour la comparaison
+         * @tparam FONCTEUR Type du foncteur
+         * @param l Liste
+         * @param condition Foncteur de comparaison
+         * @return Maillon content l'élément ou nullptr si non trouvé
+         */
         template <class FONCTEUR>
         static Liste<T>* appartient(Liste<T>* l, const FONCTEUR& condition);
 };

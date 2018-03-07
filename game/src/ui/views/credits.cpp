@@ -1,5 +1,6 @@
 #include <ui/resourceloader.h>
 #include "credits.h"
+#include "updatecreditspeed.h"
 #include <fstream>
 #include <iostream>
 #include <cstring>
@@ -14,6 +15,18 @@ Credits::Credits(sf::RenderWindow* window, FenetreJeu* f) :
     _position = 0;
     _speed = 50;
     setFond(SPACE);
+
+    SharedPtr<UpdateCreditSpeed> up(this, -400);
+    SharedPtr<UpdateCreditSpeed> fast(this, 400);
+    SharedPtr<UpdateCreditSpeed> normal(this, 50);
+
+    setKeyPressedCommand(sf::Keyboard::Up, up);
+    setKeyPressedCommand(sf::Keyboard::Down, fast);
+    setKeyPressedCommand(sf::Keyboard::Space, fast);
+
+    setKeyReleasedCommand(sf::Keyboard::Up, normal);
+    setKeyReleasedCommand(sf::Keyboard::Down, normal);
+    setKeyReleasedCommand(sf::Keyboard::Space, normal);
 }
 
 void Credits::resize(const sf::Vector2f& size) {
@@ -38,26 +51,11 @@ void Credits::render(double timeElapsed) {
 }
 
 void Credits::onEvent(const sf::Event& event) {
-    if(event.type == sf::Event::EventType::KeyPressed) {
-        switch (event.key.code) {
-            case sf::Keyboard::Key::Space:
-            case sf::Keyboard::Key::Down:
-                _speed = 400;
-                break;
-
-            case sf::Keyboard::Key::Up:
-                _speed = -400;
-                break;
-        }
+    try {
+        manageEvent(event);
     }
-    if(event.type == sf::Event::EventType::KeyReleased) {
-        switch (event.key.code) {
-            case sf::Keyboard::Key::Space:
-            case sf::Keyboard::Key::Down:
-            case sf::Keyboard::Key::Up:
-                _speed = 50;
-                break;
-        }
+    catch (UnknownCommand& e) {
+
     }
 }
 
@@ -120,4 +118,8 @@ void Credits::createText(float initialYPosition) {
     }
 
     creditsFile.close();
+}
+
+void Credits::setSpeed(int speed) {
+    _speed = speed;
 }

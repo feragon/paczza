@@ -4,8 +4,12 @@
 
 class PacmanGame : public Jeu {
     public:
-        PacmanGame();
-        virtual ~PacmanGame();
+        /**
+         * @brief Crée un jeu de Pacman
+         * @param board Plateau utilisé par le jeu
+         * @param gameData Données du jeu
+         */
+        PacmanGame(SharedPtr<Board<Element>> board, GameData* gameData);
 
         void start() override;
 
@@ -22,7 +26,7 @@ class PacmanGame : public Jeu {
         void changeLevel();
 
         unsigned short _level;
-        std::vector<MonsterManager*> _levels;
+        std::vector<SharedPtr<MonsterManager>> _levels;
 };
 
 unsigned short PacmanGame::level() const {
