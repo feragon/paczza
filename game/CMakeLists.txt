@@ -94,5 +94,5 @@ include_directories(src)
 add_executable(paczza ${SOURCE_FILES})
 target_link_libraries(paczza ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
 
-add_library(game ${SOURCE_FILES} src/astar/infosommet.h src/astar/etat.h src/util/listened.h src/game/nomorelevels.h)
+add_library(game ${SOURCE_FILES} src/astar/infosommet.h src/astar/etat.h src/util/listened.h src/game/nomorelevels.h src/ui/transform.h)
 target_link_libraries(game ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
