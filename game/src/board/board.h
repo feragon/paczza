@@ -34,6 +34,9 @@ class Board : public Graphe<Chemin, Case<ElementType>> {
          */
         void placerElementHasard(const ElementType& element, unsigned int limit = 10);
 
+        Arete<Chemin, Case<ElementType>>*
+        creeArete(const Chemin& contenu, Sommet<Case<ElementType>>* debut, Sommet<Case<ElementType>>* fin) override;
+
     private:
         std::unordered_map<Position<>, Sommet<Case<ElementType>>*> _cases;
 };
@@ -55,6 +58,7 @@ void Board<ElementType>::placerElementHasard(const ElementType& element, unsigne
     unsigned long bucket, bucket_size;
 
     Case<ElementType>* c = nullptr;
+    Sommet<Case<ElementType>>* s = nullptr;
 
     do {
         if(i == limit) {
@@ -66,10 +70,11 @@ void Board<ElementType>::placerElementHasard(const ElementType& element, unsigne
         }
         while ((bucket_size = _cases.bucket_size(bucket)) == 0 );
 
-        c = &(std::next(_cases.begin(bucket), rand() % bucket_size)->second->contenu());
+        s = *&(std::next(_cases.begin(bucket), rand() % bucket_size)->second);
+        c = &s->contenu();
 
         i++;
-    } while(c->element());
+    } while(c->element() || s->degre() == 0);
 
     c->setElement(&element);
 }
@@ -80,4 +85,15 @@ Sommet<Case<ElementType>>* Board<ElementType>::creeSommet(const Case<ElementType
     _cases[contenu.position()] = vertex;
 
     return vertex;
+}
+
+template<typename ElementType>
+Arete<Chemin, Case<ElementType>>* Board<ElementType>::creeArete(const Chemin& contenu, Sommet<Case<ElementType>>* debut, Sommet<Case<ElementType>>* fin) {
+    Position<> diff = debut->contenu().position() - fin->contenu().position();
+
+    if(abs(diff.x) > 1 || abs(diff.y) > 1) {
+        throw std::runtime_error("La distance d'une arête ne peut excéder 1");
+    }
+
+    return Graphe<Chemin, Case<ElementType>>::creeArete(contenu, debut, fin);
 }

@@ -8,6 +8,7 @@
 #include <game/point.h>
 #include <game/superpoint.h>
 #include <game/noremaininglife.h>
+#include <ui/transform.h>
 
 GameView::GameView(sf::RenderWindow* window, FenetreJeu* f, SharedPtr<Jeu> game) :
         BoardView(window, f, game->plateau()),
@@ -197,7 +198,7 @@ void GameView::drawPlayer(double timeElapsed) {
         y = 1;
     }
 
-    _playerAnimatedSprite.setPosition((pos.x + avancement * x) * SPRITE_SIZE, (pos.y + avancement * y) * SPRITE_SIZE);
+    _playerAnimatedSprite.setPosition(transform(sf::Vector2f(pos.x + avancement * x, pos.y + avancement * y)));
     _playerAnimatedSprite.animate(timeElapsed);
     window()->draw(_playerAnimatedSprite);
 }
@@ -226,27 +227,26 @@ void GameView::drawMonsters(double timeElapsed) {
             y = 1;
         }
 
-        pair.second.setPosition((monsterPos.x + avancement * x) * SPRITE_SIZE, (monsterPos.y + avancement * y) * SPRITE_SIZE);
+        pair.second.setPosition(transform(sf::Vector2f(monsterPos.x + avancement * x, monsterPos.y + avancement * y)));
         pair.second.animate(timeElapsed);
         window()->draw(pair.second);
     }
 }
 
 void GameView::updateEdge(Arete<Chemin, Case<Element>>* edge) {
-    Position<> p1 = edge->debut()->contenu().position();
-    Position<> p2 = edge->fin()->contenu().position();
+    Position<double> p1 = edge->debut()->contenu().position();
+    Position<double> p2 = edge->fin()->contenu().position();
 
     if(p1 == p2) {
         return;
     }
 
-    Position<double> moveVect = p1 - p2;
+    Position<double> moveVect = (p1 - p2) * 0.5;
 
     sf::Sprite sprite(ResourceLoader::getSprite(Sprite::COCAINE));
 
     sprite.setOrigin(SPRITE_SIZE / 2, SPRITE_SIZE / 2);
-    sprite.setPosition((p2.x + moveVect.x / 2) * SPRITE_SIZE,
-                       (p2.y + moveVect.y / 2) * SPRITE_SIZE);
+    sprite.setPosition(transform<float>(p2 + moveVect));
 
     _aretesMarquees[edge] = sprite;
 }
@@ -355,8 +355,7 @@ void GameView::placeElement(const Element& element, AnimatedSprite sprite) {
 
 void GameView::moveElement(const Element& element, sf::Transformable& transformable) const {
     transformable.setOrigin(SPRITE_SIZE / 2, SPRITE_SIZE / 2);
-    transformable.setPosition(element.position()->position().x * SPRITE_SIZE,
-                              element.position()->position().y * SPRITE_SIZE);
+    transformable.setPosition(transform<float>(element.position()->position()));
 }
 
 void GameView::placeSound(const Element& element, Sound sound) {

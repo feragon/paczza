@@ -12,7 +12,9 @@ class MainMenu : public Menu {
          */
         MainMenu(sf::RenderWindow* window, FenetreJeu* f);
 
-    private:
+    void render(double timeElapsed) override;
+
+private:
         /**
          * @brief Action pour créer un nouveau jeu
          */
@@ -38,4 +40,6 @@ class MainMenu : public Menu {
          * @return Jeu
          */
         SharedPtr<Jeu> generateGame();
+        sf::Texture _titreTexture;
+        sf::Sprite _titreSprite;
 };

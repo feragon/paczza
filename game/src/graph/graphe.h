@@ -73,7 +73,7 @@ class Graphe {
          */
         virtual Sommet<T>* creeSommet(const T& contenu);
 
-        /**
+        virtual /**
          * @brief Crée une arête entre 2 sommets supposés existants
          * @param contenu Contenu de l'arête
          * @param debut Sommet de début

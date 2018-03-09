@@ -10,6 +10,7 @@
 #include <game/gamelistener.h>
 #include <SFML/Audio/Sound.hpp>
 #include <ui/resourceloader.h>
+#include <ui/transform.h>
 
 template <typename ElementType>
 class BoardView : public View {
@@ -64,8 +65,7 @@ void BoardView<ElementType>::resize(const sf::Vector2f& size) {
             sf::Sprite sprite(ResourceLoader::getSprite(Sprite::CELL));
 
             sprite.setOrigin(SPRITE_SIZE / 2, SPRITE_SIZE / 2);
-            sprite.setPosition(sommet->value->contenu().position().x * SPRITE_SIZE,
-                               sommet->value->contenu().position().y * SPRITE_SIZE);
+            sprite.setPosition(transform<float>(sommet->value->contenu().position()));
             _backgroundSprites.push_back(sprite);
         }
     }
@@ -93,7 +93,7 @@ void BoardView<ElementType>::resize(const sf::Vector2f& size) {
 
         sprite.setOrigin(SPRITE_SIZE/2, SPRITE_SIZE/2);
         sprite.setRotation(angle);
-        sprite.setPosition((s1_x + vect_x/2) * SPRITE_SIZE, (s1_y + vect_y/2) * SPRITE_SIZE);
+        sprite.setPosition(transform(sf::Vector2f(s1_x + vect_x/2, s1_y + vect_y/2)));
         _backgroundSprites.push_back(sprite);
     }
 }
