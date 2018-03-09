@@ -54,7 +54,7 @@ set(SOURCE_FILES
         src/game/monstermanager.cpp
         src/game/dumbmonstermanager.cpp
         src/game/dumbmonstermanager.h
-        src/game/boardlistener.h
+        src/game/gamelistener.h
         src/ui/drawables/multiplefonttext.cpp
         src/ui/drawables/multiplefonttext.h
         src/game/playernotinsight.h

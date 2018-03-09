@@ -8,11 +8,11 @@
 #include "player.h"
 #include "monstermanager.h"
 #include "direction.h"
-#include "boardlistener.h"
+#include "gamelistener.h"
 #include "element.h"
 #include "gamedata.h"
 
-class Jeu : public Listened<BoardListener> {
+class Jeu : public Listened<GameListener> {
     private:
         /**
          * @brief Donne la prochaine position du joueur

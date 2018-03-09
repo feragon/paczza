@@ -3,7 +3,7 @@
 #include <util/shared_ptr.h>
 #include "boardview.h"
 
-class GameView : public BoardView<Element>, public BoardListener, public ElementVisitor {
+class GameView : public BoardView<Element>, public GameListener, public ElementVisitor {
     private:
         /**
          * @brief Met à jour les sprites des monstres

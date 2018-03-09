@@ -52,7 +52,7 @@ void Jeu::updatePlayers(double timeElapsed) {
             Arete<Chemin, Case<Element>>* arete = _board->getAreteParSommets(_player.position(), _newPlayerPosition);
             if (arete && arete->contenu().estAccessible()) {
                 arete->contenu().setChaleur(UINT8_MAX);
-                Listened<BoardListener>::callListeners(&BoardListener::updateEdge, arete);
+                Listened<GameListener>::callListeners(&GameListener::updateEdge, arete);
             }
 
             Element* e = _newPlayerPosition->contenu().element();
@@ -84,7 +84,7 @@ void Jeu::updatePlayers(double timeElapsed) {
 
                         if (newPosition == _player.position()) {
                             monsters->value->collision(_player);
-                            Listened<BoardListener>::callListeners(&BoardListener::onMonsterWeaknessUpdate, monsters->value);
+                            Listened<GameListener>::callListeners(&GameListener::onMonsterWeaknessUpdate, monsters->value);
                         }
                     }
                     catch (std::out_of_range& e) {
@@ -114,14 +114,14 @@ void Jeu::updatePlayers(double timeElapsed) {
                 nextPlayerPosition = getNextPlayerPosition();
             }
 
-            Listened<BoardListener>::callListeners(&BoardListener::onNewTurn);
-            Listened<BoardListener>::callListeners(&BoardListener::updateVertice, _newPlayerPosition);
+            Listened<GameListener>::callListeners(&GameListener::onNewTurn);
+            Listened<GameListener>::callListeners(&GameListener::updateVertice, _newPlayerPosition);
 
             _oldPositions[&_player] = _player.position();
             _newPlayerPosition = nextPlayerPosition;
 
             if (_player.position() != _newPlayerPosition) {
-                Listened<BoardListener>::callListeners(&BoardListener::playerMovementBegin, &_player);
+                Listened<GameListener>::callListeners(&GameListener::playerMovementBegin, &_player);
             }
         }
         else {
@@ -159,7 +159,7 @@ void Jeu::updatePlayers(double timeElapsed) {
                     if (abs(_player.direction() - monsters->value->direction()) == NB_DIRECTIONS / 2 ||
                         _player.position() == _newPlayerPosition) {
                         monsters->value->collision(_player);
-                        Listened<BoardListener>::callListeners(&BoardListener::onMonsterWeaknessUpdate, monsters->value);
+                        Listened<GameListener>::callListeners(&GameListener::onMonsterWeaknessUpdate, monsters->value);
                     }
                 }
             }
@@ -264,7 +264,7 @@ void Jeu::start() {
         }
     }
 
-    Listened<BoardListener>::callListeners(&BoardListener::onNewTurn);
+    Listened<GameListener>::callListeners(&GameListener::onNewTurn);
     _stopped = false;
 }
 
@@ -288,7 +288,7 @@ void Jeu::updatePoints() {
 void Jeu::setMonstersWeak() {
     for(Liste<Monster>* monster = _monsters; monster; monster = monster->next) {
         monster->value->setWeak(true);
-        Listened<BoardListener>::callListeners(&BoardListener::onMonsterWeaknessUpdate, monster->value);
+        Listened<GameListener>::callListeners(&GameListener::onMonsterWeaknessUpdate, monster->value);
     }
 }
 

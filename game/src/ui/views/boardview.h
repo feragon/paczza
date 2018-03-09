@@ -7,7 +7,7 @@
 #include <game/player.h>
 #include <ui/drawables/animatedsprite.h>
 #include "view.h"
-#include <game/boardlistener.h>
+#include <game/gamelistener.h>
 #include <SFML/Audio/Sound.hpp>
 #include <ui/resourceloader.h>
 

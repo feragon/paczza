@@ -6,7 +6,7 @@
 #include "board/chemin.h"
 #include "monster.h"
 
-class BoardListener {
+class GameListener {
     public:
         /**
          * @brief Fonction appelée avant un déplacement du joueur
