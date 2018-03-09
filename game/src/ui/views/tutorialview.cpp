@@ -1,7 +1,6 @@
 #include <ui/resourceloader.h>
 #include <SFML/Window/Event.hpp>
 #include <config.h>
-#include <ui/transform.h>
 #include "tutorialview.h"
 #include "updatetutorialcommand.h"
 
@@ -19,7 +18,7 @@ TutorialView::TutorialView(sf::RenderWindow* window, FenetreJeu* f, SharedPtr<Je
     _fog = nullptr;
     center(_indication, _returnKey);
 
-    _superPointFound = false;
+
 
     for (std::pair<const Monster* const, AnimatedSprite>& pair : _gameView.monsterAnimatedSprites()) {
         pair.second.setInfinite(false);
@@ -88,8 +87,8 @@ void TutorialView::update() {
     _state = static_cast<State>(_state + 1);
     switch (_state) {
         case PACZZA_PRESENTATION: {
-            Position<> pos = _gameView.game()->player().position()->contenu().position();
-            _fog = new Fog(window()->getView().getSize(), transform(sf::Vector2f(pos.x, pos.y)));
+            Position<> pos = (_gameView.game()->player().position()->contenu().position()) * SPRITE_SIZE;
+            _fog = new Fog(window()->getView().getSize(), sf::Vector2f(pos.x, pos.y));
 
             _indication.setString(L"Voici Paczza,\nvotre pizza préférée.");
             _indication.setCharacterSize(21);
@@ -122,8 +121,8 @@ void TutorialView::update() {
             }
 
             if(pos) {
-                *pos = (*pos) * (1.0/i);
-                _fog = new Fog(window()->getView().getSize(), transform<float>(*pos));
+                *pos = (*pos) * (SPRITE_SIZE/i);
+                _fog = new Fog(window()->getView().getSize(), sf::Vector2f(pos->x, pos->y));
             }
 
             delete pos;
@@ -140,9 +139,8 @@ void TutorialView::update() {
                 }
                 sommet->value->contenu().element()->accept(*this);
                 if(_superPointFound) {
-                    Position<> pos = sommet->value->contenu().position();
-                    _fog = new Fog(window()->getView().getSize(), transform<float>(pos));
-                    _superPointFound = false;
+                    Position<> pos = sommet->value->contenu().position() * SPRITE_SIZE;
+                    _fog = new Fog(window()->getView().getSize(), sf::Vector2f(pos.x, pos.y));
                     break;
                 }
             }

@@ -58,6 +58,7 @@ void Board<ElementType>::placerElementHasard(const ElementType& element, unsigne
     unsigned long bucket, bucket_size;
 
     Case<ElementType>* c = nullptr;
+    Sommet<Case<ElementType>>* s = nullptr;
 
     do {
         if(i == limit) {
@@ -69,10 +70,11 @@ void Board<ElementType>::placerElementHasard(const ElementType& element, unsigne
         }
         while ((bucket_size = _cases.bucket_size(bucket)) == 0 );
 
-        c = &(std::next(_cases.begin(bucket), rand() % bucket_size)->second->contenu());
+        s = *&(std::next(_cases.begin(bucket), rand() % bucket_size)->second);
+        c = &s->contenu();
 
         i++;
-    } while(c->element());
+    } while(c->element() || s->degre() == 0);
 
     c->setElement(&element);
 }

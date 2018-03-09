@@ -11,6 +11,10 @@
 MainMenu::MainMenu(sf::RenderWindow* window, FenetreJeu* f) :
     Menu(window, f) {
 
+    _titreTexture.loadFromFile("res/titre.png");
+    _titreSprite.setTexture(_titreTexture);
+    _titreSprite.setPosition(window->getSize().x / 2 - _titreSprite.getGlobalBounds().width / 2, 120);
+
     addItem(new MenuButton(L"Nouvelle partie", std::bind(&MainMenu::onNewGameSelected, this)));
     addItem(new MenuButton(L"Aide", std::bind(&MainMenu::onHelpSelected, this)));
     addItem(new MenuButton(L"Crédits", std::bind(&MainMenu::onCreditsSelected, this)));
@@ -39,4 +43,9 @@ SharedPtr<Jeu> MainMenu::generateGame() {
     gd.genererPlateau(board.get());
 
     return SharedPtr<PacmanGame>(board, &gd);
+}
+
+void MainMenu::render(double timeElapsed) {
+    Menu::render(timeElapsed);
+    window()->draw(_titreSprite);
 }

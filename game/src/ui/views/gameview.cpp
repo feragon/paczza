@@ -234,8 +234,8 @@ void GameView::drawMonsters(double timeElapsed) {
 }
 
 void GameView::updateEdge(Arete<Chemin, Case<Element>>* edge) {
-    Position<> p1 = edge->debut()->contenu().position();
-    Position<> p2 = edge->fin()->contenu().position();
+    Position<double> p1 = edge->debut()->contenu().position();
+    Position<double> p2 = edge->fin()->contenu().position();
 
     if(p1 == p2) {
         return;
@@ -246,7 +246,7 @@ void GameView::updateEdge(Arete<Chemin, Case<Element>>* edge) {
     sf::Sprite sprite(ResourceLoader::getSprite(Sprite::COCAINE));
 
     sprite.setOrigin(SPRITE_SIZE / 2, SPRITE_SIZE / 2);
-    sprite.setPosition(transform<float>(moveVect));
+    sprite.setPosition(transform<float>(p2 + moveVect));
 
     _aretesMarquees[edge] = sprite;
 }
