@@ -1,5 +1,6 @@
 #include "dumbmonstermanager.h"
 #include <game/jeu.h>
+#include <time.h>
 
 DumbMonsterManager::DumbMonsterManager(Jeu* game) :
         MonsterManager(game) {

@@ -105,6 +105,7 @@ template<typename T>
 SharedPtr<T>& SharedPtr<T>::operator=(const SharedPtr<T>& other) {
     release();
     copy(other);
+    return *this;
 }
 
 template<typename T>
@@ -112,6 +113,7 @@ template<typename U>
 SharedPtr<T>& SharedPtr<T>::operator=(const SharedPtr<U>& other) {
     release();
     copy(other);
+    return *this;
 }
 
 template<typename T>

@@ -3,6 +3,7 @@
 #include "noheatededgefound.h"
 #include "dumbmonstermanager.h"
 #include <game/jeu.h>
+#include <time.h>
 
 SenseMonsterManager::SenseMonsterManager(Jeu* game) :
         MonsterManager(game) {
