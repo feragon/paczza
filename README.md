@@ -25,3 +25,8 @@ make
 - Cliquer sur Configure et mettre la bonne version du compilateur
 - Créer une entrée _SFML_ROOT_ de type _PATH_, en mettant le dossier racine de SFML (qui contient includes et lib)
 - Cliquer sur Generate
+
+## Utilisation de Visual Studio
+- Clic droit sur le projet _paczza_ > propriétés
+- Aller dans C/C++, Ligne de commande
+- Ajouter `/utf-8`
