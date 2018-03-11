@@ -130,6 +130,7 @@ void TutorialView::update() {
         }
 
         case SUPER_POINTS: {
+            _superPointFound = false;
             _indication.setString(L"Les super points vous\nrapporteront plus de points.");
 
             Liste<Sommet<Case<Element>>>* sommet = _gameView.game()->plateau()->sommets();
