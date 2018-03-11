@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics/Text.hpp>
+#include <SFML/Audio.hpp>
 #include <ui/drawables/multiplefonttext.h>
 #include "view.h"
 
@@ -39,4 +40,5 @@ class Credits : public View {
         std::vector<MultipleFontText> _texts;
         float _position;
         int _speed;
+        sf::Music _music;
 };

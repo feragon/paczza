@@ -27,6 +27,9 @@ Credits::Credits(sf::RenderWindow* window, FenetreJeu* f) :
     setKeyReleasedCommand(sf::Keyboard::Up, normal);
     setKeyReleasedCommand(sf::Keyboard::Down, normal);
     setKeyReleasedCommand(sf::Keyboard::Space, normal);
+
+    if (_music.openFromFile("res/sounds/ForTheDamagedCoda.wav"))
+        _music.play();
 }
 
 void Credits::resize(const sf::Vector2f& size) {
