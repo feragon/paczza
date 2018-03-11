@@ -6,6 +6,9 @@ Mort aux ananas !
 - Police de caractères Kongtext par codeman38
 - Police de caractères DoCoMo par Monica Dinculescu
 
+# Execution
+L'exécutable doit être exécuté dans le dossier où se trouve le dossier `res`  
+
 # Compilation sur Linux
 ```commandline
 mkdir build

@@ -1,9 +1,6 @@
 #pragma once
 
 #include <graph/conteneur.h>
-#include <sprite.h>
-#include <sounds.h>
-#include <SFML/Audio/Sound.hpp>
 #include <util/visitable.h>
 #include "elementvisitor.h"
 #include <board/case.h>

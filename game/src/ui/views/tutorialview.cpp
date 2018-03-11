@@ -177,7 +177,7 @@ void TutorialView::update() {
 
         case END:
             fenetreJeu()->vuePrecedente();
-            break;
+            return;
 
         default:
             break;
