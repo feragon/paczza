@@ -7,6 +7,7 @@
 #include <util/listened.h>
 #include <algorithm>
 #include <unordered_map>
+#include <time.h>
 
 template <typename ElementType>
 class Board : public Graphe<Chemin, Case<ElementType>> {
