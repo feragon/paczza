@@ -1,12 +1,14 @@
 # Pac-Zza
 
+![Paczz logo](game/res/titre.png "Paczza logo")
+
 Mort aux ananas !
 
 # Ressources utilisées
-- Police de caractères Kongtext par codeman38
-- Police de caractères DoCoMo par Monica Dinculescu
+- Police de caractères **Kongtext** par codeman38
+- Police de caractères **DoCoMo** par Monica Dinculescu
 
-# Execution
+# Exécution
 L'exécutable doit être exécuté dans le dossier où se trouve le dossier `res`  
 
 # Compilation sur Linux
@@ -27,6 +29,6 @@ make
 - Cliquer sur Generate
 
 ## Utilisation de Visual Studio
-- Clic droit sur le projet _paczza_ > propriétés
-- Aller dans C/C++, Ligne de commande
+- Clic droit sur le projet _paczza_ > Propriétés
+- Aller dans C/C++ > Ligne de commande
 - Ajouter `/utf-8`
