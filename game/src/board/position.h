@@ -23,11 +23,11 @@ class Position {
         bool operator==(const Position& other) const;
         bool operator!=(const Position& other) const;
 
-        Position operator + (const Position& other) const;
-        Position operator - (const Position& other) const;
-        Position operator * (double factor) const;
-        Position operator + (T offset) const;
-        Position operator - (T offset) const;
+        const Position operator + (const Position& other) const;
+        const Position operator - (const Position& other) const;
+        const Position operator * (double factor) const;
+        const Position operator + (T offset) const;
+        const Position operator - (T offset) const;
 
         template<typename osT>
         friend std::ostream& operator<<(std::ostream& os, const Position<osT>& position);
@@ -66,27 +66,27 @@ bool Position<T>::operator!=(const Position& other) const {
 }
 
 template<typename T>
-Position<T> Position<T>::operator+(const Position& other) const {
+const Position<T> Position<T>::operator+(const Position& other) const {
         return Position(x + other.x, y + other.y);
 }
 
 template<typename T>
-Position<T> Position<T>::operator - (const Position& other) const {
+const Position<T> Position<T>::operator - (const Position& other) const {
     return Position(x - other.x, y - other.y);
 }
 
 template<typename T>
-Position<T> Position<T>::operator * (double factor) const {
+const Position<T> Position<T>::operator * (double factor) const {
     return Position(x * factor, y * factor);
 }
 
 template<typename T>
-Position<T> Position<T>::operator + (T offset) const {
+const Position<T> Position<T>::operator + (T offset) const {
     return Position(x + offset, y + offset);
 }
 
 template<typename T>
-Position<T> Position<T>::operator - (T offset) const {
+const Position<T> Position<T>::operator - (T offset) const {
     return Position(x - offset, y - offset);
 }
 
